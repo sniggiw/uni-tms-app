@@ -22,3 +22,18 @@
 2. 持久化的设置
     - 需要安装 pinia 和 pinia-plugin-persistedstate 两个插件，前者是状态管理器，后者是持久化插件；
     - 在 H5 页面 和 小程序页面 中，持久化的配置是不一样的，现在暂时是使用 H5 的写法配置，后续需要根据动态环境来配置；
+3. 安装 sass-embedded / sass，控制台会报一个警告，但是不影响使用，如果想去掉这个警告，在 vite.config.js 中配置：
+
+    ```js
+    export default defineConfig({
+        ...
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    api: "modern-compiler",
+                    silenceDeprecations: ["legacy-js-api"],
+                },
+            },
+        },
+    });
+    ```
