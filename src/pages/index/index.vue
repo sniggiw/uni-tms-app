@@ -4,7 +4,9 @@
         <button @tap="clearOtherData">清除城市数据</button>
 
         <view>城市数据：</view>
-        <view v-for="item in otherStore?.otherData[0]?.children" :key="item.id">{{ item.areaName }}</view>
+        <view v-if="otherStore?.otherData">
+            <view v-for="item in otherStore?.otherData[0]?.children" :key="item.id">{{ item.areaName }}</view>
+        </view>
     </view>
 </template>
 

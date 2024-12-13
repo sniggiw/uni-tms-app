@@ -1,4 +1,5 @@
-const baseUrl = "https://www.gosun2.com/tms-app";
+// const baseUrl = "https://www.gosun2.com/tms-app";
+const baseUrl = "/api";
 import { useUserInfoStore } from "@/stores";
 
 const httpInterceptor = {
