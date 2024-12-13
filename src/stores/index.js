@@ -6,6 +6,5 @@ pinia.use(persist);
 
 export default pinia;
 
-import * as indexStore from "./index.js";
-
-export { indexStore };
+export * from "./userInfo.js";
+export * from "./other.js";

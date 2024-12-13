@@ -37,3 +37,16 @@
         },
     });
     ```
+
+4. uniapp 的移动端适配，在样式中直接使用 rpx 单位即可，设计稿按照 750 宽度来设计；
+5. 安装 uni-ui，并且在 pages.json 中设置自动引入：
+    ```js
+    "easycom": {
+        "autoscan": true,
+        "custom": {
+            "^u-(.*)": "@/uni_modules/uni-ui/components/u-$1/u-$1.vue"
+        }
+    }
+    ```
+6. 封装 http
+    - 使用 uni.request 来封装 http，需要处理请求和响应的拦截，以及错误处理；

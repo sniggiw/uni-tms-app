@@ -1,23 +1,23 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-export const useIndexStore = defineStore(
-    "index",
+export const useUserInfoStore = defineStore(
+    "userInfo",
     () => {
-        const indexInfo = ref({});
+        const userInfo = ref({});
 
-        const setIndexInfo = (info) => {
-            indexInfo.value = info;
+        const setUserInfo = (info) => {
+            userInfo.value = info;
         };
 
-        const clearIndexInfo = () => {
-            indexInfo.value = {};
+        const clearUserInfo = () => {
+            userInfo.value = {};
         };
 
         return {
-            indexInfo,
-            setIndexInfo,
-            clearIndexInfo,
+            userInfo,
+            setUserInfo,
+            clearUserInfo,
         };
     },
     // 持久化
