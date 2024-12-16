@@ -11,10 +11,10 @@ export default defineConfig({
     server: {
         // 实际最后请求的地址是 https://www.gosun2.com/tms-app
         proxy: {
-            "/api": {
+            "/tms-app": {
                 target: "https://www.gosun2.com/tms-app",
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, "/"),
+                rewrite: (path) => path.replace(/^\/tms-app/, "/"),
             },
         },
     },
