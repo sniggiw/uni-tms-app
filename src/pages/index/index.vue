@@ -1,12 +1,6 @@
 <template>
     <view class="index-page">
-        <button @tap="getCityData">点击获取城市数据</button>
-        <button @tap="clearOtherData">清除城市数据</button>
-
-        <view>城市数据：</view>
-        <view v-if="otherStore?.otherData">
-            <view v-for="item in otherStore?.otherData[0]?.children" :key="item.id">{{ item.areaName }}</view>
-        </view>
+        <button @tap="judgeToLoginPage">跳转 login</button>
     </view>
 </template>
 
@@ -25,6 +19,12 @@ const getCityData = async () => {
 
 const clearOtherData = () => {
     otherStore.clearOtherData();
+};
+
+const judgeToLoginPage = () => {
+    uni.navigateTo({
+        url: "/pages/login/index",
+    });
 };
 </script>
 

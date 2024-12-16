@@ -9,7 +9,10 @@ export default defineConfig({
         },
     },
     server: {
-        // 实际最后请求的地址是 https://www.gosun2.com/tms-app
+        /**
+         * 假设请求地址是 http://localhost:3000/tms-app/login
+         * 实际最后请求的地址是 https://www.gosun2.com/tms-app/login -> 将 http://localhost:3000/tms-app/ 替换成了 /，得到 /login，然后拼接到 https://www.gosun2.com/tms-app 后面
+         */
         proxy: {
             "/tms-app": {
                 target: "https://www.gosun2.com/tms-app",
