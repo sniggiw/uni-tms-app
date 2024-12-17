@@ -30,14 +30,14 @@
                         <!-- uniapp 中的 input，如果需要对 placeHolder 进行样式设置，需要使用 placeholder-class 添加类名 -->
                         <input type="text" placeholder="请输入手机号" class="input" placeholder-class="placeholderClass" :value="form.phone" />
                         <view class="afterExtra">
-                            <image src="@/assets/imgs/login/iconUser.png" alt="" />
+                            <image src="@/static/imgs/login/iconUser.png" alt="" />
                         </view>
                     </view>
 
                     <view class="inputContainer">
                         <input type="text" placeholder="请输入登录密码" class="input" placeholder-class="placeholderClass" :value="form.password" />
                         <view class="afterExtra">
-                            <image src="@/assets/imgs/login/iconUnShowPassword.png" alt="" />
+                            <image src="@/static/imgs/login/iconUnShowPassword.png" alt="" />
                         </view>
                     </view>
 
@@ -142,7 +142,7 @@ const handleToggleAgree = () => {
     .header {
         width: 100%;
         height: 490rpx;
-        background: url("@/assets/imgs/login/headerBg.png") left top / 100% 100% no-repeat;
+        background: url("@/static/imgs/login/headerBg.png") left top / 100% 100% no-repeat;
         overflow: hidden;
 
         .top {
@@ -190,7 +190,7 @@ const handleToggleAgree = () => {
                 margin-right: 52rpx;
                 width: 36rpx;
                 height: 36rpx;
-                background: url("@/assets/imgs/login/iconOnlineService.png") left top / 100% 100% no-repeat;
+                background: url("@/static/imgs/login/iconOnlineService.png") left top / 100% 100% no-repeat;
             }
         }
 
@@ -204,7 +204,7 @@ const handleToggleAgree = () => {
                 margin-right: 30rpx;
                 width: 160rpx;
                 height: 160rpx;
-                background: url("@/assets/imgs/login/logo.png") left top / 100% 100% no-repeat;
+                background: url("@/static/imgs/login/logo.png") left top / 100% 100% no-repeat;
             }
 
             .desc {
@@ -267,7 +267,7 @@ const handleToggleAgree = () => {
                     .iconArrowDown {
                         width: 20rpx;
                         height: 10rpx;
-                        background: url("@/assets/imgs/login/iconArrowDown.png") left top / 100% 100% no-repeat;
+                        background: url("@/static/imgs/login/iconArrowDown.png") left top / 100% 100% no-repeat;
                     }
                 }
 
@@ -314,7 +314,7 @@ const handleToggleAgree = () => {
                     }
 
                     .iconIsRememberPassword {
-                        background: url("@/assets/imgs/login/iconRememberPassword.png") left top / 100% 100% no-repeat;
+                        background: url("@/static/imgs/login/iconRememberPassword.png") left top / 100% 100% no-repeat;
                     }
 
                     .unRememberPassword {
@@ -375,11 +375,11 @@ const handleToggleAgree = () => {
                 }
 
                 .leftLine {
-                    background: url("@/assets/imgs/login/leftLine.png") left top / 100% 100% no-repeat;
+                    background: url("@/static/imgs/login/leftLine.png") left top / 100% 100% no-repeat;
                 }
 
                 .rightLine {
-                    background: url("@/assets/imgs/login/rightLine.png") left top / 100% 100% no-repeat;
+                    background: url("@/static/imgs/login/rightLine.png") left top / 100% 100% no-repeat;
                 }
             }
 
@@ -415,12 +415,12 @@ const handleToggleAgree = () => {
                 height: 28rpx;
 
                 &.iconAgree {
-                    background: url("@/assets/imgs/login/iconAgree.png") left top / 100% 100% no-repeat;
+                    background: url("@/static/imgs/login/iconAgree.png") left top / 100% 100% no-repeat;
                 }
 
                 &.unAgree {
                     opacity: 0.3;
-                    background: url("@/assets/imgs/login/iconAgree.png") left top / 100% 100% no-repeat;
+                    background: url("@/static/imgs/login/iconAgree.png") left top / 100% 100% no-repeat;
                 }
             }
 
