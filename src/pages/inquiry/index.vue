@@ -108,7 +108,7 @@
 <script setup>
 import { ref, onMounted, reactive, toRefs } from "vue";
 // import { getBannerData } from "@/api/common";
-import HomeCollapseItem from "../../../src/pages/components/homeCollapseItem/index.vue";
+import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
 const background = ref(["color1", "color2", "color3"]);
 const indicatorDots = ref(true);
 const autoplay = ref(true);

@@ -41,188 +41,167 @@
         </view>
       </view>
     </view> -->
-    
   </view>
 </template>
 
-<script>
+<script setup>
 import { ref, reactive, onMounted, watch } from "vue";
-// import Api from '@/api/index.js';
 
-export default {
-  props: {
-    flow: {
-      type: String,
-      default: "",
-    },
+// Props
+const props = defineProps({
+  flow: {
+    type: String,
+    default: "",
   },
-  setup(props, { emit }) {
-    const lang = ref("");
-    const searchData = reactive({});
-    const historyList = reactive({});
-    const inquirySearch = reactive({
-      1: {
-        srcCountry: "",
-        srcCountryEn: "",
-        destCountry: "",
-        destCountryEn: "",
-        srcScode: "",
-        destScode: "",
-      },
-      2: {
-        srcCountry: "",
-        srcCountryEn: "",
-        destCountry: "",
-        destCountryEn: "",
-        srcScode: "",
-        destScode: "",
-      },
-      3: {
-        srcCountry: "",
-        srcCountryEn: "",
-        destCountry: "",
-        destCountryEn: "",
-        srcScode: "",
-        destScode: "",
-      },
-      4: {
-        srcCountry: "",
-        srcCountryEn: "",
-        destCountry: "",
-        destCountryEn: "",
-        srcScode: "",
-        destScode: "",
-      },
-      5: {
-        srcCountry: "",
-        srcCountryEn: "",
-        destCountry: "",
-        destCountryEn: "",
-        srcScode: "",
-        destScode: "",
-      },
-    });
+});
 
-    onMounted(() => {
-      lang.value = uni.getStorageSync('lang');
-    });
+// Emits
+const emit = defineEmits(["searchInquiryCallback"]);
 
-    watch(
-      () => props.flow,
-      (newVal) => {
-        if (newVal) {
-          // inquiryHistory();
-        }
-      },
-      { immediate: true }
-    );
-
-    const toSearchInquiry = () => {
-      const inquirySearchData = inquirySearch[props.flow];
-      if (!inquirySearchData.srcCountry) {
-        uni.showToast({
-          title: uni.$t("queryChannel.srcCountrySelectPlaceholder"),
-          icon: "none",
-          duration: 2000,
-        });
-        return;
-      }
-      if (!inquirySearchData.destCountry) {
-        uni.showToast({
-          title: uni.$t("queryChannel.srcCountrySelectPlaceholder"),
-          icon: "none",
-          duration: 2000,
-        });
-        return;
-      }
-      Object.assign(searchData, inquirySearchData);
-      searchData.flow = props.flow;
-      emit("searchInquiryCallback", searchData);
-    };
-
-    const inquiryHistory = () => {
-      // Api.inquiryHistory({ flow: props.flow }).then((res) => {
-      //   if (res.code === 200) {
-      //     historyList[props.flow] = res.data;
-      //   } else {
-      //     uni.showToast({
-      //       title: res.msg,
-      //       icon: 'none',
-      //       duration: 2000
-      //     });
-      //   }
-      // });
-    };
-
-    const toJump = (type) => {
-      uni.navigateTo({
-        url: `/pages/address/list?flow=${props.flow}&type=${type}`,
-      });
-    };
-
-    const toJumpDetail = (item) => {
-      const params = {
-        srcCountry: item.startPos.title,
-        srcCountryEn: item.startPos.titleEn,
-        srcScode: item.startPos.scode,
-        destCountry: item.endPos.title,
-        destScode: item.endPos.scode,
-        destCountryEn: item.endPos.titleEn,
-        transCount: item.transCount,
-        flow: item.flowId,
-      };
-      if (item.zxTransKind != null) {
-        params.transKind = item.zxTransKind.value;
-      }
-      if (item.otherCompany != null) {
-        params.companyName = item.otherCompany.value;
-      }
-      if (item.expressKind != null) {
-        params.packageKind = item.expressKind.value;
-      }
-      if (item.portSpecKind != null) {
-        params.portSpecKind = item.portSpecKind;
-      }
-      if (item.productAttr) {
-        params.products = item.productAttr;
-      }
-      let path = "";
-      switch (props.flow) {
-        case "1":
-          path = "/pages/inquiry/dedicatedLine";
-          break;
-        case "2":
-          path = "/pages/inquiry/intAirport";
-          break;
-        case "3":
-          path = "/pages/inquiry/intPort";
-          break;
-        case "4":
-          path = "/pages/inquiry/intExpress";
-          break;
-        case "5":
-          path = "/pages/inquiry/intRail";
-          break;
-      }
-      uni.navigateTo({
-        url: `${path}?${Object.keys(params)
-          .map((key) => `${key}=${encodeURIComponent(params[key])}`)
-          .join("&")}`,
-      });
-    };
-
-    return {
-      lang,
-      searchData,
-      historyList,
-      inquirySearch,
-      toSearchInquiry,
-      inquiryHistory,
-      toJump,
-      toJumpDetail,
-    };
+// State
+const lang = ref("");
+const searchData = reactive({});
+const historyList = reactive({});
+const inquirySearch = reactive({
+  1: {
+    srcCountry: "",
+    srcCountryEn: "",
+    destCountry: "",
+    destCountryEn: "",
+    srcScode: "",
+    destScode: "",
   },
+  2: {
+    srcCountry: "",
+    srcCountryEn: "",
+    destCountry: "",
+    destCountryEn: "",
+    srcScode: "",
+    destScode: "",
+  },
+  3: {
+    srcCountry: "",
+    srcCountryEn: "",
+    destCountry: "",
+    destCountryEn: "",
+    srcScode: "",
+    destScode: "",
+  },
+  4: {
+    srcCountry: "",
+    srcCountryEn: "",
+    destCountry: "",
+    destCountryEn: "",
+    srcScode: "",
+    destScode: "",
+  },
+  5: {
+    srcCountry: "",
+    srcCountryEn: "",
+    destCountry: "",
+    destCountryEn: "",
+    srcScode: "",
+    destScode: "",
+  },
+});
+
+// Lifecycle
+onMounted(() => {
+  lang.value = uni.getStorageSync("lang");
+});
+
+// Watchers
+watch(
+  () => props.flow,
+  (newVal) => {
+    if (newVal) {
+      // inquiryHistory();
+    }
+  },
+  { immediate: true }
+);
+
+// Methods
+const toSearchInquiry = () => {
+  const inquirySearchData = inquirySearch[props.flow];
+  if (!inquirySearchData.srcCountry) {
+    uni.showToast({
+      title: uni.$t("queryChannel.srcCountrySelectPlaceholder"),
+      icon: "none",
+      duration: 2000,
+    });
+    return;
+  }
+  if (!inquirySearchData.destCountry) {
+    uni.showToast({
+      title: uni.$t("queryChannel.srcCountrySelectPlaceholder"),
+      icon: "none",
+      duration: 2000,
+    });
+    return;
+  }
+  Object.assign(searchData, inquirySearchData);
+  searchData.flow = props.flow;
+  emit("searchInquiryCallback", searchData);
 };
+
+const toJump = (type) => {
+  uni.navigateTo({
+    url: `/pages/address/list?flow=${props.flow}&type=${type}`,
+  });
+};
+
+const toJumpDetail = (item) => {
+  const params = {
+    srcCountry: item.startPos.title,
+    srcCountryEn: item.startPos.titleEn,
+    srcScode: item.startPos.scode,
+    destCountry: item.endPos.title,
+    destScode: item.endPos.scode,
+    destCountryEn: item.endPos.titleEn,
+    transCount: item.transCount,
+    flow: item.flowId,
+  };
+  if (item.zxTransKind != null) {
+    params.transKind = item.zxTransKind.value;
+  }
+  if (item.otherCompany != null) {
+    params.companyName = item.otherCompany.value;
+  }
+  if (item.expressKind != null) {
+    params.packageKind = item.expressKind.value;
+  }
+  if (item.portSpecKind != null) {
+    params.portSpecKind = item.portSpecKind;
+  }
+  if (item.productAttr) {
+    params.products = item.productAttr;
+  }
+  const pathMap = {
+    1: "/pages/inquiry/dedicatedLine",
+    2: "/pages/inquiry/intAirport",
+    3: "/pages/inquiry/intPort",
+    4: "/pages/inquiry/intExpress",
+    5: "/pages/inquiry/intRail",
+  };
+  const path = pathMap[props.flow] || "";
+  uni.navigateTo({
+    url: `${path}?${Object.keys(params)
+      .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+      .join("&")}`,
+  });
+};
+
+// Expose state and methods
+defineExpose({
+  lang,
+  searchData,
+  historyList,
+  inquirySearch,
+  toSearchInquiry,
+  toJump,
+  toJumpDetail,
+});
 </script>
 
 <style lang="scss" scoped>
@@ -238,7 +217,7 @@ export default {
   font-weight: bold;
   color: #333333;
   line-height: 1;
-  
+
   .left,
   .right {
     flex: 1;

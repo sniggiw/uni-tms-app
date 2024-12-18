@@ -30,7 +30,7 @@ const judgeToLoginPage = () => {
 
 const judgeInuqieyPage = () => {
     uni.navigateTo({
-        url: "/pages/inquiry/home",
+        url: "/pages/inquiry/index",
     });
 };
 
