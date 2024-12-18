@@ -27,6 +27,13 @@
                 "navigationStyle": "custom",
                 "navigationBarTitleText": "登录"
             }
+        },
+        {
+            "path": "pages/inquiry/home",
+            "style": {
+                "navigationStyle": "custom",
+                "navigationBarTitleText": "询价"
+            }
         }
     ],
     "globalStyle": {

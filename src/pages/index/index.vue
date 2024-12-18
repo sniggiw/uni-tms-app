@@ -1,6 +1,7 @@
 <template>
     <view class="index-page">
         <button @tap="judgeToLoginPage">跳转 login</button>
+        <button @tap="judgeInuqieyPage">跳转 询价首页</button>
     </view>
 </template>
 
@@ -26,6 +27,13 @@ const judgeToLoginPage = () => {
         url: "/pages/login/index",
     });
 };
+
+const judgeInuqieyPage = () => {
+    uni.navigateTo({
+        url: "/pages/inquiry/home",
+    });
+};
+
 </script>
 
 <style lang="scss" scoped></style>
