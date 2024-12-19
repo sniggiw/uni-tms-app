@@ -18,7 +18,7 @@
       </view>
     </view>
     <view class="check-box">
-      <button type="default" class="shortcut-price">快速下单</button>
+      <button type="default" class="shortcut-price" v-if="flow == 1">快速下单</button>
       <button class="check-price" @tap="toSearchInquiry">查价</button>
     </view>
     <!-- 历史询价 -->
@@ -123,25 +123,25 @@ watch(
 
 // Methods
 const toSearchInquiry = () => {
-  const inquirySearchData = inquirySearch[props.flow];
-  if (!inquirySearchData.srcCountry) {
-    uni.showToast({
-      title: uni.$t("queryChannel.srcCountrySelectPlaceholder"),
-      icon: "none",
-      duration: 2000,
-    });
-    return;
-  }
-  if (!inquirySearchData.destCountry) {
-    uni.showToast({
-      title: uni.$t("queryChannel.srcCountrySelectPlaceholder"),
-      icon: "none",
-      duration: 2000,
-    });
-    return;
-  }
-  Object.assign(searchData, inquirySearchData);
-  searchData.flow = props.flow;
+  // const inquirySearchData = inquirySearch[props.flow];
+  // if (!inquirySearchData.srcCountry) {
+  //   uni.showToast({
+  //     title: '请选择起运地',
+  //     icon: "none",
+  //     duration: 2000,
+  //   });
+  //   return;
+  // }
+  // if (!inquirySearchData.destCountry) {
+  //   uni.showToast({
+  //     title: '请选择目的地',
+  //     icon: "none",
+  //     duration: 2000,
+  //   });
+  //   return;
+  // }
+  // Object.assign(searchData, inquirySearchData);
+  // searchData.flow = props.flow;
   emit("searchInquiryCallback", searchData);
 };
 

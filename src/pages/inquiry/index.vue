@@ -43,7 +43,7 @@
             @searchInquiryCallback="searchInquiryCallback"
           ></HomeCollapseItem>
         </uni-collapse-item>
-
+        <!-- 机场到机场 -->
         <uni-collapse-item name="2" title-border="none" :show-arrow="false">
           <template v-slot:title>
             <view class="collapseItem">
@@ -57,7 +57,12 @@
               </view>
             </view>
           </template>
+          <HomeCollapseItem
+            :flow="activeName"
+            @searchInquiryCallback="searchInquiryCallback"
+          ></HomeCollapseItem>
         </uni-collapse-item>
+        <!-- 港口 -->
         <uni-collapse-item name="3" title-border="none" :show-arrow="false">
           <template v-slot:title>
             <view class="collapseItem">
@@ -71,7 +76,12 @@
               </view>
             </view>
           </template>
+          <HomeCollapseItem
+            :flow="activeName"
+            @searchInquiryCallback="searchInquiryCallback"
+          ></HomeCollapseItem>
         </uni-collapse-item>
+        <!-- 快递 -->
         <uni-collapse-item name="4" title-border="none" :show-arrow="false">
           <template v-slot:title>
             <view class="collapseItem">
@@ -85,7 +95,12 @@
               </view>
             </view>
           </template>
+          <HomeCollapseItem
+            :flow="activeName"
+            @searchInquiryCallback="searchInquiryCallback"
+          ></HomeCollapseItem>
         </uni-collapse-item>
+        <!-- 铁路 -->
         <uni-collapse-item name="5" title-border="none" :show-arrow="false">
           <template v-slot:title>
             <view class="collapseItem">
@@ -99,9 +114,23 @@
               </view>
             </view>
           </template>
+          <HomeCollapseItem
+            :flow="activeName"
+            @searchInquiryCallback="searchInquiryCallback"
+          ></HomeCollapseItem>
         </uni-collapse-item>
       </uni-collapse>
     </view>
+    <CargoInfoDialog ref="show" :searchData="searchData" :flow="activeName"></CargoInfoDialog>
+     <!-- <button @tap="clickOpen">打开</button>
+    <uni-popup ref="show" type="dialog">
+      <uni-popup-dialog
+        mode="input"
+        message="成功消息"
+        :duration="2000"
+        
+      ></uni-popup-dialog>
+    </uni-popup> -->
   </view>
 </template>
 
@@ -109,7 +138,7 @@
 import { ref, onMounted, reactive, toRefs } from "vue";
 // import { getBannerData } from "@/api/common";
 import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
-const background = ref(["color1", "color2", "color3"]);
+import CargoInfoDialog from "../inquiry/components/cargoInfoDialog/index.vue";
 const indicatorDots = ref(true);
 const autoplay = ref(true);
 const interval = ref(2000);
@@ -117,6 +146,7 @@ const duration = ref(500);
 const activeName = ref("1");
 const searchData = ref({});
 const showCargoInfo = ref(false);
+const show = ref(true)
 const data = reactive({
   bannerParams: {
     kind: "询价首页",
@@ -133,9 +163,13 @@ onMounted(() => {
 //   getBannerData(bannerParams.value).then((response) => {});
 // }
 function searchInquiryCallback(data) {
+  console.log('@@',data)
   searchData.value = data;
-  showCargoInfo.value = true;
+  show.value.openPopup();
+  
 }
+
+
 </script>
 
 <style lang="scss" scoped>
