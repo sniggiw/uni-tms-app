@@ -313,7 +313,7 @@ const close = () => {
 const confirm = (value) => {
   // TODO 做一些其他的事情，before-close 为true的情况下，手动执行 close 才会关闭对话框
   // ...
-  console.log(value);
+  // console.log(value);
   show.value.close();
 };
 

@@ -147,7 +147,7 @@ const toSearchInquiry = () => {
 
 const toJump = (type) => {
   uni.navigateTo({
-    url: `/pages/address/list?flow=${props.flow}&type=${type}`,
+    url: `/pages/inquiry/components/addressList/index/index?flow=${props.flow}&type=${type}`,
   });
 };
 

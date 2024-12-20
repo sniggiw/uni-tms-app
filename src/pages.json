@@ -1,45 +1,51 @@
 {
-    "easycom": {
-        "autoscan": true,
-        "custom": {
-            // uni-ui 规则如下配置
-            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
-        }
-    },
-    "pages": [
-        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-            "path": "pages/index/index",
-            "style": {
-                "navigationStyle": "custom", // 后续需要根据环境判断是否需要自定义导航栏 现在暂时是写 H5 页面，需要先去掉
-                "navigationBarTitleText": "首页"
-            }
-        },
-        {
-            "path": "pages/mine/index",
-            "style": {
-                "navigationBarTitleText": "我的"
-            }
-        },
-        {
-            "path": "pages/login/index",
-            "style": {
-                "navigationStyle": "custom",
-                "navigationBarTitleText": "登录"
-            }
-        },
-        {
-            "path": "pages/inquiry/index",
-            "style": {
-                "navigationStyle": "custom",
-                "navigationBarTitleText": "询价"
-            }
-        }
-    ],
-    "globalStyle": {
-        "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "tsm-app",
-        "navigationBarBackgroundColor": "#F8F8F8",
-        "backgroundColor": "#F8F8F8"
-    }
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			// uni-ui 规则如下配置
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+		}
+	},
+	"pages": [
+		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom", // 后续需要根据环境判断是否需要自定义导航栏 现在暂时是写 H5 页面，需要先去掉
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/mine/index",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/inquiry/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "询价"
+			}
+		},
+		{
+			"path": "pages/inquiry/components/addressList/index/index",
+			"style": {
+				"navigationBarTitleText": "地址选择"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "tsm-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
 }
