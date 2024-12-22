@@ -1,9 +1,13 @@
 <template>
-  <view class="homeCollapse-page">
+ <view class="homeCollapse-page">
     <view class="open-content">
       <view class="left" @tap="toJump(1)">
-        <view class="left">起运港</view>
-        <view class="foreign">Select</view>
+        <view class="left">{{
+          inquirySearch[flow] ? inquirySearch[flow].srcCountry || "请选择" : "请选择"
+        }}</view>
+        <view class="foreign">{{
+          inquirySearch[flow] ? inquirySearch[flow].srcCountryEn || "Select" : "Select"
+        }}</view>
       </view>
 
       <view class="center">
@@ -13,14 +17,21 @@
       </view>
 
       <view class="right" @tap="toJump(2)">
-        <view>目的港</view>
-        <view class="foreign">Select</view>
+        <view>{{
+          inquirySearch[flow] ? inquirySearch[flow].destCountry || "目的港" : "目的港"
+        }}</view>
+        <view class="foreign">{{
+          inquirySearch[flow] ? inquirySearch[flow].destCountryEn || "Select" : "Select"
+        }}</view>
       </view>
     </view>
     <view class="check-box">
-      <button type="default" class="shortcut-price" v-if="flow == 1">快速下单</button>
+      <button type="default" class="shortcut-price" v-if="flow == 1">
+        快速下单
+      </button>
       <button class="check-price" @tap="toSearchInquiry">查价</button>
     </view>
+  
     <!-- 历史询价 -->
     <!-- <view v-if="historyList[flow] && historyList[flow].length > 0" class="inquiry-history">
       <view class="title">您查询过的路线</view>
@@ -45,7 +56,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch, onBeforeUnmount } from "vue";
+import { useRoute } from "vue-router";
+
+// 获取当前路由实例
+const route = useRoute();
 
 // Props
 const props = defineProps({
@@ -107,41 +122,70 @@ const inquirySearch = reactive({
 
 // Lifecycle
 onMounted(() => {
-  lang.value = uni.getStorageSync("lang");
+  // lang.value = uni.getStorageSync("lang");
+  // 清除 localStorage 中的数据
+  uni.removeStorageSync("departure");
+  uni.removeStorageSync("destination");
+  Object.keys(inquirySearch).forEach((key) => {
+    inquirySearch[key] = {
+      srcCountry: "",
+      srcCountryEn: "",
+      destCountry: "",
+      destCountryEn: "",
+      srcScode: "",
+      destScode: "",
+    };
+  });
 });
 
-// Watchers
 watch(
-  () => props.flow,
-  (newVal) => {
-    if (newVal) {
-      // inquiryHistory();
+  () => route.fullPath,
+  (to, from) => {
+    const departure = uni.getStorageSync("departure");
+   
+    if (departure) {
+      const departureData = JSON.parse(departure);
+      departureData.forEach((element) => {
+        inquirySearch[element.flow].srcCountry = element.city;
+        inquirySearch[element.flow].srcCountryEn = element.cityEn;
+        inquirySearch[element.flow].srcScode = element.scode;
+      });
+    }
+    const destination = uni.getStorageSync("destination");
+    // const destinationData = JSON.parse(destination);
+    if (destination) {
+      const destinationData = JSON.parse(destination);
+      destinationData.forEach((element) => {
+        inquirySearch[element.flow].destCountry = element.city;
+        inquirySearch[element.flow].destCountryEn = element.cityEn;
+        inquirySearch[element.flow].destScode = element.scode;
+      });
     }
   },
-  { immediate: true }
+  { immediate: true } // Run the effect immediately on component mount
 );
 
 // Methods
 const toSearchInquiry = () => {
-  // const inquirySearchData = inquirySearch[props.flow];
-  // if (!inquirySearchData.srcCountry) {
-  //   uni.showToast({
-  //     title: '请选择起运地',
-  //     icon: "none",
-  //     duration: 2000,
-  //   });
-  //   return;
-  // }
-  // if (!inquirySearchData.destCountry) {
-  //   uni.showToast({
-  //     title: '请选择目的地',
-  //     icon: "none",
-  //     duration: 2000,
-  //   });
-  //   return;
-  // }
-  // Object.assign(searchData, inquirySearchData);
-  // searchData.flow = props.flow;
+  const inquirySearchData = inquirySearch[props.flow];
+  if (!inquirySearchData.srcCountry) {
+    uni.showToast({
+      title: "请选择起运地",
+      icon: "none",
+      duration: 2000,
+    });
+    return;
+  }
+  if (!inquirySearchData.destCountry) {
+    uni.showToast({
+      title: "请选择目的地",
+      icon: "none",
+      duration: 2000,
+    });
+    return;
+  }
+  Object.assign(searchData, inquirySearchData);
+  searchData.flow = props.flow;
   emit("searchInquiryCallback", searchData);
 };
 

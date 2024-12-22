@@ -21,7 +21,7 @@
             class="group-item"
             @click="handleItemClick(item)"
           >
-            {{ item.title }} ({{ item.titleEn }})
+            {{ item.title }}
           </view>
         </view>
       </view>
@@ -112,29 +112,29 @@ export default {
 }
 
 .group {
-  padding: 10px 0;
+  padding: 20rpx 0;
 }
 
 .group-title {
-  font-size: 16px;
+  font-size: 32rpx;
   font-weight: bold;
-  padding: 10px;
+  padding: 20rpx;
   background-color: #f5f5f5;
 }
 
 .group-items {
-  padding: 10px;
+  padding: 20rpx;
 }
 
 .group-item {
-  padding: 5px 0;
+  padding: 10rpx 0;
   cursor: pointer;
 }
 
 .index-bar {
   position: fixed;
   top: 50%;
-  right: 10px;
+  right: 20rpx;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -143,8 +143,8 @@ export default {
 }
 
 .index-item {
-  padding: 2px 5px;
-  font-size: 12px;
+  padding: 4rpx 10rpx;
+  font-size: 24rpx;
   color: #333;
   cursor: pointer;
 }

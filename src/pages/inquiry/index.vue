@@ -220,6 +220,7 @@ const searchData = ref({});
 const showCargoInfo = ref(false);
 const show = ref(true);
 const hotToday = ref([]);
+const lang = ref('')
 const data = reactive({
   bannerParams: {
     kind: "询价首页",
@@ -243,6 +244,7 @@ const bannerData = ref([
 onMounted(() => {
   // bannerList();
   inquiryHotTodayData();
+  lang.value = uni.getStorageSync("lang");
 });
 function bannerList() {
   getBannerData(bannerParams.value).then((response) => {

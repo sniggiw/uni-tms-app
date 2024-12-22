@@ -32,7 +32,7 @@ const inquiryHotToday = (params) => {
 const inquiryAddr = (params) => {
     return new Promise((resolve, reject) => {
       const queryString = new URLSearchParams(params).toString();
-      const url = `/tms-app/common/inquiry/addr?flow=1&type=1&addr=`;
+      const url = `/tms-app/common/inquiry/addr?${queryString}`;
         http.get(url)
             .then((response) => {
                 resolve(response);
