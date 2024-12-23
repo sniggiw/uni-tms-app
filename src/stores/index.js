@@ -6,5 +6,6 @@ pinia.use(persist);
 
 export default pinia;
 
-export * from "./userInfo.js";
+export * from "./auth.js";
 export * from "./other.js";
+

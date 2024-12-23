@@ -28,14 +28,14 @@
                             <text class="text iconArrowDown"></text>
                         </view>
                         <!-- uniapp 中的 input，如果需要对 placeHolder 进行样式设置，需要使用 placeholder-class 添加类名 -->
-                        <input type="text" placeholder="请输入手机号" class="input" placeholder-class="placeholderClass" :value="form.phone" />
+                        <input type="text" placeholder="请输入手机号" class="input" placeholder-class="placeholderClass" v-model="form.regPhone" />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUser.png" alt="" />
                         </view>
                     </view>
 
                     <view class="inputContainer">
-                        <input type="text" placeholder="请输入登录密码" class="input" placeholder-class="placeholderClass" :value="form.password" />
+                        <input type="text" placeholder="请输入登录密码" class="input" placeholder-class="placeholderClass" v-model="form.regPwd" />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUnShowPassword.png" alt="" />
                         </view>
@@ -53,7 +53,7 @@
 
                     <view class="trackAndLoginBtns">
                         <view class="btn track">轨迹查询</view>
-                        <view class="btn login">登录</view>
+                        <view class="btn login" @tap="handleLogin">登录</view>
                     </view>
 
                     <view class="orLine">
@@ -95,7 +95,17 @@
 </template>
 
 <script setup>
+import moment from "moment";
 import { reactive, ref } from "vue";
+import { loginByPhone } from "@/api/auth";
+import { useAuthStore } from "@/stores";
+const authStore = useAuthStore();
+
+const ERROR_TOSAT_TEXT = {
+    regPhone: "请输入手机号",
+    regPwd: "请输入密码",
+    isAgree: "请先同意协议",
+};
 
 const popupLanguage = ref(null);
 const languageList = ref([
@@ -119,10 +129,11 @@ const handleChangeLanguage = (value) => {
 };
 
 const form = reactive({
-    phone: "",
-    password: "",
+    areaPhonePrefix: "+86",
+    regPhone: "18520664371",
+    regPwd: "123456",
     isRememberPassword: false,
-    isAgree: false,
+    isAgree: true,
 });
 
 const handleToggleIsRememberPassword = () => {
@@ -131,7 +142,73 @@ const handleToggleIsRememberPassword = () => {
 
 const handleToggleAgree = () => {
     form.isAgree = !form.isAgree;
-}
+};
+
+// 校验表单
+const validateForm = () => {
+    const phoneRegex = /^1[3-9]\d{9}$/;
+
+    for (const key in form) {
+        if (!form[key] && key !== "isRememberPassword") {
+            uni.showToast({
+                title: ERROR_TOSAT_TEXT[key],
+                duration: 2000,
+                icon: "none",
+            });
+
+            return false;
+        }
+
+        if (form.phone && !phoneRegex.test(form.phone)) {
+            uni.showToast({
+                title: "请输入正确的手机号",
+                duration: 2000,
+                icon: "none",
+            });
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const handleLogin = async () => {
+    if (!validateForm()) return;
+
+    uni.showLoading({
+        title: "登录中...",
+    });
+    const res = await loginByPhone(form);
+    uni.hideLoading();
+
+    if (res.code == 200) {
+        // 数据持久化
+        authStore.setAuthInfo({
+            token: res.data.token,
+            loginDatePeriod: [moment().format("YYYY-MM-DD HH:mm:ss"), moment().add(7, "days").format("YYYY-MM-DD HH:mm:ss")],
+            isRememberPassword: form.isRememberPassword,
+        });
+
+        uni.showToast({
+            title: '登录成功',
+            duration: 1500,
+            icon: "none",
+            success: () => {
+                setTimeout(() => {
+                    uni.navigateTo({
+                        url: "/pages/index/index",
+                    });
+                }, 1500);
+            },
+        });
+    } else {
+        uni.showToast({
+            title: res.msg,
+            duration: 1500,
+            icon: "none",
+        });
+    }
+};
 </script>
 
 <style lang="scss" scoped>
