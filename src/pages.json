@@ -31,7 +31,7 @@
 		{
 			"path": "pages/inquiry/index",
 			"style": {
-				"navigationStyle": "custom",
+				
 				"navigationBarTitleText": "询价"
 			}
 		},
@@ -40,12 +40,24 @@
 			"style": {
 				"navigationBarTitleText": "地址选择"
 			}
+		},
+		{
+			"path": "pages/inquiry/dedicatedLine/index",
+			"style": {
+				"navigationBarTitleText": "在线询价"
+			}
+		},
+		{
+			"path": "pages/inquiry/dedicatedLine/channelDetail",
+			"style": {
+				"navigationBarTitleText": "专线查价结果详情"
+			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "tsm-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarTextStyle": "#FFFFFF",
+		"navigationBarTitleText": "tms-app",
+		"navigationBarBackgroundColor": "#DD312F",
 		"backgroundColor": "#F8F8F8"
 	}
 }

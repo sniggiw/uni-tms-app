@@ -236,7 +236,7 @@ const onSubmit = () => {
   }
   emit("update:showCategory", !props.showCategory);
   const pathMap = {
-    1: "/pages/inquiry/dedicatedLine",
+    1: "/pages/inquiry/dedicatedLine/index",
     2: "/pages/inquiry/intAirport",
     3: "/pages/inquiry/intPort",
     4: "/pages/inquiry/intExpress",

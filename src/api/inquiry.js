@@ -43,4 +43,19 @@ const inquiryAddr = (params) => {
     });
 };
 
-export { getBannerData,inquiryHotToday,inquiryAddr };
+// 起运地/目的地
+const getInquiryZxData = (params) => {
+    return new Promise((resolve, reject) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/tms-app/zx/inquiry?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData };
