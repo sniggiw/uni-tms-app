@@ -12,4 +12,16 @@ const getCity = () => {
     });
 };
 
-export { getCity };
+const getCustomerInfo = () => {
+    return new Promise((resolve, reject) => {
+        http.get("/tms-app/customer/info")
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export { getCity, getCustomerInfo };

@@ -1,23 +1,23 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-export const useUserInfoStore = defineStore(
-    "userInfo",
+export const useAuthStore = defineStore(
+    "auth",
     () => {
-        const userInfo = ref({});
+        const authInfo = ref(null);
 
-        const setUserInfo = (info) => {
-            userInfo.value = info;
+        const setAuthInfo = (info) => {
+            authInfo.value = info;
         };
 
-        const clearUserInfo = () => {
-            userInfo.value = {};
+        const clearAuthInfo = () => {
+            authInfo.value = null;
         };
 
         return {
-            userInfo,
-            setUserInfo,
-            clearUserInfo,
+            authInfo,
+            setAuthInfo,
+            clearAuthInfo,
         };
     },
     // 持久化
@@ -25,6 +25,10 @@ export const useUserInfoStore = defineStore(
     {
         persist: {
             enabled: true,
+            strategies: [{
+                // 可以指定任何 extends Storage 的实例，默认是 sessionStorage
+                storage: localStorage,
+            }],
         },
     }
     // 小程序中的写法

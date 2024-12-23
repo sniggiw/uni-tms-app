@@ -1,25 +1,29 @@
 <template>
     <view class="index-page">
         <button @tap="judgeToLoginPage">跳转 login</button>
-        <button @tap="judgeInuqieyPage">跳转 询价首页</button>
+        <button @tap="clearAuthInfoData">清除登录状态</button>
     </view>
 </template>
 
 <script setup>
-import { getCity } from "@/api/other";
-import { useOtherStore } from "@/stores";
+import { getCustomerInfo } from "@/api/other";
+import { useOtherStore, useAuthStore } from "@/stores";
 const otherStore = useOtherStore();
+const authStore = useAuthStore();
 
-const getCityData = async () => {
-    const res = await getCity();
+const getCustomerInfoData = async () => {
+    const res = await getCustomerInfo();
 
     if (res.code == 200) {
-        otherStore.setOtherData(res.data);
+        console.log("custom info", res);
     }
 };
 
-const clearOtherData = () => {
-    otherStore.clearOtherData();
+getCustomerInfoData();
+
+const clearAuthInfoData = () => {
+    authStore.clearAuthInfo();
+    getCustomerInfoData();
 };
 
 const judgeToLoginPage = () => {
