@@ -211,13 +211,9 @@ import { ref, onMounted, reactive, toRefs } from "vue";
 import { getBannerData, inquiryHotToday } from "@/api/inquiry";
 import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
 import CargoInfoDialog from "../inquiry/components/cargoInfoDialog/index.vue";
-const indicatorDots = ref(true);
-const autoplay = ref(true);
-const interval = ref(2000);
-const duration = ref(500);
+
 const activeName = ref("1");
 const searchData = ref({});
-const showCargoInfo = ref(false);
 const show = ref(true);
 const hotToday = ref([]);
 const lang = ref('')
@@ -249,7 +245,6 @@ onMounted(() => {
 function bannerList() {
   getBannerData(bannerParams.value).then((response) => {
     bannerData.value = response.rows;
-    console.log("@@", bannerData.value);
   });
 }
 function searchInquiryCallback(data) {

@@ -78,7 +78,7 @@
               ></uni-easyinput>
               <uni-data-select
                 v-model="form.transUnit"
-                :localdata="range"
+                :localdata="transUnitData"
                 :clear="false"
               ></uni-data-select>
             </view>
@@ -174,7 +174,7 @@
               ></uni-easyinput>
               <uni-data-select
                 v-model="form.transUnit"
-                :localdata="range"
+                :localdata="transUnitData"
                 :clear="false"
               ></uni-data-select>
             </view>
@@ -219,17 +219,24 @@
         </template>
       </uni-popup-dialog>
     </uni-popup>
+    <CategoryDialog
+      ref="showCategory"
+      @backOffDialog="backOffDialog"
+      :searchData="form"
+    ></CategoryDialog>
   </view>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from "vue";
+import CategoryDialog from "../../components/categoryDialog/index.vue";
+import { ref, reactive, onMounted, watch,defineEmits, defineProps } from "vue";
+import { getDictTypes } from "@/api/common"; // 导入 utils 文件中的方法
 const show = ref(null);
 const form = reactive({
   transKind: "",
   weight: "",
   transCount: "",
-  transUnit: "CTN",
+  transUnit: "",
   packageKind: "",
   squares: "",
   companyName: "",
@@ -241,6 +248,12 @@ const form = reactive({
   destCity: "", //目的地城市 2024-4-23新增-仅专线流程需要触发接口,传参数给后端计算派送费使用
   // containers:'',
 });
+const showCategory = ref(true);
+const transKind = ref([]);
+const transUnitData = ref([]);
+const packageKind = ref([]);
+const portSpecKind = ref([]);
+const range = ref([]);
 // Props
 const props = defineProps({
   // show: {
@@ -256,32 +269,30 @@ const props = defineProps({
     default: () => {},
   },
 });
-
-const range = ref([
-  { value: "CTN", text: "CTN" },
-  { value: "PALLET", text: "PALLET" },
-  { value: "WOODEN CASE", text: "WOODEN CASE" },
-  { value: "WOODEN FRAME", text: "WOODEN FRAME" },
-  { value: "SACKS", text: "SACKS" },
-  { value: "FLIGHT CASE", text: "FLIGHT CASE" },
-  { value: "IRON FRAME", text: "IRON FRAME" },
-]);
-
-const transKind = ref([
-  { value: "空运", name: "空运" },
-  { value: "海运", name: "海运" },
-  { value: "陆运", name: "陆运" },
-]);
-
-const packageKind = ref([
-  { value: "包裹", name: "包裹" },
-  { value: "文件", name: "文件" },
-]);
-
-const portSpecKind = ref([
-  { value: "整柜", name: "整柜" },
-  { value: "散货", name: "散货" },
-]);
+onMounted(() => {
+  let dicTitles = "专线设置.运输类别,专线设置.件数单位,快递设置.包裹类型,港口设置.装箱类型";
+  getDictTypes({ dicTitles }).then((response) => {
+    transKind.value = response.data["专线设置.运输类别"];
+    transUnitData.value = response.data["专线设置.件数单位"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    packageKind.value = response.data["快递设置.包裹类型"];
+    portSpecKind.value = response.data["港口设置.装箱类型"];
+    if (transKind.value && transKind.value.length > 0) {
+      form.transKind = transKind.value[0].value;
+    }
+    if (transUnitData.value && transUnitData.value.length > 0) {
+      form.transUnit = transUnitData.value[0].value;
+    }
+    if (packageKind.value && packageKind.value.length > 0) {
+      form.packageKind = packageKind.value[0].name;
+    }
+    if (portSpecKind.value && portSpecKind.value.length > 0) {
+      form.portSpecKind = portSpecKind.value[0].name;
+    }
+  });
+});
 
 // 打开弹窗
 const openPopup = () => {
@@ -305,16 +316,18 @@ const handlePopupChange = (e) => {
 };
 
 const close = () => {
-  // TODO 做一些其他的事情，before-close 为true的情况下，手动执行 close 才会关闭对话框
-  // ...
   show.value.close();
 };
 
+const backOffDialog = () => {
+  // emit("update:show", true);
+};
+
 const confirm = (value) => {
-  // TODO 做一些其他的事情，before-close 为true的情况下，手动执行 close 才会关闭对话框
-  // ...
-  // console.log(value);
   show.value.close();
+  // emit("update:show", !show.value);
+  form.v = Object.assign(form, props.searchData);
+  showCategory.value.openCateforyPopup();
 };
 
 // 暴露方法给父组件
@@ -327,32 +340,35 @@ defineExpose({
 <style lang="scss" scoped>
 .cargoInfoDialog-page {
   :deep(.uni-dialog-content) {
-    display:contents;
+    display: contents;
     text-align: center;
   }
-  .dialog-title{
+  :deep(.uni-dialog-title) {
+    display: none;
+  }
+  .dialog-title {
     position: relative;
     text-align: center;
     margin: 12rpx;
     font-size: 36rpx;
     color: #333333;
-   
-   
-    .title-ico{
+    padding-top: 30rpx;
+
+    .title-ico {
       width: 50rpx;
       height: 10rpx;
       margin: 0rpx 18rpx 8rpx 12rpx;
     }
-    .one-flow{
+    .one-flow {
       font-size: 30rpx;
-      color: #DE3031;
+      color: #de3031;
     }
-    .one-select{
+    .one-select {
       width: 30rpx;
       height: 34rpx;
       margin-bottom: -4rpx;
     }
-    .second-flow{
+    .second-flow {
       font-size: 30rpx;
       color: #999999;
     }
