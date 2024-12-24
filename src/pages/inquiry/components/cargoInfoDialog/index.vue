@@ -8,7 +8,6 @@
         @close="close"
         @confirm="confirm"
         confirmText="下一步"
-        title="  "
       >
         <!-- 弹窗内容 -->
         <template v-slot:default>
@@ -269,6 +268,9 @@ const props = defineProps({
     default: () => {},
   },
 });
+
+
+
 onMounted(() => {
   let dicTitles = "专线设置.运输类别,专线设置.件数单位,快递设置.包裹类型,港口设置.装箱类型";
   getDictTypes({ dicTitles }).then((response) => {
@@ -306,7 +308,7 @@ const closePopup = () => {
 };
 
 // 定义 emit
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close",'update:show']);
 
 // 监听弹窗状态变化
 const handlePopupChange = (e) => {
@@ -320,13 +322,13 @@ const close = () => {
 };
 
 const backOffDialog = () => {
-  // emit("update:show", true);
+  show.value.open();
 };
 
 const confirm = (value) => {
   show.value.close();
-  // emit("update:show", !show.value);
-  form.v = Object.assign(form, props.searchData);
+  emit("update:show", !show.value);
+  Object.assign(form, props.searchData);
   showCategory.value.openCateforyPopup();
 };
 

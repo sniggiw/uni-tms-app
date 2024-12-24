@@ -58,4 +58,19 @@ const getInquiryZxData = (params) => {
     });
 };
 
-export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData };
+// 起运地/目的地
+const inquiryHistory = (params) => {
+    return new Promise((resolve, reject) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/tms-app/common/inquiry/history?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory };

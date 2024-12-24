@@ -5,51 +5,21 @@
     <view class="search">
       <view class="city-info">
         <!-- 起运地下拉 -->
-        <!-- <van-dropdown-menu duration="0.5" active-color="#DF3030">
-          <van-dropdown-item v-model="searchParams.srcTitle" ref="srcTitle" :disabled="closeAddressList">
-            <template #title>
-              <view class="src-country">
-                <view>
-                  <i class="ico-select"></i>
-                  {{ searchParams.srcTitle }}
-                </view>
-                <view class="desc">
-                  {{ searchParams.srcTitleEn }}
-                </view>
-              </view>
-            </template>
-            <view class="popupTxet">
-              <addressList @checkCityCallback="checkCityCallback" :isDialog="true" flow="1" type="1">
-              </addressList>
-            </view>
-          </van-dropdown-item>
-        </van-dropdown-menu> -->
-        <!-- <view class="city-info-center">
-          <image src="@/assets/images/icon-right.png" alt />
-        </view> -->
+        <view>
+          {{ searchParams.srcTitle }}
+        </view>
+        <view class="city-info-center">
+          <image src="@/static/inquiry/icon-right.png" />
+        </view>
         <!-- 目的地下拉 -->
-        <!-- <van-dropdown-menu duration="0.5" active-color="#DF3030">
-          <van-dropdown-item v-model="searchParams.descTitle" ref="descTitle" :title="searchParams.descTitle" :disabled="closeAddressList">
-            <template #title>
-              <view class="dest-country">
-                <view>
-                  <i class="ico-select"></i>
-                  {{ searchParams.descTitle }}
-                </view>
-                <view class="desc">
-                  {{ searchParams.descTitleEn }}
-                </view>
-              </view>
-            </template>
-            <view class="popupTxet">
-              <addressList @checkCityCallback="checkCityCallback" :isDialog="true" flow="1" type="2">
-              </addressList>
-            </view>
-          </van-dropdown-item>
-        </van-dropdown-menu> -->
+        <view>
+          {{ searchParams.descTitle }}
+        </view>
       </view>
-      <view class="productsAttr">{{ searchParams.weight }}kg | {{ searchParams.squares }}CBM |
-        {{ searchParams.transCount }}{{ searchParams.transUnit }}</view>
+      <view class="size-num"
+        >{{ searchParams.weight }}kg | {{ searchParams.squares }}CBM |
+        {{ searchParams.transCount }}{{ searchParams.transUnit }}</view
+      >
       <!-- <van-dropdown-menu duration="0.5" :close-on-click-outside="false" :z-index="5500">
         <van-dropdown-item ref="cargoInfo" class="dropdown-cargoInfoBy" @open="handleDropdownOpen" @close="handleDropdownClose">
           <template #title>
@@ -79,16 +49,63 @@
         <view class="center" v-for="(item, index) in inquiryList" :key="index">
           <view class="title">
             <template v-if="lang === 'zh_CN'">
-              <van-image class="imgage" :src="require('@/assets/images/ico-nothan.png')" fit="contain" v-if="item.taxIncluded == true" />
-              <van-image class="imgage" :src="require('@/assets/images/ico-nohan.png')" fit="contain" v-if="item.taxIncluded == false" />
+              <image
+                class="imgage"
+                :src="require('@/static/inquiry/ico-nothan.png')"
+                fit="contain"
+                v-if="item.taxIncluded == true"
+              />
+              <image
+                class="imgage"
+                :src="require('@/static/inquiry/ico-nohan.png')"
+                fit="contain"
+                v-if="item.taxIncluded == false"
+              />
             </template>
             <template v-if="lang === 'en_US'">
-              <van-image class="dutyImgage-En" :src="require('@/assets/images/ico-en-nothan.png')" fit="contain" v-if="item.taxIncluded == true" />
-              <van-image class="imgage-En" :src="require('@/assets/images/ico-en-nohan.png')" fit="contain" v-if="item.taxIncluded == false" />
+              <image
+                class="dutyImgage-En"
+                :src="require('@/static/inquiry/ico-en-nothan.png')"
+                fit="contain"
+                v-if="item.taxIncluded == true"
+              />
+              <image
+                class="imgage-En"
+                :src="require('@/static/inquiry/ico-en-nohan.png')"
+                fit="contain"
+                v-if="item.taxIncluded == false"
+              />
             </template>
-            <view class="tit" @click="placeOrder(item.id, item.price, item.channelCode, item.transKind, item.channelId, item.deliveryFeeDisplay, item.destCity)">{{ item.title }}</view>
+            <view
+              class="tit"
+              @click="
+                placeOrder(
+                  item.id,
+                  item.price,
+                  item.channelCode,
+                  item.transKind,
+                  item.channelId,
+                  item.deliveryFeeDisplay,
+                  item.destCity
+                )
+              "
+              >{{ item.title }}</view
+            >
           </view>
-          <view class="parameter" @click="placeOrder(item.id, item.price, item.channelCode, item.transKind, item.channelId, item.deliveryFeeDisplay, item.destCity)">
+          <view
+            class="parameter"
+            @click="
+              placeOrder(
+                item.id,
+                item.price,
+                item.channelCode,
+                item.transKind,
+                item.channelId,
+                item.deliveryFeeDisplay,
+                item.destCity
+              )
+            "
+          >
             <view class="leftBox">
               <view>
                 运输方式:
@@ -131,8 +148,13 @@
               </view>
               <view>
                 派送费:
-                <template v-if="item.deliveryFeeDisplay == '面谈' || item.deliveryFeeDisplay == 'interview'">
-                  <text>{{ $t('inquiry.portInterview') }}</text>
+                <template
+                  v-if="
+                    item.deliveryFeeDisplay == '面谈' ||
+                    item.deliveryFeeDisplay == 'interview'
+                  "
+                >
+                  <text>面谈</text>
                 </template>
                 <template v-else>
                   <text>{{ item.deliveryFeeDisplay }}</text>
@@ -141,40 +163,64 @@
             </view>
             <view class="right">
               <template v-if="item.price > 0">
-                <view class="top" v-if="item.pricingType == '按重量'">{{ item.currencySymbol }}{{ item.price }}/KG</view>
-                <view class="top" v-if="item.pricingType == '按体积'">{{ item.currencySymbol }}{{ item.price }}/CBM</view>
-                <view class="top" v-if="item.pricingType == '按数量'">{{ item.currencySymbol }}{{ item.price }}/PCS</view>
-                <view class="continue-price" v-if="item.pricingType == '按首续重'">
-                  <view>{{ $t('inquiry.continuePrice') }}</view>
-                  {{ item.currencySymbol }}{{ item.continuePrice }}/0.5KG {{ item.currencySymbol }}{{ item.price }}/0.5KG
+                <view class="top" v-if="item.pricingType == '按重量'"
+                  >{{ item.currencySymbol }}{{ item.price }}/KG</view
+                >
+                <view class="top" v-if="item.pricingType == '按体积'"
+                  >{{ item.currencySymbol }}{{ item.price }}/CBM</view
+                >
+                <view class="top" v-if="item.pricingType == '按数量'"
+                  >{{ item.currencySymbol }}{{ item.price }}/PCS</view
+                >
+                <view
+                  class="continue-price"
+                  v-if="item.pricingType == '按首续重'"
+                >
+                  <view>{{ $t("inquiry.continuePrice") }}</view>
+                  {{ item.currencySymbol }}{{ item.continuePrice }}/0.5KG
+                  {{ item.currencySymbol }}{{ item.price }}/0.5KG
                 </view>
-                <van-button class="jumpDetail">点击查价</van-button>
+                <button class="jumpDetail">点击查价</button>
               </template>
               <template v-if="item.price < 1">
-                <van-button class="jumpDetail" @click.stop="service()"> 联系客服 </van-button>
+                <button class="jumpDetail" @click.stop="service()">
+                  联系客服
+                </button>
               </template>
             </view>
           </view>
           <view class="divider"></view>
-          <view class="matter" ref="sidebarBox" @click="placeOrder(item.id, item.price, item.channelCode, item.transKind, item.channelId, item.deliveryFeeDisplay, item.destCity)">
-            <!-- <view ref="p1">
+          <view
+            class="matter"
+            ref="sidebarBox"
+            @click="
+              placeOrder(
+                item.id,
+                item.price,
+                item.channelCode,
+                item.transKind,
+                item.channelId,
+                item.deliveryFeeDisplay,
+                item.destCity
+              )
+            "
+          >
+            <view ref="p1">
               <view v-html="item.note"></view>
-            </view> -->
+            </view>
           </view>
         </view>
       </template>
-      <!-- <van-empty :description="$t('common.notData')" v-else>
-        <template #image>
-          <image src="@/assets/images/ico-notData.png" alt="">
-        </template>
-      </van-empty> -->
+      <EmptyComponent v-else/>
     </view>
   </view>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { getInquiryZxData } from "@/api/inquiry";
+import { onLoad } from "@dcloudio/uni-app";
+import EmptyComponent from '../../../components/EmptyComponent/index.vue';
 // import addressList from "@/views/components/addressList/index.vue"; // 起运地目的地列表
 // import CargoInfoByDetail from "@/views/inquiry/components/cargoInfoByDetail/index.vue";
 
@@ -182,19 +228,20 @@ import { getInquiryZxData } from "@/api/inquiry";
 const props = defineProps({
   show: {
     type: Boolean,
-    default: false
+    default: false,
   },
   searchData: {
     type: Object,
-    default: () => ({})
-  }
+    default: () => ({}),
+  },
 });
 
 // 定义响应式变量
-const lang = ref(''); // 登录时选择的语言
+const lang = ref(""); // 登录时选择的语言
 const sort = ref([]); // 排序
 const transKind = ref([]); // 运输方式筛选数据来源
 const inquiryList = ref([]); // 请求专线列表
+const paramsData = ref({});
 const searchParams = reactive({
   // 首页接收数据传参
   pageNum: 1, // 当前页数
@@ -211,7 +258,7 @@ const searchParams = reactive({
   descTitle: props.searchData.destCountry, // 目的地国家名
   descScode: props.searchData.destScode, // 目的地编码
   descTitleEn: props.searchData.destCountryEn, // 目的地国家英文名
-  sort: '1', // 默认不传，价格传1，时效传2
+  sort: "1", // 默认不传，价格传1，时效传2
   destCity: props.searchData.destCity, // 目的地城市
   maxHeight: props.searchData.maxHeight, // 最大高度
   maxLong: props.searchData.maxLong, // 最大长度
@@ -223,36 +270,46 @@ const homeTop = ref(0);
 
 // 生命周期钩子
 onMounted(() => {
-  lang.value = localStorage.getItem('lang');
+  lang.value = uni.getStorageSync("lang");
+
   getInquiryZx();
   // listReceiverCityData();
 });
 
+onLoad((options) => {
+  Object.assign(searchParams, options);
+});
+
 onBeforeUnmount(() => {
-  const app = document.getElementById('app');
+  const app = document.getElementById("app");
   homeTop.value = app.scrollTop || 0;
 });
 
-// 方法定义
 const getInquiryZx = () => {
+  uni.showLoading({
+    title: "加载中...",
+    mask: true,
+  });
   let params = JSON.parse(JSON.stringify(searchParams));
   if (params.products && params.products.length > 0) {
     params.products = params.products.toString();
   }
   inquiryList.value = [];
-  getInquiryZxData(params).then(res => {
+  getInquiryZxData(params).then((res) => {
     if (res.code === 200) {
       const resData = res.rows;
       inquiryList.value = [...inquiryList.value, ...resData];
       if (inquiryList.value.length >= res.total) {
         // 所有数据加载完成
       }
+      uni.hideLoading();
     } else {
       uni.showToast({
         title: res.msg,
-        icon: 'none',
-        duration: 2000
+        icon: "none",
+        duration: 2000,
       });
+      uni.hideLoading();
     }
   });
 };
@@ -268,18 +325,26 @@ const closeFloor = () => {
 };
 
 const handleDropdownOpen = () => {
-  document.getElementById('app').style.overflow = 'hidden';
+  document.getElementById("app").style.overflow = "hidden";
   closeAddressList.value = true;
 };
 
 const handleDropdownClose = () => {
-  document.getElementById('app').style.overflow = 'auto';
+  document.getElementById("app").style.overflow = "auto";
   closeAddressList.value = false;
 };
 
-const placeOrder = (id, price, channelCode, transKind, channelId, deliveryFeeDisplay, destCity) => {
+const placeOrder = (
+  id,
+  price,
+  channelCode,
+  transKind,
+  channelId,
+  deliveryFeeDisplay,
+  destCity
+) => {
   uni.navigateTo({
-    url: `/pages/inquiry/channelDetail?channelId=${id}&price=${price}&channelCode=${channelCode}&transKind=${transKind}&channel=${channelId}&title=${props.searchData.title}&weight=${searchParams.weight}&srcCountry=${searchParams.srcTitle}&srcScode=${searchParams.srcScode}&srcCountryEn=${searchParams.srcTitleEn}&squares=${searchParams.squares}&products=${searchParams.products}&destCountry=${searchParams.descTitle}&destCountryEn=${searchParams.descTitleEn}&destScode=${searchParams.descScode}&transCount=${searchParams.transCount}&transUnit=${searchParams.transUnit}&destCity=${destCity}&deliveryFeeDisplay=${deliveryFeeDisplay}`
+    url: `/pages/inquiry/channelDetail?channelId=${id}&price=${price}&channelCode=${channelCode}&transKind=${transKind}&channel=${channelId}&title=${props.searchData.title}&weight=${searchParams.weight}&srcCountry=${searchParams.srcTitle}&srcScode=${searchParams.srcScode}&srcCountryEn=${searchParams.srcTitleEn}&squares=${searchParams.squares}&products=${searchParams.products}&destCountry=${searchParams.descTitle}&destCountryEn=${searchParams.descTitleEn}&destScode=${searchParams.descScode}&transCount=${searchParams.transCount}&transUnit=${searchParams.transUnit}&destCity=${destCity}&deliveryFeeDisplay=${deliveryFeeDisplay}`,
   });
 };
 
@@ -294,7 +359,7 @@ const checkCityCallback = (data) => {
     searchParams.descTitle = data.title;
     searchParams.descScode = data.scode;
     searchParams.descTitleEn = data.titleEn;
-    searchParams.destCity = '';
+    searchParams.destCity = "";
     // listReceiverCityData();
   }
   getInquiryZx();
@@ -320,15 +385,11 @@ const checkCityCallback = (data) => {
 // };
 
 const service = () => {
-  if (uni.getStorageSync('areaNumber') != '+86') {
-    uni.navigateTo({
-      url: "/pages/account/whatsApp"
-    });
-  } else {
-    uni.navigateTo({
-      url: "/pages/account/wechat"
-    });
-  }
+  uni.showToast({
+    title: '正在开发中',
+    icon: "error",
+    duration: 1500,
+  });
 };
 </script>
 
@@ -338,7 +399,7 @@ const service = () => {
 }
 
 .content {
-  
+  background: #f9f9fa;
   .search {
     padding: 30rpx 20rpx 40rpx;
     background: #df3030;
@@ -349,7 +410,7 @@ const service = () => {
       font-size: 40rpx;
       color: #ffffff;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-     
+
       // /deep/.van-dropdown-menu {
       //   .dest-country, .src-country {
       //     position: relative;
@@ -414,11 +475,11 @@ const service = () => {
         height: 0px;
         margin: 30rpx 0;
         border: 1px dashed #ffa0a0;
-        img {
+        > uni-image {
           display: block;
           width: 34rpx;
           height: 34rpx;
-          pointer-events:none;
+          pointer-events: none;
         }
       }
     }
@@ -460,7 +521,7 @@ const service = () => {
     //     max-height: 85%;
     //   }
     // }
-    // .productsAttr {
+    // .size-num {
     //   min-height: 40rpx;
     //   color: #ffffff;
     //   font-size: 30rpx;
@@ -468,7 +529,13 @@ const service = () => {
     //   text-align: center;
     // }
   }
-
+  .size-num {
+    min-height: 40rpx;
+    color: #ffffff;
+    font-size: 30rpx;
+    margin: 16rpx auto;
+    text-align: center;
+  }
   .container {
     position: relative;
     top: -40rpx;
@@ -526,41 +593,41 @@ const service = () => {
       border-radius: 30rpx;
       margin: 30rpx 30rpx 40rpx 30rpx;
       position: relative;
-      .title{
-      .imgage {
-        width: 114rpx;
-        height: 54rpx;
-        position: absolute;
-        right: -2rpx;
-        top: 0;
-        pointer-events:none;
+      .title {
+        .imgage {
+          width: 114rpx;
+          height: 54rpx;
+          position: absolute;
+          right: -2rpx;
+          top: 0;
+          pointer-events: none;
+        }
+        //英文版含税图片
+        .dutyImgage-En {
+          position: absolute;
+          right: -4rpx;
+          top: 0;
+          width: 210rpx;
+          height: 58rpx;
+          pointer-events: none;
+        }
+        //英文版不含税图片
+        .imgage-En {
+          position: absolute;
+          right: 0px;
+          top: 0;
+          width: 130rpx;
+          height: 54rpx;
+          pointer-events: none;
+        }
+        .tit {
+          font-size: 34rpx;
+          color: #f86e21;
+          margin: 10rpx 0px 0px 38rpx;
+          padding-top: 70rpx;
+          font-weight: 600;
+        }
       }
-      //英文版含税图片
-      .dutyImgage-En{
-        position: absolute;
-        right: -4rpx;
-        top: 0;
-        width: 210rpx;
-        height: 58rpx;
-        pointer-events:none;
-      }
-       //英文版不含税图片
-      .imgage-En{
-        position: absolute;
-        right: 0px;
-        top: 0;
-        width: 130rpx;
-        height: 54rpx;
-        pointer-events:none;
-      }
-      .tit {
-        font-size: 34rpx;
-        color: #F86E21;
-        margin: 10rpx 0px 0px 38rpx;
-        padding-top: 70rpx;
-        font-weight: 600;
-      }
-    }
       .bg {
         width: 630rpx;
         height: 2rpx;
@@ -581,7 +648,7 @@ const service = () => {
           font-size: 28rpx;
           color: #999999;
 
-          > div > span {
+          > view > uni-text {
             font-size: 26rpx;
             margin-left: 10rpx;
             width: 200rpx;
@@ -605,46 +672,48 @@ const service = () => {
           bottom: 0px;
           right: 44rpx;
           font-size: 40rpx;
-          
+
           .top {
             margin-left: 16rpx;
             margin-bottom: 10rpx;
             font-size: 28rpx;
-            color: #DD312F;
+            color: #dd312f;
           }
-          .continue-price{
+          .continue-price {
             margin-left: 16rpx;
             margin-bottom: 10rpx;
             font-size: 28rpx;
-            color: #DD312F;
-            word-break: break-all; 
+            color: #dd312f;
+            word-break: break-all;
             word-wrap: break-word;
           }
-          .bottom{
+          .bottom {
             width: 240rpx;
             height: 20rpx;
           }
-          .interview{
+          .interview {
             width: 180rpx;
             height: 100rpx;
             font-size: 30rpx;
             text-align: center;
-            background: #DF3030;
+            background: #df3030;
             color: #ffffff;
             border-radius: 30rpx;
-            border: 1px solid #DF3030;
-            >div{
+            border: 1px solid #df3030;
+            > div {
               width: 140rpx;
               margin-left: 20rpx;
               margin-top: 6rpx;
             }
           }
-          .jumpDetail{
+          .jumpDetail {
             border-radius: 200rpx;
-            background: #F54543;
-            color: #FFFFFF;
+            background: #f54543;
+            color: #ffffff;
             height: 70rpx;
             width: 220rpx;
+            line-height: 70rpx;
+            font-size: 30rpx;
           }
         }
       }
@@ -664,7 +733,7 @@ const service = () => {
         margin: -20rpx 30rpx;
         word-wrap: break-word;
         font-size: 24rpx;
-        color: #F86E21;
+        color: #f86e21;
         overflow: hidden;
 
         .get_ct_more {

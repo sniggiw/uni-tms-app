@@ -11,7 +11,7 @@ const request = axios.create({
 request.interceptors.request.use(
     // 在发送请求之前做些什么
     function (config) {
-        config.headers["Content-Language"] = localStorage.getItem("lang") ? localStorage.getItem("lang") : "zh_CN"; // 语言
+        config.headers["Content-Language"] = uni.getStorageSync("lang") ? uni.getStorageSync("lang") : "zh_CN"; // 语言
         config.headers["X-Request-Client"] = "web"; // 客户端来源:默认web
 
         if (authStore?.authInfo?.token) {

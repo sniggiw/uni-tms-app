@@ -2,6 +2,7 @@
     <view class="index-page">
         <button @tap="judgeToLoginPage">跳转 login</button>
         <button @tap="clearAuthInfoData">清除登录状态</button>
+        <button @tap="judgeInuqieyPage">询价</button>
     </view>
 </template>
 

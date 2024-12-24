@@ -1,12 +1,16 @@
 <template>
- <view class="homeCollapse-page">
+  <view class="homeCollapse-page">
     <view class="open-content">
       <view class="left" @tap="toJump(1)">
         <view class="left">{{
-          inquirySearch[flow] ? inquirySearch[flow].srcCountry || "请选择" : "请选择"
+          inquirySearch[flow]
+            ? inquirySearch[flow].srcTitle || "请选择"
+            : "请选择"
         }}</view>
         <view class="foreign">{{
-          inquirySearch[flow] ? inquirySearch[flow].srcCountryEn || "Select" : "Select"
+          inquirySearch[flow]
+            ? inquirySearch[flow].srcTitleEn || "Select"
+            : "Select"
         }}</view>
       </view>
 
@@ -18,10 +22,14 @@
 
       <view class="right" @tap="toJump(2)">
         <view>{{
-          inquirySearch[flow] ? inquirySearch[flow].destCountry || "目的港" : "目的港"
+          inquirySearch[flow]
+            ? inquirySearch[flow].descTitle || "目的港"
+            : "目的港"
         }}</view>
         <view class="foreign">{{
-          inquirySearch[flow] ? inquirySearch[flow].destCountryEn || "Select" : "Select"
+          inquirySearch[flow]
+            ? inquirySearch[flow].descTitleEn || "Select"
+            : "Select"
         }}</view>
       </view>
     </view>
@@ -31,12 +39,20 @@
       </button>
       <button class="check-price" @tap="toSearchInquiry">查价</button>
     </view>
-  
+
     <!-- 历史询价 -->
-    <!-- <view v-if="historyList[flow] && historyList[flow].length > 0" class="inquiry-history">
+    <!-- <view
+      v-if="historyList[flow] && historyList[flow].length > 0"
+      class="inquiry-history"
+    >
       <view class="title">您查询过的路线</view>
       <view class="history-list">
-        <view v-for="(item, index) in historyList[flow]" :key="index" class="item" @tap="toJumpDetail(item)">
+        <view
+          v-for="(item, index) in historyList[flow]"
+          :key="index"
+          class="item"
+          @tap="toJumpDetail(item)"
+        >
           <view class="left">
             <view class="city">{{ item.startPos.title }}</view>
             <view>{{ item.weight }}kg</view>
@@ -58,7 +74,7 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-
+import { inquiryHistory } from "@/api/inquiry";
 // 获取当前路由实例
 const route = useRoute();
 
@@ -79,42 +95,42 @@ const searchData = reactive({});
 const historyList = reactive({});
 const inquirySearch = reactive({
   1: {
-    srcCountry: "",
-    srcCountryEn: "",
-    destCountry: "",
-    destCountryEn: "",
+    srcTitle: "",
+    srcTitleEn: "",
+    descTitle: "",
+    descTitleEn: "",
     srcScode: "",
     destScode: "",
   },
   2: {
-    srcCountry: "",
-    srcCountryEn: "",
-    destCountry: "",
-    destCountryEn: "",
+    srcTitle: "",
+    srcTitleEn: "",
+    descTitle: "",
+    descTitleEn: "",
     srcScode: "",
     destScode: "",
   },
   3: {
-    srcCountry: "",
-    srcCountryEn: "",
-    destCountry: "",
-    destCountryEn: "",
+    srcTitle: "",
+    srcTitleEn: "",
+    descTitle: "",
+    descTitleEn: "",
     srcScode: "",
     destScode: "",
   },
   4: {
-    srcCountry: "",
-    srcCountryEn: "",
-    destCountry: "",
-    destCountryEn: "",
+    srcTitle: "",
+    srcTitleEn: "",
+    descTitle: "",
+    descTitleEn: "",
     srcScode: "",
     destScode: "",
   },
   5: {
-    srcCountry: "",
-    srcCountryEn: "",
-    destCountry: "",
-    destCountryEn: "",
+    srcTitle: "",
+    srcTitleEn: "",
+    descTitle: "",
+    descTitleEn: "",
     srcScode: "",
     destScode: "",
   },
@@ -128,26 +144,27 @@ onMounted(() => {
   uni.removeStorageSync("destination");
   Object.keys(inquirySearch).forEach((key) => {
     inquirySearch[key] = {
-      srcCountry: "",
-      srcCountryEn: "",
-      destCountry: "",
-      destCountryEn: "",
+      srcTitle: "",
+      srcTitleEn: "",
+      descTitle: "",
+      descTitleEn: "",
       srcScode: "",
       destScode: "",
     };
   });
+  // inquiryHistoryData();
 });
 
 watch(
   () => route.fullPath,
   (to, from) => {
     const departure = uni.getStorageSync("departure");
-   
+
     if (departure) {
       const departureData = JSON.parse(departure);
       departureData.forEach((element) => {
-        inquirySearch[element.flow].srcCountry = element.city;
-        inquirySearch[element.flow].srcCountryEn = element.cityEn;
+        inquirySearch[element.flow].srcTitle = element.city;
+        inquirySearch[element.flow].srcTitleEn = element.cityEn;
         inquirySearch[element.flow].srcScode = element.scode;
       });
     }
@@ -156,8 +173,8 @@ watch(
     if (destination) {
       const destinationData = JSON.parse(destination);
       destinationData.forEach((element) => {
-        inquirySearch[element.flow].destCountry = element.city;
-        inquirySearch[element.flow].destCountryEn = element.cityEn;
+        inquirySearch[element.flow].descTitle = element.city;
+        inquirySearch[element.flow].descTitleEn = element.cityEn;
         inquirySearch[element.flow].destScode = element.scode;
       });
     }
@@ -168,7 +185,7 @@ watch(
 // Methods
 const toSearchInquiry = () => {
   const inquirySearchData = inquirySearch[props.flow];
-  if (!inquirySearchData.srcCountry) {
+  if (!inquirySearchData.srcTitle) {
     uni.showToast({
       title: "请选择起运地",
       icon: "none",
@@ -176,7 +193,7 @@ const toSearchInquiry = () => {
     });
     return;
   }
-  if (!inquirySearchData.destCountry) {
+  if (!inquirySearchData.descTitle) {
     uni.showToast({
       title: "请选择目的地",
       icon: "none",
@@ -196,16 +213,21 @@ const toJump = (type) => {
 };
 
 const toJumpDetail = (item) => {
-  const params = {
-    srcCountry: item.startPos.title,
-    srcCountryEn: item.startPos.titleEn,
+  // 创建一个参数对象
+  const params = reactive({
+    srcTitle: item.startPos.title,
+    srcTitleEn: item.startPos.titleEn,
     srcScode: item.startPos.scode,
-    destCountry: item.endPos.title,
+    descTitle: item.endPos.title,
     destScode: item.endPos.scode,
-    destCountryEn: item.endPos.titleEn,
+    descTitleEn: item.endPos.titleEn,
     transCount: item.transCount,
     flow: item.flowId,
-  };
+    squares:item.squares,
+    weight:item.weight
+  });
+
+  // 根据条件添加其他参数
   if (item.zxTransKind != null) {
     params.transKind = item.zxTransKind.value;
   }
@@ -221,18 +243,49 @@ const toJumpDetail = (item) => {
   if (item.productAttr) {
     params.products = item.productAttr;
   }
-  const pathMap = {
-    1: "/pages/inquiry/dedicatedLine",
-    2: "/pages/inquiry/intAirport",
-    3: "/pages/inquiry/intPort",
-    4: "/pages/inquiry/intExpress",
-    5: "/pages/inquiry/intRail",
-  };
-  const path = pathMap[props.flow] || "";
+
+  // 根据 flow 跳转到不同的页面
+  let path = "";
+  switch (props.flow) {
+    case "1":
+      path = "/pages/inquiry/dedicatedLine/index"; // 专线
+      break;
+    case "2":
+      path = "/pages/inquiry/intAirport"; // 国际机场
+      break;
+    case "3":
+      path = "/pages/inquiry/intPort"; // 国际港口
+      break;
+    case "4":
+      path = "/pages/inquiry/intExpress"; // 国际快递
+      break;
+    case "5":
+      path = "/pages/inquiry/intRail"; // 国际铁路
+      break;
+    default:
+      console.error("无效的 flow");
+      return;
+  }
+
+  // 使用 uni.navigateTo 跳转页面
   uni.navigateTo({
     url: `${path}?${Object.keys(params)
       .map((key) => `${key}=${encodeURIComponent(params[key])}`)
       .join("&")}`,
+  });
+};
+
+const inquiryHistoryData = () => {
+  inquiryHistory({ flow: props.flow }).then((response) => {
+    if (response.code === 200) {
+      historyList[props.flow] = response.data;
+    } else {
+      uni.showToast({
+        title: response.msg,
+        icon: "none",
+        mask: true,
+      });
+    }
   });
 };
 

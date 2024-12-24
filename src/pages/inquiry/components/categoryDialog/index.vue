@@ -11,8 +11,7 @@
         :before-close="true"
         @close="closeCateforyPopup"
         @confirm="onSubmit"
-        confirmText="货物价格"
-        title="  "
+        confirmText="获取价格"
       >
         <!-- 弹窗内容 -->
         <template v-slot:default>
@@ -95,7 +94,7 @@ const props = defineProps({
 });
 
 // Emits
-const emit = defineEmits(["update:showCategory", "backOffDialog"]);
+const emit = defineEmits(["update:showCategory", "backOffDialog","close"]);
 
 // State
 const lang = ref("");
@@ -201,8 +200,7 @@ const openCateforyPopup = () => {
 const closeCateforyPopup = () => {
   showCategory.value.close();
   emit("update:showCategory", !props.showCategory);
-  emit("backOffDialog");
-  // emit("close"); // 通知父组件弹窗已关闭
+  emit("backOffDialog"); // 通知父组件弹窗已关闭,父组件弹窗打开
 };
 
 // Methods
@@ -234,7 +232,7 @@ const onSubmit = () => {
     });
     return;
   }
-  emit("update:showCategory", !props.showCategory);
+  showCategory.value.close(); //关闭弹窗
   const pathMap = {
     1: "/pages/inquiry/dedicatedLine/index",
     2: "/pages/inquiry/intAirport",

@@ -216,7 +216,7 @@ const activeName = ref("1");
 const searchData = ref({});
 const show = ref(true);
 const hotToday = ref([]);
-const lang = ref('')
+const lang = ref("");
 const data = reactive({
   bannerParams: {
     kind: "询价首页",
@@ -248,7 +248,6 @@ function bannerList() {
   });
 }
 function searchInquiryCallback(data) {
-  // console.log('@@',data)
   searchData.value = data;
   show.value.openPopup();
 }
@@ -260,10 +259,74 @@ function inquiryHotTodayData() {
     // console.log("@@", bannerData.value);
   });
 }
+
+// 定义方法
+const toJumpList = (channel, flowTemplateId) => {
+  // 创建一个参数对象
+  const params = reactive({
+    srcTitle: channel.startPos.title,
+    srcScode: channel.startPos.scode,
+    srcTitleEn: channel.startPos.titleEn,
+    descTitle: channel.endPos.title,
+    destScode: channel.endPos.scode,
+    descTitleEn: channel.endPos.titleEn,
+    weight: channel.weight,
+    squares: channel.squares,
+    products: channel.productAttr,
+    transCount: channel.transCount,
+    transUnit: channel.transUnit,
+    flow: channel.flowId,
+  });
+
+  // 根据条件添加其他参数
+  if (channel.zxTransKind != null) {
+    params.transKind = channel.zxTransKind.value;
+  }
+  if (channel.otherCompany != null) {
+    params.companyName = channel.otherCompany.value;
+  }
+  if (channel.expressKind != null) {
+    params.packageKind = channel.expressKind.value;
+  }
+  if (channel.portSpecKind != null) {
+    params.portSpecKind = channel.portSpecKind;
+  }
+
+  // 根据 flowTemplateId 跳转到不同的页面
+  let path = "";
+  switch (flowTemplateId) {
+    case 1:
+      path = "/pages/inquiry/dedicatedLine/index"; // 专线
+      break;
+    case 2:
+      path = "/pages/inquiry/intAirport"; // 机场
+      break;
+    case 3:
+      path = "/pages/inquiry/intPort"; // 港口
+      break;
+    case 4:
+      path = "/pages/inquiry/intExpress"; // 快递
+      break;
+    case 5:
+      path = "/pages/inquiry/intRail"; // 铁路
+      break;
+    default:
+      console.error("无效的 flowTemplateId");
+      return;
+  }
+
+  // 使用 uni.navigateTo 跳转页面
+  uni.navigateTo({
+    url: `${path}?${Object.keys(params)
+      .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+      .join("&")}`,
+  });
+};
 </script>
 
 <style lang="scss" scoped>
 .inquiryHome-page {
+  background: #f9f9fa;
   .swiper {
     width: 100%;
     height: 450rpx; /* 根据需要调整高度 */
@@ -284,11 +347,16 @@ function inquiryHotTodayData() {
     .uni-collapse {
       font-size: 32rpx;
       color: #333333;
+      background: #f9f9fa;
+      // :deep(.uni-collapse-item__wrap.is--transition){
+      //   height: auto !important;
+      // }
       :deep(.uni-collapse-item) {
         overflow: hidden;
         box-shadow: 0px 6rpx 10rpx 2rpx rgba(232, 225, 225, 0.34);
         border-radius: 10rpx;
         margin-bottom: 20rpx;
+        background-color: #fff;
         .collapseItem {
           position: relative;
           padding: 40rpx 40rpx 20rpx;
