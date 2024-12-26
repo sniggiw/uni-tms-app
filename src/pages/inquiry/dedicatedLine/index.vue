@@ -92,20 +92,7 @@
               >{{ item.title }}</view
             >
           </view>
-          <view
-            class="parameter"
-            @click="
-              placeOrder(
-                item.id,
-                item.price,
-                item.channelCode,
-                item.transKind,
-                item.channelId,
-                item.deliveryFeeDisplay,
-                item.destCity
-              )
-            "
-          >
+          <view class="parameter">
             <view class="leftBox">
               <view>
                 运输方式:
@@ -180,7 +167,22 @@
                   {{ item.currencySymbol }}{{ item.continuePrice }}/0.5KG
                   {{ item.currencySymbol }}{{ item.price }}/0.5KG
                 </view>
-                <button class="jumpDetail">点击查价</button>
+                <button
+                  class="jumpDetail"
+                  @tap="
+                    placeOrder(
+                      item.id,
+                      item.price,
+                      item.channelCode,
+                      item.transKind,
+                      item.channelId,
+                      item.deliveryFeeDisplay,
+                      item.destCity
+                    )
+                  "
+                >
+                  点击查价
+                </button>
               </template>
               <template v-if="item.price < 1">
                 <button class="jumpDetail" @click.stop="service()">
@@ -193,7 +195,7 @@
           <view
             class="matter"
             ref="sidebarBox"
-            @click="
+            @tap="
               placeOrder(
                 item.id,
                 item.price,
@@ -211,7 +213,7 @@
           </view>
         </view>
       </template>
-      <EmptyComponent v-else/>
+      <EmptyComponent v-else />
     </view>
   </view>
 </template>
@@ -220,7 +222,7 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { getInquiryZxData } from "@/api/inquiry";
 import { onLoad } from "@dcloudio/uni-app";
-import EmptyComponent from '../../../components/EmptyComponent/index.vue';
+import EmptyComponent from "../../../components/EmptyComponent/index.vue";
 // import addressList from "@/views/components/addressList/index.vue"; // 起运地目的地列表
 // import CargoInfoByDetail from "@/views/inquiry/components/cargoInfoByDetail/index.vue";
 
@@ -344,7 +346,7 @@ const placeOrder = (
   destCity
 ) => {
   uni.navigateTo({
-    url: `/pages/inquiry/channelDetail?channelId=${id}&price=${price}&channelCode=${channelCode}&transKind=${transKind}&channel=${channelId}&title=${props.searchData.title}&weight=${searchParams.weight}&srcCountry=${searchParams.srcTitle}&srcScode=${searchParams.srcScode}&srcCountryEn=${searchParams.srcTitleEn}&squares=${searchParams.squares}&products=${searchParams.products}&destCountry=${searchParams.descTitle}&destCountryEn=${searchParams.descTitleEn}&destScode=${searchParams.descScode}&transCount=${searchParams.transCount}&transUnit=${searchParams.transUnit}&destCity=${destCity}&deliveryFeeDisplay=${deliveryFeeDisplay}`,
+    url: `/pages/inquiry/dedicatedLine/channelDetail?channelId=${id}&price=${price}&channelCode=${channelCode}&transKind=${transKind}&channel=${channelId}&title=${props.searchData.title}&weight=${searchParams.weight}&srcCountry=${searchParams.srcTitle}&srcScode=${searchParams.srcScode}&srcCountryEn=${searchParams.srcTitleEn}&squares=${searchParams.squares}&products=${searchParams.products}&destCountry=${searchParams.descTitle}&destCountryEn=${searchParams.descTitleEn}&destScode=${searchParams.descScode}&transCount=${searchParams.transCount}&transUnit=${searchParams.transUnit}&destCity=${destCity}&deliveryFeeDisplay=${deliveryFeeDisplay}`,
   });
 };
 
@@ -386,7 +388,7 @@ const checkCityCallback = (data) => {
 
 const service = () => {
   uni.showToast({
-    title: '正在开发中',
+    title: "正在开发中",
     icon: "error",
     duration: 1500,
   });

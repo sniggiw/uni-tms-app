@@ -73,4 +73,32 @@ const inquiryHistory = (params) => {
     });
 };
 
-export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory };
+const getInquiryZxDetail = (params) => {
+    return new Promise((resolve, reject) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/tms-app/zx/inquiry/detail?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+const postinquiryHistory = (params) => {
+    return new Promise((resolve, reject) => {
+        const url = `/tms-app/common/inquiry/history`;
+        http.post(url, params) // 直接将 params 作为请求体传递
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+
+export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory };

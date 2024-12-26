@@ -12,3 +12,10 @@ uni-page-wrapper{
     background: #f9f9fa;
     height: 100vh;
 }
+/* 自定义卡片样式 */
+.custom-card {
+    background: #FFFFFF;
+    box-shadow: 0px 6rpx 10rpx 2rpx rgba(232,225,225,0.34);
+    border-radius: 30rpx;
+    overflow: hidden;
+}
