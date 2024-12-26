@@ -92,7 +92,7 @@ const handleClick = () => {
 }
 
 .checkbox.checked .checkbox-icon {
-  background-color: #1989fa;
-  border-color: #1989fa;
+  background-color: #ee0a24;
+  border-color: #ee0a24;
 }
 </style>

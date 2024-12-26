@@ -149,25 +149,64 @@
         <view class="custom-card list">
           <view>
             <view class="title">如果您的货物满足以下费用请勾选</view>
-            <CheckboxGroup
-              v-model="checkState"
-              v-for="(item, index) in serviceBillsDetailVos"
-              :key="index"
-            >
+            <CheckboxGroup v-model="serviceBillsDetailVosCheckState">
+              <view v-for="(item, index) in serviceBillsDetailVos" :key="index">
+                <view class="absence-price" v-if="item.isTotalItem === 0">
+                  {{ item.costItem }}
+                  <text
+                    >总价{{ inquiryDetail.currencySymbol
+                    }}{{ item.costPrice }}</text
+                  >
+                </view>
+                <view v-if="item.isTotalItem === 1">
+                  <Checkbox :value="item" class="check" @tap="checkServe(item)">
+                    {{ item.costItem }}
+                  </Checkbox>
+                  <view class="total"
+                    >总价{{ inquiryDetail.currencySymbol
+                    }}{{ getPrice(item.costPrice * item.num) }}</view
+                  >
+                  <!-- 步进器 -->
+                  <view v-if="item.ster">
+                    <view
+                      class="ster"
+                      v-if="item.templateServiceKind === '按数量'"
+                    >
+                      <uni-number-box
+                        v-model="item.num"
+                        theme="round"
+                        button-size="22"
+                        @plus="item.num++"
+                        @minus="item.num--"
+                        :min="1"
+                      />
+                      <view
+                        >单价{{ inquiryDetail.currencySymbol
+                        }}{{ getPrice(item.costPrice) }}/{{ item.unit }}</view
+                      >
+                    </view>
+                  </view>
+                  <view class="memo">{{ item.memo }}</view>
+                </view>
+              </view>
+            </CheckboxGroup>
+          </view>
+        </view>
+      </template>
+      <template v-if="feeBillsDetailVos.length > 0">
+        <view class="custom-card list">
+          <view class="title">如果您的货物满足以下费用请勾选</view>
+          <CheckboxGroup v-model="feeBillsDetailVosCheckState">
+            <view v-for="(item, index) in feeBillsDetailVos" :key="index">
               <view class="absence-price" v-if="item.isTotalItem === 0">
-                {{ item.costItem }}
+                {{ item.costItem }}{{ $t("inquiry.notTotalPrice") }}
                 <text
                   >总价{{ inquiryDetail.currencySymbol
                   }}{{ item.costPrice }}</text
                 >
               </view>
               <view v-if="item.isTotalItem === 1">
-                <Checkbox
-                  :value="item"
-                  class="check"
-                  checked-color="#ee0a24"
-                  @tap="checkServe(item)"
-                >
+                <Checkbox :value="item" class="check" @tap="checkServe(item)">
                   {{ item.costItem }}
                 </Checkbox>
                 <view class="total"
@@ -196,58 +235,8 @@
                 </view>
                 <view class="memo">{{ item.memo }}</view>
               </view>
-            </CheckboxGroup>
-          </view>
-        </view>
-      </template>
-      <template v-if="feeBillsDetailVos.length > 0">
-        <view class="custom-card list">
-          <view class="title">如果您的货物满足以下费用请勾选</view>
-          <CheckboxGroup
-            v-model="checkState"
-            v-for="(item, index) in feeBillsDetailVos"
-            :key="index"
-          >
-            <view class="absence-price" v-if="item.isTotalItem === 0">
-              {{ item.costItem }}{{ $t("inquiry.notTotalPrice") }}
-              <text
-                >总价{{ inquiryDetail.currencySymbol
-                }}{{ item.costPrice }}</text
-              >
-            </view>
-            <view v-if="item.isTotalItem === 1">
-              <Checkbox
-                :value="item"
-                class="check"
-                @tap="checkServe(item)"
-              >
-                {{ item.costItem }}
-              </Checkbox>
-              <view class="total"
-                >总价{{ inquiryDetail.currencySymbol
-                }}{{ getPrice(item.costPrice * item.num) }}</view
-              >
-              <!-- 步进器 -->
-              <view v-if="item.ster">
-                <view class="ster" v-if="item.templateServiceKind === '按数量'">
-                  <uni-number-box
-                    v-model="item.num"
-                    theme="round"
-                    button-size="22"
-                    @plus="item.num++"
-                    @minus="item.num--"
-                    :min="1"
-                  />
-                  <view
-                    >单价{{ inquiryDetail.currencySymbol
-                    }}{{ getPrice(item.costPrice) }}/{{ item.unit }}</view
-                  >
-                </view>
-              </view>
-              <view class="memo">{{ item.memo }}</view>
             </view>
           </CheckboxGroup>
-          {{ checkState }}
         </view>
       </template>
       <!-- 产品介绍 -->
@@ -311,12 +300,24 @@
         </view>
       </view>
       <view class="detailText" v-if="contentDetail">
-        <view class="content-listem" v-for="(item, index) in checkState" :key="index">
-          <view>{{ item.name }}{{ item.costItem }}</view>
-          <view>{{ inquiryDetail.currencySymbol }}{{ getPrice(item.costPrice * item.num) }}</view>
+        <view
+          >运费总价：{{ inquiryDetail.currencySymbol
+          }}{{ inquiryDetail.totalPrice }}</view
+        >
+        <view
+          class="content-listem"
+          v-for="(item, index) in feeBillsDetailVosCheckState.concat(
+            serviceBillsDetailVosCheckState
+          )"
+          :key="index"
+        >
+          <view>附加费：{{ item.name }}{{ item.costItem }}</view>
+          <view
+            >{{ inquiryDetail.currencySymbol
+            }}{{ getPrice(item.costPrice * item.num) }}</view
+          >
         </view>
       </view>
-    
     </view>
   </view>
 </template>
@@ -347,16 +348,16 @@ const serviceBillsDetailVos = ref([]);
 const priceA = ref(true);
 const state = ref(false);
 const detal = ref(false);
-const sidebarBox = ref(false);
+
 const matter = ref(false);
 const measure = ref(false);
 const contentDetail = ref(false);
-const checkState = ref([]);
+const feeBillsDetailVosCheckState = ref([]);
 const getMoreCon = ref(false);
 const getmatersCon = ref(false);
 const getmeasureCon = ref(false);
 const queryPriceHistoryId = ref("");
-
+const serviceBillsDetailVosCheckState = ref([]);
 const searchA = reactive({
   id: route.query.channelId,
   weight: route.query.weight,
@@ -387,6 +388,7 @@ const historyParams = reactive({
 });
 const confirmPopup = ref(false);
 const isBind = ref(false);
+
 onMounted(() => {
   getInquiryZxDetailData();
   historyKeep();
@@ -417,20 +419,43 @@ onMounted(() => {
 
 const totalPrice = computed(() => {
   if (price.value > 0) {
-    let p0 = inquiryDetail.value.totalPrice * 1;
-    return checkState.value.reduce(
-      (total, item) => total + item.costPrice * item.num,
-      p0
-    );
-    // console.log('@@@@',checkState.value)
-  }
-  if (price.value < 1) {
-    return checkState.value.reduce(
+    // 初始值为 inquiryDetail.value.totalPrice
+    const p0 = inquiryDetail.value.totalPrice * 1;
+
+    // 计算 feeBillsDetailVosCheckState.value 的总和
+    const checkStateTotal = feeBillsDetailVosCheckState.value.reduce(
       (total, item) => total + item.costPrice * item.num,
       0
     );
-    // console.log('####',checkState.value)
+
+    // 计算 serviceBillsDetailVosCheckState.value 的总和
+    const serviceBillsTotal = serviceBillsDetailVosCheckState.value.reduce(
+      (total, item) => total + item.costPrice * item.num,
+      0
+    );
+
+    // 返回 p0 + checkStateTotal + serviceBillsTotal
+    return p0 + checkStateTotal + serviceBillsTotal;
   }
+
+  if (price.value < 1) {
+    // 计算 feeBillsDetailVosCheckState.value 的总和
+    const checkStateTotal = feeBillsDetailVosCheckState.value.reduce(
+      (total, item) => total + item.costPrice * item.num,
+      0
+    );
+
+    // 计算 serviceBillsDetailVosCheckState.value 的总和
+    const serviceBillsTotal = serviceBillsDetailVosCheckState.value.reduce(
+      (total, item) => total + item.costPrice * item.num,
+      0
+    );
+
+    // 返回 checkStateTotal + serviceBillsTotal
+    return checkStateTotal + serviceBillsTotal;
+  }
+
+  // 默认返回 0
   return 0;
 });
 
@@ -1025,7 +1050,6 @@ const service = () => {
 
         .matter {
           width: 630rpx;
-
           background: #fcfcfc;
           border-radius: 14rpx 14rpx 14rpx 14rpx;
           opacity: 1;
@@ -1129,11 +1153,11 @@ const service = () => {
       border-radius: 30rpx 30rpx 0rpx 0rpx;
       color: #333333;
       padding: 50rpx;
+      text-align: center;
 
       .content-listem {
         display: flex;
         color: #333333;
-        margin-left: 70rpx;
 
         > view {
           width: 200rpx;
@@ -1142,7 +1166,7 @@ const service = () => {
         }
       }
     }
-    :deep(.uni-popup__wrapper){
+    :deep(.uni-popup__wrapper) {
       bottom: 205rpx;
     }
   }
