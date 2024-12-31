@@ -1,0 +1,1321 @@
+<template>
+  <view class="place-order">
+    <view class="opinion" v-if="flowInstLog && flowInstLog.id">
+      <view class="time">{{ flowInstLog.createdTime }}</view>
+      <view class="desc"
+        >{{ flowInstLog.stepResult }}&nbsp;&nbsp;{{
+          flowInstLog.stepDesc
+        }}</view
+      >
+    </view>
+    <uni-forms :model="form" @submit="onSubmit">
+      <view class="custom-card container1" id="app">
+        <uni-forms-item label="渠道" required>
+          <uni-easyinput
+            v-model="form.baseInfo.title"
+            disabled
+            :inputBorder="false"
+          />
+        </uni-forms-item>
+        <!-- 付款方式 -->
+        <uni-forms-item label="付款方式" required>
+          <uni-data-select
+            v-model="form.baseInfo.payKind"
+            :localdata="payKind"
+            placeholder="请选择付款方式"
+          />
+        </uni-forms-item>
+        <!-- 订单类型 -->
+        <uni-forms-item label="订单类型">
+          <uni-data-select
+            v-model="form.baseInfo.packageKind"
+            :localdata="orderType"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <!-- 入库类型 -->
+        <uni-forms-item label="入库类型">
+          <uni-data-select
+            v-model="form.baseInfo.sendPlanKind"
+            :localdata="incomingType"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <uni-forms-item label="是否单证报关">
+          <uni-data-select
+            v-model="form.baseInfo.isSingle"
+            :localdata="sysYesNo"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <!-- 预计交货日期 -->
+        <uni-forms-item label="预计交货日期">
+          <uni-datetime-picker
+            v-model="form.baseInfo.wantBeginDate"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <!-- FBA货物选择 -->
+        <!-- <view class="fba-goods fba-goods-border">
+          <view class="title">FBA货物</view>
+          <switch v-model="form.baseInfo.isFba" :active-value="'是'" :inactive-value="'否'" />
+        </view> -->
+        <template v-if="form.baseInfo.isFba === '是'">
+          <!-- FBA编号 -->
+          <uni-forms-item label="$t('placeOrder.fbaCode')">
+            <uni-easyinput
+              v-model="form.baseInfo.fbaCode"
+              placeholder="$t('placeOrder.fbaCodePlaceholder')"
+            />
+          </uni-forms-item>
+          <!-- Amazon RID -->
+          <uni-forms-item label="$t('placeOrder.amazonRID')">
+            <uni-easyinput
+              v-model="form.baseInfo.amazonRID"
+              placeholder="$t('placeOrder.amazonRIDPlaceholder')"
+            />
+          </uni-forms-item>
+          <uni-forms-item label="$t('placeOrder.fbaWarehouseName')">
+            <uni-data-select
+              v-model="form.baseInfo.fbaWarehouseName"
+              :localdata="fbaWarehouseName"
+              placeholder="$t('placeOrder.fbaWarehouseNamePlaceholder')"
+            />
+          </uni-forms-item>
+        </template>
+      </view>
+      <!-- 发货人 -->
+      <view class="custom-card container2">
+        <uni-forms-item label="发货人">
+          <uni-easyinput
+            v-model="form.sendInfo.senderName"
+            placeholder=""
+            :border="true"
+          />
+          <button @tap="checkAddress('发货人')">选择</button>
+        </uni-forms-item>
+        <uni-forms-item label="发货人电话">
+          <view class="area-phone">
+            <view class="phone-prefix">
+              <view>{{ form.sendInfo.senderPhonePrefix }}</view>
+              <view class="ico-phone"></view>
+            </view>
+            <uni-easyinput
+              v-model="form.sendInfo.senderPhone"
+              placeholder=""
+            />
+          </view>
+        </uni-forms-item>
+        <uni-forms-item label="发货人地区">
+          <uni-data-select v-model="form.sendInfo.area" placeholder="" />
+        </uni-forms-item>
+        <uni-forms-item label="详细地址">
+          <uni-easyinput v-model="form.sendInfo.senderAddr" placeholder="" />
+        </uni-forms-item>
+      </view>
+      <!-- 收货人 -->
+      <view class="custom-card container3">
+        <!-- <uni-cell :title="$t('orderDetail.lang')" :value="lang" /> -->
+        <uni-forms-item label="收货人">
+          <uni-easyinput
+            v-model="form.receiveInfo.receiverName"
+            placeholder=""
+          />
+          <!-- <button @tap="checkAddress('收货人')">
+            选择
+          </button> -->
+        </uni-forms-item>
+        <uni-forms-item label="收货人电话1">
+          <view class="area-phone">
+            <view class="phone-prefix">
+              <view>{{ form.receiveInfo.receiverPhonePrefix }}</view>
+              <view class="ico-phone"></view>
+            </view>
+            <uni-easyinput
+              v-model="form.receiveInfo.receiverPhone"
+              placeholder=""
+            />
+          </view>
+        </uni-forms-item>
+        <uni-forms-item label="收货人国家">
+          <uni-data-select
+            v-model="form.receiveInfo.area"
+            :localdata="receiveInfoCity"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <uni-forms-item label="详细地址">
+          <uni-easyinput
+            v-model="form.receiveInfo.receiverAddr"
+            placeholder=""
+          />
+        </uni-forms-item>
+      </view>
+      <!-- 派送人城市 -->
+      <view class="custom-card container3" v-if="receiverShow">
+        <uni-forms-item label="$t('orderDetail.receivCity')">
+          <uni-data-select
+            v-model="spareReceiverCountryName"
+            :localdata="receiverCityData"
+            placeholder="$t('orderDetail.receivCityPlaceholder')"
+          />
+        </uni-forms-item>
+      </view>
+      <!-- 唛头 -->
+      <view class="custom-card container4">
+        <uni-forms-item label="如有其他属性请备注">
+          <uni-easyinput
+            v-model="form.attrInfo.productsAttrDesc"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <uni-forms-item label="唛头">
+          <uni-easyinput
+            v-model="form.attrInfo.shippingMark"
+            placeholder="$t('goods.shippingMarkPlaceholder')"
+          />
+        </uni-forms-item>
+      </view>
+      <!-- 货物中文名 —— 图片上传 -->
+      <view class="custom-card container5">
+        <!-- <uni-cell :title="$t('inquiry.productsAttr')" :value="form.attrInfo.productsAttr" /> -->
+        <template v-if="showLang === 'zh_CN' || areaPhonePreFix != '+968'">
+          <uni-forms-item label="中文品名">
+            <uni-easyinput
+              v-model="form.productsInfo.productsCn"
+              placeholder=""
+            />
+          </uni-forms-item>
+          <uni-forms-item label="英文品名">
+            <uni-easyinput
+              v-model="form.productsInfo.productsOthers"
+              placeholder=""
+            />
+          </uni-forms-item>
+        </template>
+        <template v-else>
+          <uni-forms-item label="英文品名">
+            <uni-easyinput
+              v-model="form.productsInfo.productsOthers"
+              placeholder=""
+            />
+          </uni-forms-item>
+          <uni-forms-item label="中文品名">
+            <uni-easyinput
+              v-model="form.productsInfo.productsCn"
+              placeholder=""
+            />
+          </uni-forms-item>
+        </template>
+        <uni-forms-item label="总箱数">
+          <uni-easyinput
+            v-model="form.productsInfo.transCount"
+            placeholder="$t('goods.transCountPlaceholder')"
+          />
+          <uni-data-select
+            v-model="form.productsInfo.transUnit"
+            :localdata="transUnit"
+          />
+        </uni-forms-item>
+        <uni-forms-item label="重量(KG)">
+          <uni-easyinput v-model="form.productsInfo.weight" placeholder="" />
+        </uni-forms-item>
+        <uni-forms-item label="方数">
+          <uni-easyinput v-model="form.productsInfo.squares" placeholder="" />
+        </uni-forms-item>
+        <uni-forms-item label="参考重量区间单价">
+          <uni-easyinput
+            v-model="form.productsInfo.queryPrice"
+            placeholder=""
+            disabled
+          />
+        </uni-forms-item>
+        <view class="upload">
+          <view class="title">外观图片上传</view>
+          <view class="content">
+            <uni-file-picker
+              v-model="form.productsInfo.lookPictures"
+              :auto-upload="false"
+              @success="afterRead"
+              @fail="beforeRead"
+              @delete="beforeDelete"
+            />
+          </view>
+        </view>
+      </view>
+      <!-- 发货信息 -->
+      <view class="custom-card container5">
+        <uni-forms-item label="收货仓库">
+          <uni-data-select
+            v-model="form.sendPlanInfo.warehouse"
+            :localdata="warehouseList"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <!-- <uni-cell v-if="form.sendPlanInfo.warehouse" :value="warehouse.contactMan + ' ' + warehouse.contactPhone + ' ' + warehouse.addr" />
+        <uni-cell v-if="form.sendPlanInfo.warehouse" :value="warehouse.memo" /> -->
+        <view class="copy-box">
+          <button class="copy-btn" @tap="onCopy"></button>
+        </view>
+        <uni-forms-item label="货运方式">
+          <uni-data-select
+            v-model="form.sendPlanInfo.transKind"
+            :localdata="transKind"
+            placeholder=""
+          />
+        </uni-forms-item>
+        <!-- <uni-forms-item v-if="form.sendPlanInfo.transKind === '快递送货' || form.sendPlanInfo.transKind === 'express delivery'" :label="$t('deliverGoods.courierNumber')" name="sendPlanInfo.transNum">
+          <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.courierNumberPlaceholder')" />
+        </uni-forms-item>
+        <uni-forms-item v-if="form.sendPlanInfo.transKind === '司机送货' || form.sendPlanInfo.transKind === 'driver delivery'" :label="$t('deliverGoods.licensePlate')" name="sendPlanInfo.transNum">
+          <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.licensePlatePlaceholder')" />
+        </uni-forms-item>
+        <uni-forms-item v-if="form.sendPlanInfo.transKind === '物流送货' || form.sendPlanInfo.transKind === 'logistics delivery'" :label="$t('deliverGoods.oddNumber')" name="sendPlanInfo.transNum">
+          <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.oddNumberPlaceholder')" />
+        </uni-forms-item> -->
+      </view>
+      <!-- 箱单上传 -->
+      <!-- <view class="order-batch">
+        <view class="container1">
+          <button @tap="downloadOrderTemplate(templateUrl)" v-if="showExhibit">
+            <i class="ico-download"></i>
+            <span v-html="$t('packingList.downloadPackingTemplate')"></span>
+          </button>
+          <uni-file-picker
+            accept=".pdf,.xls,.doc,.jpg,.png,.docx,.xlsx,.zip,.7z,.rar"
+            @success="packUpload"
+          >
+            <button class="upload">
+              <i class="ico-upload"></i>
+              {{ $t('packingList.uploadPackingTemplate') }}
+            </button>
+          </uni-file-picker>
+        </view>
+        <view
+          class="custom-card container2"
+          v-if="form.productsInfo.packingList.length > 0"
+        >
+          <uni-cell v-for="(item, index) in form.productsInfo.packingList" :key="index" :title="item.title">
+            <button @tap="deleteFile(item.title)">{{ $t('common.delete') }}</button>
+          </uni-cell>
+        </view>
+      </view> -->
+      <!-- 运输协议 -->
+      <!-- <agreement ref="agreement" /> -->
+      <view class="footerBtn">
+        <!-- <button @tap="onSubmit">{{ $t('inquiry.onsubmitButton') }}</button> -->
+      </view>
+    </uni-forms>
+    <uni-popup ref="popup" type="bottom">
+      <uni-datetime-picker
+        v-model="currentDate"
+        type="date"
+        title="$t('placeOrder.currentDatePlaceholder')"
+        @cancel="showDateTimePicker = false"
+        @confirm="onConfirmTime"
+        :start="minDate"
+        :end="maxDate"
+      />
+    </uni-popup>
+    <uni-popup ref="confirmPopup" type="dialog">
+      <uni-popup-dialog
+        title="$t('confirmTips.confirmOrder')"
+        @confirm="onConfirm"
+      />
+    </uni-popup>
+  </view>
+</template>
+
+<script setup>
+import { ref, reactive, computed, watch, onMounted } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import { useRoute, useRouter } from "vue-router";
+const route = useRoute();
+const router = useRouter();
+import { getDictTypes } from "@/api/common";
+// import Api from "@/api/index.js";
+// import SelectComponent from "../../../components/selectComponent/";
+// import Agreement from "@/views/components/agreement";
+// import Compressor from 'compressorjs';
+// import CustomSelect from "../../../components/selectComponent/index.vue";
+// 响应式数据
+const showConfirm = ref(false);
+const id = ref("");
+const products = ref([]);
+const kind = ref("");
+const timeType = ref(1);
+const showDateTimePicker = ref(false);
+const minDate = ref(new Date(2020, 0, 1));
+const maxDate = ref(new Date(2099, 10, 1));
+const currentDate = ref(new Date());
+const payKind = ref([]);
+const fbaWarehouseName = ref([]);
+const sysYesNo = ref([]);
+const productsAttr = ref([]);
+const transUnit = ref([]);
+const flowInstLog = ref({});
+const fileList = ref([]);
+const language = ref([]);
+const lang = ref("English");
+const form = reactive({
+  baseInfo: {
+    amazonRID: "",
+    channelCode: "",
+    channelId: "",
+    fbaCode: "",
+    fbaWarehouseName: "",
+    isFba: "否",
+    isSingle: "",
+    payKind: "1",
+    wantBeginDate: "",
+    wantEndDate: "",
+    title: "",
+    packageKind: "",
+    sendPlanKind: "",
+  },
+  sendInfo: {
+    cityCode: "",
+    countryCode: "",
+    id: "",
+    provinceCode: "",
+    senderAddr: "",
+    senderCityName: "",
+    senderCountryName: "",
+    senderName: "",
+    senderPhone: "",
+    senderProvinceName: "",
+    senderPhonePrefix: "+86",
+  },
+  receiveInfo: {
+    receiverLang: "en",
+    cityCode: "",
+    countryCode: "",
+    id: "",
+    provinceCode: "",
+    receiverAddr: "",
+    receiverCityName: "",
+    receiverCountryName: "",
+    receiverEmail: "",
+    receiverName: "",
+    receiverPhone1: "",
+    receiverPhone2: "",
+    receiverPhone3: "",
+    receiverProvinceName: "",
+    receiverPhonePrefix: "+971",
+  },
+  attrInfo: {
+    productsAttr: "",
+    productsAttrDesc: "",
+    shippingMark: "",
+  },
+  productsInfo: {
+    lookPictures: [],
+    packingList: [],
+    productsCn: "",
+    productsOthers: "",
+    squares: "",
+    transCount: "",
+    transUnit: "",
+    weight: "",
+    queryPrice: "",
+    finalPriceUnt: "",
+    finalPrice: "",
+  },
+  sendPlanInfo: {
+    transKind: "",
+    transNum: "",
+    warehouse: "",
+    warehouseId: "",
+  },
+  queryPriceHistoryId: "",
+});
+const templateUrl = ref("");
+const zxPackingList = ref([]);
+const transKind = ref([]);
+const warehouseList = ref([]);
+const warehouse = ref({});
+const columns = ref([]);
+const type = ref(1);
+const orderType = ref([]);
+const incomingType = ref([]);
+const receiveInfoParams = reactive({
+  lang: "en",
+  level: "1",
+});
+const receiveInfoCity = ref([]);
+const phonePrefixParams = reactive({
+  lang: "zh",
+  level: "1",
+});
+const areaPhonePre = ref([]);
+const phonePrefixLang = ref("");
+const showLang = ref("");
+const areaPhonePreFix = ref("");
+const showExhibit = ref(true);
+const receiverCityParams = reactive({
+  channelCode: "",
+});
+const receiverCityData = ref([]);
+const receiverShow = ref(false);
+const spareReceiverCountryName = ref("");
+const cascadeData = ref([
+  {
+    text: '选项1',
+    value: '1',
+    children: [
+      {
+        text: '选项1-1',
+        value: '1-1'
+      },
+      {
+        text: '选项1-2',
+        value: '1-2'
+      }
+    ]
+  },
+  {
+    text: '选项2',
+    value: '2',
+    children: [
+      {
+        text: '选项2-1',
+        value: '2-1'
+      },
+      {
+        text: '选项2-2',
+        value: '2-2'
+      }
+    ]
+  }
+]);
+// 生命周期钩子
+onLoad((options) => {
+  id.value = options.id;
+  // products.value = options.products ? options.products.split(',') : [];
+  form.baseInfo.channelCode = options.channelCode;
+  form.baseInfo.channelId = options.channelId;
+  form.baseInfo.title = options.title;
+  form.attrInfo.productsAttr = options.products
+    ? String(options.products).replaceAll(",", ";")
+    : "";
+  form.productsInfo.squares = options.squares;
+  form.productsInfo.transCount = options.transCount;
+  form.productsInfo.transUnit = options.transUnit;
+  form.productsInfo.weight = options.weight;
+  form.productsInfo.finalPriceUnt = options.unit;
+  form.queryPriceHistoryId = options.queryPriceHistoryId;
+
+  // if (options.regPhone) {
+  //   form.regPhone = options.regPhone;
+  // }
+  // if (options.price < 1) {
+  //   form.productsInfo.queryPrice = "inquiry.interview";
+  //   form.productsInfo.finalPrice = '0';
+  // }
+  // if (options.price > 0) {
+  //   form.productsInfo.queryPrice = options.price;
+  //   form.productsInfo.finalPrice = options.price;
+  // }
+
+  // getOrderTemplate();
+  // phonePrefixLang.value = uni.getStorageSync('lang');
+  // if (uni.getSystemInfoSync().platform === 'mp-weixin') {
+  //   showExhibit.value = false;
+  // } else {
+  //   showExhibit.value = true;
+  // }
+});
+
+onMounted(() => {
+  // uni.showLoading({ title: '加载中...' });
+  getDictTypesData();
+  // getWarehouseList();
+  // getCity();
+  // getContract();
+  // getPhonePrefix();
+  showLang.value = uni.getStorageSync("lang");
+  areaPhonePreFix.value = getCookie("areaNumber");
+  // console.log('@@@',form.baseInfo.payKind)
+});
+
+// 方法
+const getDictTypesData = () => {
+  getDictTypes({
+    dicTitles:
+      "付款方式,专线设置.FBA仓库,询价货物属性,专线设置.件数单位,系统是否, 专线设置.货运方式,专线设置.订单类型,专线设置.入库类型",
+  }).then((response) => {
+    payKind.value = response.data["付款方式"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    // fbaWarehouseName.value = response.data["专线设置.FBA仓库"];
+    // sysYesNo.value = response.data["系统是否"];
+    // productsAttr.value = response.data["询价货物属性"];
+    // transUnit.value = response.data["专线设置.件数单位"];
+    // transKind.value = response.data["专线设置.货运方式"];
+    // orderType.value = response.data["专线设置.订单类型"];
+    // incomingType.value = response.data["专线设置.入库类型"];
+    // language.value = [
+    //   { name: "简体中文", value: "zh" },
+    //   { name: "English", value: "en" },
+    //   { name: "Español", value: "es" },
+    //   { name: "اللغة العربية", value: "ar" },
+    // ];
+    // if (id.value) {
+    //   orderInfoZx();
+    // } else {
+    //   getCityData({ lang: form.receiveInfo.receiverLang });
+    // }
+    // if (receiverCityParams.channelCode) {
+    //   receiverCity();
+    // }
+  });
+};
+
+const getWarehouseList = () => {
+  Api.getWarehouseList().then((res) => {
+    if (res.code === 200) {
+      warehouseList.value = res.rows;
+    } else {
+      showToast(res.msg);
+    }
+  });
+};
+
+const getCity = () => {
+  Api.getCity(receiveInfoParams).then((res) => {
+    if (res.code === 200) {
+      receiveInfoCity.value = [...receiveInfoCity.value, ...res.data];
+    } else {
+      showToast(res.msg);
+    }
+  });
+};
+
+const getContract = () => {
+  Api.getContract().then((res) => {
+    if (res.code === 200) {
+      form.sendInfo = {
+        cityCode: res.data.cityCode,
+        countryCode: res.data.countryCode,
+        id: res.data.id,
+        provinceCode: res.data.provinceCode,
+        senderAddr: res.data.addr,
+        senderCityName: res.data.cityName,
+        senderCountryName: res.data.countryName,
+        senderName: res.data.realname,
+        senderPhone: res.data.phone1,
+        senderProvinceName: res.data.provinceName,
+        area: getAllArea(
+          res.data.countryName,
+          res.data.provinceName,
+          res.data.cityName
+        ),
+        senderPhonePrefix: res.data.phonePrefix || "+86",
+      };
+    } else {
+      showToast(res.msg);
+    }
+  });
+};
+
+const getPhonePrefix = () => {
+  Api.getCity(phonePrefixParams).then((res) => {
+    if (res.code === 200) {
+      areaPhonePre.value = res.data.map((element) => ({
+        areaPhonePre: element.phonePrefix,
+      }));
+    }
+  });
+};
+
+// const orderInfoZx = () => {
+//   uni.showLoading({ title: '加载中...' });
+//   Api.orderInfoZx({ id: id.value }).then(res => {
+//     uni.hideLoading();
+//     if (res.code === 200) {
+//       Object.assign(form, res.data);
+//       flowInstLog.value = res.data.flowInstLog;
+//       warehouse.value = {
+//         contactMan: res.data.sendPlanInfo.contactMan,
+//         contactPhone: res.data.sendPlanInfo.contactPhone,
+//         addr: res.data.sendPlanInfo.addr,
+//         memo: res.data.sendPlanInfo.memo,
+//       };
+//       if (form.attrInfo.productsAttr) {
+//         form.attrInfo.productsAttr = form.attrInfo.productsAttr.split(';');
+//       }
+//       form.sendInfo.area = getAllArea(form.sendInfo.senderCountryName, form.sendInfo.senderProvinceName, form.sendInfo.senderCityName);
+//       form.receiveInfo.area = getAllArea(form.receiveInfo.receiverCountryName);
+//       getCityData({ lang: form.receiveInfo.receiverLang });
+//       spareReceiverCountryName.value = res.data.receiveInfo.receiverCityName;
+//       receiverCityParams.channelCode = res.data.baseInfo.channelCode;
+//       receiverCity();
+//     } else {
+//       showToast(res.msg);
+//     }
+//   });
+// };
+
+const receiverCity = () => {
+  Api.getReceiverCity(receiverCityParams).then((res) => {
+    if (res.code === 200) {
+      receiverCityData.value = res.rows;
+      receiverShow.value = res.rows.length > 0;
+      if (receiverShow.value) {
+        spareReceiverCountryName.value = route.query.destCity;
+      }
+    } else {
+      showToast(res.msg);
+    }
+  });
+};
+
+const showDateTimePickerMethod = (type) => {
+  timeType.value = type;
+  showDateTimePicker.value = true;
+};
+
+const onConfirmTime = (value) => {
+  if (timeType.value === 1) {
+    form.baseInfo.wantBeginDate = dateFormat("YYYY-mm-dd", value);
+  } else if (timeType.value === 2) {
+    form.baseInfo.wantEndDate = dateFormat("YYYY-mm-dd", value);
+  }
+  showDateTimePicker.value = false;
+};
+
+const onSubmit = () => {
+  if (!agreementRef.value.getChecked()) {
+    showToast("inquiry.protocolTips");
+    return;
+  }
+  showConfirm.value = true;
+};
+
+const onConfirm = () => {
+  form.receiveInfo.receiverCityName = spareReceiverCountryName.value;
+  const params = { ...form };
+  params.attrInfo.productsAttr = params.attrInfo.productsAttr
+    .toString()
+    .replaceAll(",", ";");
+  uni.showLoading({ title: "加载中..." });
+  if (id.value) {
+    Api.orderResubmit(params).then((res) => {
+      uni.hideLoading();
+      if (res.code === 200) {
+        uni.navigateTo({ url: "/pages/order/list?active=2" });
+        showToast("placeOrder.placeOrderSuccess");
+      } else {
+        showToast(res.msg);
+      }
+    });
+  } else {
+    Api.zxOrderSubmit(params).then((res) => {
+      uni.hideLoading();
+      if (res.code === 200) {
+        uni.navigateTo({ url: "/pages/order/list?active=2" });
+        showToast("placeOrder.placeOrderSuccess");
+      } else {
+        showToast(res.msg);
+      }
+    });
+  }
+};
+
+const checkAddress = (kind) => {
+  uni.navigateTo({
+    url: `/pages/account/address?kind=${kind}&sourceUrl=${encodeURIComponent(
+      location.href
+    )}`,
+  });
+};
+
+const beforeRead = (file) => {
+  if (file.size > 10 * 1024 * 1024) {
+    showToast("common.imgUploadTip");
+    return false;
+  }
+  return true;
+};
+
+const afterRead = (file) => {
+  if (file.file.size < 2 * 1024 * 1024) {
+    commonUpload(file);
+    return;
+  }
+  // new Compressor(file.file, {
+  //   quality: 0.6,
+  //   success(result) {
+  //     file.file = result;
+  //     commonUpload(file);
+  //   },
+  //   error(err) {
+  //     console.log(err.message);
+  //   },
+  // });
+};
+
+// const commonUpload = (file) => {
+//   file.status = 'uploading';
+//   file.message = "common.uploading";
+//   const formData = new FormData();
+//   formData.append('file', file.file);
+//   Api.commonUpload(formData).then(res => {
+//     if (res.code === 200) {
+//       file.status = 'done';
+//       const lookPicture = { ...res.data, ...form.productsInfo.lookPictures[form.productsInfo.lookPictures.length - 1] };
+//       form.productsInfo.lookPictures[form.productsInfo.lookPictures.length - 1] = lookPicture;
+//     } else {
+//       file.status = 'failed';
+//       file.message = "common.uploadFailed";
+//       showToast(res.msg);
+//     }
+//   }).catch(() => {
+//     file.status = 'failed';
+//     file.message = "common.uploadFailed";
+//   });
+// };
+
+const beforeDelete = (file) => {
+  form.productsInfo.lookPictures.splice(file.index, 1);
+};
+
+const downloadOrderTemplate = (path, title) => {
+  window.location.href = Api.downloadResource({
+    resource: encodeURIComponent(path),
+    downloadName: title,
+  });
+};
+
+// const packCommonUpload = (file) => {
+//   const formData = new FormData();
+//   formData.append('file', file);
+//   Api.commonUpload(formData).then(res => {
+//     if (res.code === 200) {
+//       showToast('common.processedSuccess');
+//       form.productsInfo.packingList.push(res.data);
+//     } else {
+//       uni.hideLoading();
+//       showToast(res.msg);
+//     }
+//   });
+// };
+
+const getOrderTemplate = () => {
+  uni.showLoading({ title: "加载中..." });
+  Api.getOrderTemplate({ title: "专线装箱单模板" }).then((res) => {
+    uni.hideLoading();
+    if (res.code === 200) {
+      templateUrl.value = res.data.path;
+    } else {
+      showToast(res.msg);
+    }
+  });
+};
+
+const packUpload = (file) => {
+  const imgType = ["jpg", "png"];
+  const fileType = ["pdf", "xls", "doc", "docx", "xlsx", "zip", "7z", "rar"];
+  const fileName = file.name.split(".");
+  if (
+    fileType.includes(fileName[fileName.length - 1]) ||
+    imgType.includes(fileName[fileName.length - 1])
+  ) {
+    if (imgType.includes(fileName[fileName.length - 1])) {
+      if (file.size < 2 * 1024 * 1024) {
+        packCommonUpload(file);
+        return;
+      }
+      // new Compressor(file, {
+      //   quality: 0.6,
+      //   success(result) {
+      //     file = result;
+      //     if (file.size <= 10 * 1024 * 1024) {
+      //       packCommonUpload(file);
+      //     } else {
+      //       showToast('common.imgUploadTip');
+      //     }
+      //   },
+      //   error(err) {
+      //     console.log(err.message);
+      //   },
+      // });
+    }
+    if (fileType.includes(fileName[fileName.length - 1])) {
+      if (file.size <= 20 * 1024 * 1024) {
+        packCommonUpload(file);
+      } else {
+        showToast("common.fileUploadTip");
+      }
+    }
+  } else {
+    showToast("packingList.verificationUploadFormat");
+  }
+};
+
+const deleteFile = (title) => {
+  const index = form.productsInfo.packingList.findIndex(
+    (x) => x.title === title
+  );
+  form.productsInfo.packingList.splice(index, 1);
+};
+
+const onCopy = () => {
+  showToast("overseasTaobao.copySuccess");
+};
+
+const onError = () => {
+  showToast("overseasTaobao.copyError");
+};
+
+const showToast = (message, duration = 2000) => {
+  uni.showToast({ title: message, icon: "none", duration });
+};
+
+const getAllArea = (countryName, provinceName, cityName) => {
+  return `${countryName} ${provinceName} ${cityName}`;
+};
+
+const dateFormat = (format, date) => {
+  // 实现日期格式化逻辑
+};
+
+const getCookie = (name) => {
+  // 实现获取 Cookie 的逻辑
+};
+
+// 监听路由变化
+// watch(() => route.path, (to, from) => {
+//   if (to !== from) {
+//     // 处理路由变化逻辑
+//   }
+// });
+
+// // 监听 address 变化
+// watch(address, (val, oldVal) => {
+//   uni.hideLoading();
+// }, { deep: true });
+</script>
+
+<style lang="scss" scoped>
+* {
+  touch-action: pan-y;
+}
+
+.place-order {
+  padding: 40rpx 30rpx 130rpx;
+  margin-bottom: 40rpx;
+  .custom-card {
+    margin-top: 25rpx;
+  }
+
+  :deep(.uni-cell) {
+    padding-bottom: 16rpx; 
+  }
+  :deep(.uni-forms-item__content) {
+    display: flex !important;
+  }
+  :deep(.uni-forms-item__label){
+    width: 200rpx !important;
+  }
+  :deep(.uni-forms-item){
+    border-bottom: 2rpx solid #ebedf0; 
+    padding: 10rpx;
+  }
+
+  .opinion {
+    padding: 20rpx 30rpx;
+    margin-bottom: 30rpx;
+    background: #fff8e9;
+    box-shadow: 0rpx 6rpx 8rpx 2rpx rgba(232, 225, 225, 0.3);
+    border-radius: 30rpx;
+    border: 2rpx solid #f2deb9;
+    color: #e68c57;
+    font-size: 28rpx;
+
+    .time {
+      margin-bottom: 10rpx;
+    }
+  }
+
+  :deep(.uni-form) {
+    .container1,
+    .container2,
+    .container3,
+    .container4,
+    .container5 {
+      padding: 15rpx;
+      &:last-child {
+        margin-bottom: 20rpx;
+      }
+      .uni-cell {
+        // .van-field__button {
+        //   line-height: 1;
+        // }
+
+        .uni-button {
+          border-radius: 36rpx; 
+          border: 2rpx solid #df3030; 
+          background: #fff;
+          font-size: 28rpx; 
+          color: #df3030;
+          width: 110rpx; 
+          height: 50rpx; 
+          line-height: normal;
+        }
+      }
+      .copy-box {
+        width: 91%;
+        margin: 0 auto;
+        border-bottom: 2rpx solid #ebedf0; 
+        display: flex;
+        justify-content: right;
+      }
+      .copy-btn {
+        border: 2rpx solid #df3030; 
+        border-radius: 200rpx; 
+        text-align: center;
+        color: #df3030;
+        font-size: 26rpx; 
+        padding: 0rpx 50rpx 0rpx 50rpx; 
+        margin: 20rpx 0rpx 20rpx 0rpx; 
+        height: 70rpx; 
+        line-height: 70rpx; 
+      }
+    }
+
+    .container1 {
+      .fba-goods {
+        display: flex;
+        align-items: center;
+        padding: 36rpx 30rpx 36rpx; 
+
+        .title {
+          flex: 1;
+          font-size: 30rpx; 
+          color: #666;
+        }
+
+        .van-switch {
+          font-size: 42rpx; 
+        }
+      }
+
+      .fba-goods-border {
+        position: relative;
+
+        &::after {
+          position: absolute;
+          box-sizing: border-box;
+          content: " ";
+          pointer-events: none;
+          right: 30rpx; 
+          bottom: 0;
+          left: 30rpx; 
+          border-bottom: 2rpx solid #ebedf0; 
+          transform: scaleY(0.5);
+        }
+      }
+    }
+
+    .container4 {
+      padding: 30rpx 30rpx; 
+
+      .van-checkbox {
+        margin-bottom: 30rpx; 
+
+        .van-checkbox__label {
+          font-size: 30rpx; 
+        }
+
+        .ico-unchecked {
+          display: inline-block;
+          width: 30rpx; 
+          height: 30rpx; 
+          background: url("../../../../assets/images/common/ico-unchecked.png")
+            no-repeat;
+          background-size: contain;
+        }
+
+        .ico-checked {
+          display: inline-block;
+          width: 30rpx; 
+          height: 30rpx; 
+          background: url("../../../../assets/images/common/ico-checked.png")
+            no-repeat;
+          background-size: contain;
+        }
+      }
+
+      .other-property {
+        padding: 20rpx 30rpx; 
+        margin-bottom: 20rpx; 
+        border-radius: 10rpx; 
+        border: 2rpx solid #aeaeae; 
+
+        .uni-field__control {
+          text-align: left;
+        }
+      }
+    }
+    .footerBtn {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      width: 100%;
+      height: 200rpx; 
+      max-width: 750rpx; 
+      background: #ffffff;
+      padding: 24rpx 0; 
+      text-align: center;
+      box-shadow: 0rpx -4rpx 8rpx 2rpx rgba(230, 220, 220, 0.3); 
+      border-radius: 40rpx 40rpx 0rpx 0rpx;
+      padding-bottom: 0;
+      .uni-button {
+        font-size: 28rpx; 
+        height: 88rpx; 
+        width: 600rpx; 
+        line-height: 90rpx; 
+        padding: 0 30rpx; 
+        color: #ffffff;
+        background: #df3030;
+        border-radius: 50rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    .container5 {
+      .trans-count {
+        .van-field__button {
+          width: 160rpx;
+
+          .select-component {
+            &::after {
+              border: 0;
+            }
+
+            .van-cell {
+              padding: 0;
+
+              &::after {
+                border: 0;
+              }
+            }
+          }
+        }
+      }
+
+      .title {
+        position: relative;
+        font-size: 28rpx;
+        color: #666666;
+        padding: 36rpx 30rpx 30rpx;
+
+        &::after {
+          position: absolute;
+          box-sizing: border-box;
+          content: " ";
+          pointer-events: none;
+          right: 30rpx;
+          bottom: 0;
+          left: 30rpx;
+          border-bottom: 2rpx solid #ebedf0;
+          transform: scaleY(0.5);
+        }
+      }
+
+      .query-price {
+        .van-field__label {
+          width: 240rpx;
+        }
+      }
+
+      .upload {
+        .title {
+          font-size: 36rpx;
+          color: #333;
+          font-weight: bold;
+
+          &::after {
+            border: 0;
+          }
+        }
+
+        .content {
+          margin: 12rpx 30rpx 32rpx;
+        }
+
+        .ico-upload {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 180rpx; 
+          height: 180rpx; 
+          background: #f9f9f9;
+          border-radius: 6rpx 6rpx 6rpx 6rpx; 
+          opacity: 1;
+          border: 2rpx dashed #b9b9b9; 
+
+          .ico-upload-img {
+            width: 70rpx; 
+            height: 54rpx; 
+          }
+        }
+
+        .van-uploader__preview {
+          margin-right: 40rpx; 
+          &:nth-of-type(3n) {
+            margin-right: 0;
+          }
+        }
+
+        .van-uploader__preview-image {
+          width: 180rpx; 
+          height: 180rpx; 
+        }
+
+        .van-uploader__preview-delete {
+          display: inline-block;
+          top: -20rpx; 
+          right: -20rpx; 
+          width: 48rpx; 
+          height: 48rpx;
+          background: url("../../../../assets/images/common/ico-upload-close.png")
+            no-repeat;
+          background-size: contain;
+        }
+      }
+    }
+    .order-batch {
+      .uni-cell__title {
+        //解决文件名过长  将下载按钮挤压
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .container1 {
+        margin: 0 30rpx; 
+        margin-bottom: 30rpx; 
+        text-align: center;
+
+        .uni-button {
+          width: 100%;
+          height: 100rpx; 
+          margin-top: 20rpx;
+          border-radius: 100rpx; 
+          line-height: 100rpx; 
+          padding: 0 45rpx; 
+          font-size: 28rpx; 
+          color: #15ce87;
+          background: #ffffff;
+          border: 2rpx dashed #15ce87;
+          &:last-child {
+            color: #2a8dff;
+            border: 2rpx dashed #2a8dff;
+          }
+        }
+        .upload {
+          padding: 0 178rpx;
+          border: 2rpx dashed #2a8dff; 
+          color: #2a8dff;
+        }
+        .ico-download {
+          display: inline-block;
+          vertical-align: sub;
+          margin-right: 32rpx; 
+          width: 40rpx; 
+          height: 40rpx; 
+          background: url("../../../../assets/images/order/ico-download.png");
+          background-size: contain;
+        }
+        .ico-upload {
+          display: inline-block;
+          vertical-align: sub;
+          margin-right: 32rpx;
+          width: 40rpx;
+          height: 40rpx;
+          background: url("../../../../assets/images/order/ico-upload-btn.png");
+          background-size: contain;
+        }
+      }
+      .container2 {
+        min-height: 40vh; 
+        width: 690rpx;
+        margin-top: 30rpx;
+        margin-bottom: 20rpx;
+        .uni-cell {
+          align-items: center;
+        }
+        .uni-cell__title {
+          font-size: 30rpx;
+          flex: 1;
+        }
+        .van-icon__image {
+          margin-right: 20rpx; 
+          width: 44rpx; 
+          height: 48rpx;
+        }
+        .uni-button {
+          height: 70rpx; 
+          background: #ffffff;
+          border-radius: 36rpx; 
+          border: 2rpx solid #df3030; 
+          font-size: 22rpx;
+          padding-left: 10rpx; 
+          padding-right: 10rpx;
+          color: #df3030;
+        }
+        .uni-button + .uni-button {
+          margin-left: 20rpx; 
+        }
+      }
+    }
+  }
+}
+.area-phone {
+  // 去除手机区号下拉框下划线
+  display: flex;
+  align-items: center;
+  margin-top: -30rpx;
+  .phone-prefix {
+    color: #333333;
+    font-size: 30rpx; 
+    display: flex;
+    align-items: center;
+    margin-top: 14rpx; 
+    margin-left: 84rpx; 
+    .ico-phone {
+      width: 20rpx; 
+      height: 10rpx; 
+      background: url("../../../../assets/images/common/icon-phonePreFix.png")
+        no-repeat;
+      background-size: contain;
+      margin-left: 16rpx; 
+    }
+  }
+  .uni-cell {
+    margin-right: -26rpx; 
+  }
+  .areaphone-select {
+    width: 386rpx; 
+    // margin-right: -30rpx; 
+    .uni-field::before {
+      // 去除手机区域号码边框下划线
+      border-top: none;
+    }
+  }
+  // /deep/.areaphone-select::after{  // 去除手机区域号码边框下划线
+  //   border-bottom: none;
+  // }
+}
+.ico-date {
+  width: 33rpx;
+  height: auto;
+  margin-right: 10rpx; 
+  vertical-align: text-top;
+}
+</style>

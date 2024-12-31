@@ -31,7 +31,6 @@
 		{
 			"path": "pages/inquiry/index",
 			"style": {
-				
 				"navigationBarTitleText": "询价"
 			}
 		},
@@ -51,6 +50,12 @@
 			"path": "pages/inquiry/dedicatedLine/channelDetail",
 			"style": {
 				"navigationBarTitleText": "专线查价结果详情"
+			}
+		},
+		{
+			"path": "pages/inquiry/dedicatedLine/orders",
+			"style": {
+				"navigationBarTitleText": "在线下单"
 			}
 		}
 	],

@@ -229,7 +229,7 @@
 <script setup>
 import CategoryDialog from "../../components/categoryDialog/index.vue";
 import { ref, reactive, onMounted, watch,defineEmits, defineProps } from "vue";
-import { getDictTypes } from "@/api/common"; // 导入 utils 文件中的方法
+import { getDictTypes } from "@/api/common"; 
 const show = ref(null);
 const form = reactive({
   transKind: "",

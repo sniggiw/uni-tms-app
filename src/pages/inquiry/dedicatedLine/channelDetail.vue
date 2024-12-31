@@ -589,8 +589,8 @@ const placeOrder = () => {
     channelCode: inquiryDetail.value.channelCode,
     weight: weight.value,
     squares: squares.value,
-    transUnit: route.query.transUnit,
-    products: route.query.products,
+    transUnit: historyParams.transUnit,
+    products: historyParams.productAttr,
     title: inquiryDetail.value.title,
     transCount: transCount.value,
     price: price.value,
@@ -598,12 +598,17 @@ const placeOrder = () => {
     queryPriceHistoryId: queryPriceHistoryId.value,
     destCity: destCity.value,
   };
+
+  // 移除缓存数据
   uni.removeStorageSync("sendInfo");
   uni.removeStorageSync("receiveInfo");
-  // router.push({
-  //   path: '/order/dl/placeOrder/first',
-  //   query: queryParams,
-  // });
+
+  // 跳转到指定页面并传递参数
+  uni.navigateTo({
+    url: `/pages/inquiry/dedicatedLine/orders?${Object.keys(queryParams)
+      .map(key => `${key}=${encodeURIComponent(queryParams[key])}`)
+      .join('&')}`
+  });
 };
 
 const getTip = async () => {
