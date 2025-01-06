@@ -23,64 +23,69 @@
             v-model="form.baseInfo.payKind"
             :localdata="payKind"
             placeholder="请选择付款方式"
+            :clear="false"
           />
         </uni-forms-item>
         <!-- 订单类型 -->
-        <uni-forms-item label="订单类型">
+        <uni-forms-item label="订单类型" required>
           <uni-data-select
             v-model="form.baseInfo.packageKind"
             :localdata="orderType"
-            placeholder=""
+            placeholder="请选择订单类型"
+            :clear="false"
           />
         </uni-forms-item>
         <!-- 入库类型 -->
-        <uni-forms-item label="入库类型">
+        <uni-forms-item label="入库类型" required>
           <uni-data-select
             v-model="form.baseInfo.sendPlanKind"
             :localdata="incomingType"
-            placeholder=""
+            placeholder="请选择入库类型"
+            :clear="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="是否单证报关">
+        <uni-forms-item label="是否单证报关" required>
           <uni-data-select
             v-model="form.baseInfo.isSingle"
             :localdata="sysYesNo"
-            placeholder=""
+            placeholder="请选择是否单证报关"
+            :clear="false"
           />
         </uni-forms-item>
         <!-- 预计交货日期 -->
-        <uni-forms-item label="预计交货日期">
+        <uni-forms-item label="预计交货日期" required>
           <uni-datetime-picker
+            type="date"
             v-model="form.baseInfo.wantBeginDate"
-            placeholder=""
+            placeholder="请选择预计交货日期"
           />
         </uni-forms-item>
         <!-- FBA货物选择 -->
-        <!-- <view class="fba-goods fba-goods-border">
-          <view class="title">FBA货物</view>
-          <switch v-model="form.baseInfo.isFba" :active-value="'是'" :inactive-value="'否'" />
-        </view> -->
+        <uni-forms-item label="FBA货物">
+          <switch
+            style="transform: scale(0.8)"
+            @change="clickSwitch"
+            class="select-switch"
+            color="rgb(223, 48, 48)"
+          />
+        </uni-forms-item>
         <template v-if="form.baseInfo.isFba === '是'">
-          <!-- FBA编号 -->
-          <uni-forms-item label="$t('placeOrder.fbaCode')">
-            <uni-easyinput
-              v-model="form.baseInfo.fbaCode"
-              placeholder="$t('placeOrder.fbaCodePlaceholder')"
-            />
-          </uni-forms-item>
-          <!-- Amazon RID -->
-          <uni-forms-item label="$t('placeOrder.amazonRID')">
-            <uni-easyinput
-              v-model="form.baseInfo.amazonRID"
-              placeholder="$t('placeOrder.amazonRIDPlaceholder')"
-            />
-          </uni-forms-item>
-          <uni-forms-item label="$t('placeOrder.fbaWarehouseName')">
+          <uni-forms-item label="FBA仓库" required>
             <uni-data-select
               v-model="form.baseInfo.fbaWarehouseName"
               :localdata="fbaWarehouseName"
-              placeholder="$t('placeOrder.fbaWarehouseNamePlaceholder')"
+              placeholder=""
+              :clear="false"
             />
+          </uni-forms-item>
+          <!-- FBA编号 -->
+          <uni-forms-item label="FBA编号" required>
+            <uni-easyinput v-model="form.baseInfo.fbaCode" placeholder="" />
+          </uni-forms-item>
+
+          <!-- Amazon RID -->
+          <uni-forms-item label="amazonRID" required>
+            <uni-easyinput v-model="form.baseInfo.amazonRID" placeholder="" />
           </uni-forms-item>
         </template>
       </view>
@@ -89,10 +94,10 @@
         <uni-forms-item label="发货人">
           <uni-easyinput
             v-model="form.sendInfo.senderName"
-            placeholder=""
+            placeholder="请输入"
             :border="true"
           />
-          <button @tap="checkAddress('发货人')">选择</button>
+          <!-- <button @tap="checkAddress('发货人')">选择</button> -->
         </uni-forms-item>
         <uni-forms-item label="发货人电话">
           <view class="area-phone">
@@ -102,15 +107,21 @@
             </view>
             <uni-easyinput
               v-model="form.sendInfo.senderPhone"
-              placeholder=""
+              placeholder="请输入发货人电话"
             />
           </view>
         </uni-forms-item>
         <uni-forms-item label="发货人地区">
-          <uni-data-select v-model="form.sendInfo.area" placeholder="" />
+          <uni-data-select
+            v-model="form.sendInfo.area"
+            placeholder="请选择发货人地区"
+          />
         </uni-forms-item>
         <uni-forms-item label="详细地址">
-          <uni-easyinput v-model="form.sendInfo.senderAddr" placeholder="" />
+          <uni-easyinput
+            v-model="form.sendInfo.senderAddr"
+            placeholder="请输入详细地址"
+          />
         </uni-forms-item>
       </view>
       <!-- 收货人 -->
@@ -119,7 +130,7 @@
         <uni-forms-item label="收货人">
           <uni-easyinput
             v-model="form.receiveInfo.receiverName"
-            placeholder=""
+            placeholder="请输入收货人"
           />
           <!-- <button @tap="checkAddress('收货人')">
             选择
@@ -133,7 +144,7 @@
             </view>
             <uni-easyinput
               v-model="form.receiveInfo.receiverPhone"
-              placeholder=""
+              placeholder="请输入收货人电话"
             />
           </view>
         </uni-forms-item>
@@ -170,10 +181,7 @@
           />
         </uni-forms-item>
         <uni-forms-item label="唛头">
-          <uni-easyinput
-            v-model="form.attrInfo.shippingMark"
-            placeholder="$t('goods.shippingMarkPlaceholder')"
-          />
+          <uni-easyinput v-model="form.attrInfo.shippingMark" placeholder="" />
         </uni-forms-item>
       </view>
       <!-- 货物中文名 —— 图片上传 -->
@@ -183,13 +191,13 @@
           <uni-forms-item label="中文品名">
             <uni-easyinput
               v-model="form.productsInfo.productsCn"
-              placeholder=""
+              placeholder="请输入中文品名"
             />
           </uni-forms-item>
           <uni-forms-item label="英文品名">
             <uni-easyinput
               v-model="form.productsInfo.productsOthers"
-              placeholder=""
+              placeholder="请输入英文品名"
             />
           </uni-forms-item>
         </template>
@@ -215,6 +223,7 @@
           <uni-data-select
             v-model="form.productsInfo.transUnit"
             :localdata="transUnit"
+            :clear="false"
           />
         </uni-forms-item>
         <uni-forms-item label="重量(KG)">
@@ -230,7 +239,7 @@
             disabled
           />
         </uni-forms-item>
-        <view class="upload">
+        <view class="photo-upload">
           <view class="title">外观图片上传</view>
           <view class="content">
             <uni-file-picker
@@ -246,11 +255,12 @@
       <!-- 发货信息 -->
       <view class="custom-card container5">
         <uni-forms-item label="收货仓库">
-          <uni-data-select
-            v-model="form.sendPlanInfo.warehouse"
+          <uni-data-picker
             :localdata="warehouseList"
-            placeholder=""
-          />
+            popup-title="请选择仓库"
+            :map="{ text: 'title', value: 'title' }"
+            v-model="form.sendPlanInfo.warehouse"
+          ></uni-data-picker>
         </uni-forms-item>
         <!-- <uni-cell v-if="form.sendPlanInfo.warehouse" :value="warehouse.contactMan + ' ' + warehouse.contactPhone + ' ' + warehouse.addr" />
         <uni-cell v-if="form.sendPlanInfo.warehouse" :value="warehouse.memo" /> -->
@@ -258,11 +268,12 @@
           <button class="copy-btn" @tap="onCopy"></button>
         </view>
         <uni-forms-item label="货运方式">
-          <uni-data-select
-            v-model="form.sendPlanInfo.transKind"
+          <uni-data-picker
             :localdata="transKind"
-            placeholder=""
-          />
+            popup-title="请选择货运方式"
+            :map="{ text: 'name', value: 'value' }"
+            v-model="form.sendPlanInfo.transKind"
+          ></uni-data-picker>
         </uni-forms-item>
         <!-- <uni-forms-item v-if="form.sendPlanInfo.transKind === '快递送货' || form.sendPlanInfo.transKind === 'express delivery'" :label="$t('deliverGoods.courierNumber')" name="sendPlanInfo.transNum">
           <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.courierNumberPlaceholder')" />
@@ -275,38 +286,53 @@
         </uni-forms-item> -->
       </view>
       <!-- 箱单上传 -->
-      <!-- <view class="order-batch">
+      <view class="order-batch">
         <view class="container1">
-          <button @tap="downloadOrderTemplate(templateUrl)" v-if="showExhibit">
+          <button @tap="downloadOrderTemplate(templateUrl)" class="operat-btn">
             <i class="ico-download"></i>
-            <span v-html="$t('packingList.downloadPackingTemplate')"></span>
+            <text>下载装箱单文件</text>
           </button>
-          <uni-file-picker
+          <!-- <uni-file-picker
             accept=".pdf,.xls,.doc,.jpg,.png,.docx,.xlsx,.zip,.7z,.rar"
             @success="packUpload"
           >
-            <button class="upload">
+            <button class="operat-btn">
               <i class="ico-upload"></i>
-              {{ $t('packingList.uploadPackingTemplate') }}
+              装箱单附件上传
             </button>
-          </uni-file-picker>
+          </uni-file-picker> -->
+          <uni-file-picker
+            limit="5"
+            file-mediatype="all"
+            class="operat-btn"
+            accept=".pdf,.xls,.doc,.jpg,.png,.docx,.xlsx,.zip,.7z,.rar"
+            >装箱单附件上传</uni-file-picker
+          >
         </view>
         <view
           class="custom-card container2"
           v-if="form.productsInfo.packingList.length > 0"
         >
-          <uni-cell v-for="(item, index) in form.productsInfo.packingList" :key="index" :title="item.title">
-            <button @tap="deleteFile(item.title)">{{ $t('common.delete') }}</button>
-          </uni-cell>
+          <view
+            v-for="(item, index) in form.productsInfo.packingList"
+            :key="index"
+            :title="item.title"
+          >
+            <button @tap="deleteFile(item.title)">
+              {{ $t("common.delete") }}
+            </button>
+          </view>
         </view>
-      </view> -->
-      <!-- 运输协议 -->
-      <!-- <agreement ref="agreement" /> -->
-      <view class="footerBtn">
-        <!-- <button @tap="onSubmit">{{ $t('inquiry.onsubmitButton') }}</button> -->
       </view>
+      <!-- 运输协议 -->
+      <Agreement ref="agreement" class="agreement-age"/>
+      <view class="footerBtn">
+        <button @tap="onSubmit">提交订单</button>
+      </view>
+     
     </uni-forms>
-    <uni-popup ref="popup" type="bottom">
+    
+    <!-- <uni-popup ref="popup" type="bottom">
       <uni-datetime-picker
         v-model="currentDate"
         type="date"
@@ -316,7 +342,7 @@
         :start="minDate"
         :end="maxDate"
       />
-    </uni-popup>
+    </uni-popup> -->
     <uni-popup ref="confirmPopup" type="dialog">
       <uni-popup-dialog
         title="$t('confirmTips.confirmOrder')"
@@ -331,23 +357,15 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-const router = useRouter();
-import { getDictTypes } from "@/api/common";
-// import Api from "@/api/index.js";
-// import SelectComponent from "../../../components/selectComponent/";
-// import Agreement from "@/views/components/agreement";
+import { getDictTypes, getWarehouseList } from "@/api/common";
+import Agreement from "../../../components/agreement/index.vue";
 // import Compressor from 'compressorjs';
 // import CustomSelect from "../../../components/selectComponent/index.vue";
 // 响应式数据
 const showConfirm = ref(false);
 const id = ref("");
-const products = ref([]);
-const kind = ref("");
 const timeType = ref(1);
 const showDateTimePicker = ref(false);
-const minDate = ref(new Date(2020, 0, 1));
-const maxDate = ref(new Date(2099, 10, 1));
-const currentDate = ref(new Date());
 const payKind = ref([]);
 const fbaWarehouseName = ref([]);
 const sysYesNo = ref([]);
@@ -451,43 +469,15 @@ const areaPhonePre = ref([]);
 const phonePrefixLang = ref("");
 const showLang = ref("");
 const areaPhonePreFix = ref("");
-const showExhibit = ref(true);
+
 const receiverCityParams = reactive({
   channelCode: "",
 });
 const receiverCityData = ref([]);
 const receiverShow = ref(false);
 const spareReceiverCountryName = ref("");
-const cascadeData = ref([
-  {
-    text: '选项1',
-    value: '1',
-    children: [
-      {
-        text: '选项1-1',
-        value: '1-1'
-      },
-      {
-        text: '选项1-2',
-        value: '1-2'
-      }
-    ]
-  },
-  {
-    text: '选项2',
-    value: '2',
-    children: [
-      {
-        text: '选项2-1',
-        value: '2-1'
-      },
-      {
-        text: '选项2-2',
-        value: '2-2'
-      }
-    ]
-  }
-]);
+const agreement = ref('')
+
 // 生命周期钩子
 onLoad((options) => {
   id.value = options.id;
@@ -519,17 +509,12 @@ onLoad((options) => {
 
   // getOrderTemplate();
   // phonePrefixLang.value = uni.getStorageSync('lang');
-  // if (uni.getSystemInfoSync().platform === 'mp-weixin') {
-  //   showExhibit.value = false;
-  // } else {
-  //   showExhibit.value = true;
-  // }
 });
 
 onMounted(() => {
   // uni.showLoading({ title: '加载中...' });
   getDictTypesData();
-  // getWarehouseList();
+  getWarehouseListData();
   // getCity();
   // getContract();
   // getPhonePrefix();
@@ -548,13 +533,34 @@ const getDictTypesData = () => {
       ...item,
       text: item.name,
     }));
-    // fbaWarehouseName.value = response.data["专线设置.FBA仓库"];
-    // sysYesNo.value = response.data["系统是否"];
-    // productsAttr.value = response.data["询价货物属性"];
-    // transUnit.value = response.data["专线设置.件数单位"];
-    // transKind.value = response.data["专线设置.货运方式"];
-    // orderType.value = response.data["专线设置.订单类型"];
-    // incomingType.value = response.data["专线设置.入库类型"];
+    fbaWarehouseName.value = response.data["专线设置.FBA仓库"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    sysYesNo.value = response.data["系统是否"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    productsAttr.value = response.data["询价货物属性"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    transUnit.value = response.data["专线设置.件数单位"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    transKind.value = response.data["专线设置.货运方式"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    orderType.value = response.data["专线设置.订单类型"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
+    incomingType.value = response.data["专线设置.入库类型"].map((item) => ({
+      ...item,
+      text: item.name,
+    }));
     // language.value = [
     //   { name: "简体中文", value: "zh" },
     //   { name: "English", value: "en" },
@@ -572,8 +578,16 @@ const getDictTypesData = () => {
   });
 };
 
-const getWarehouseList = () => {
-  Api.getWarehouseList().then((res) => {
+const clickSwitch = (event) => {
+  if (event.detail.value === false) {
+    form.baseInfo.isFba = "否";
+  } else {
+    form.baseInfo.isFba = "是";
+  }
+};
+
+const getWarehouseListData = () => {
+  getWarehouseList().then((res) => {
     if (res.code === 200) {
       warehouseList.value = res.rows;
     } else {
@@ -686,8 +700,8 @@ const onConfirmTime = (value) => {
 };
 
 const onSubmit = () => {
-  if (!agreementRef.value.getChecked()) {
-    showToast("inquiry.protocolTips");
+  if (!agreement.value.getChecked()) {
+    showToast('您有必填选项未填写');
     return;
   }
   showConfirm.value = true;
@@ -906,21 +920,72 @@ const getCookie = (name) => {
 .place-order {
   padding: 40rpx 30rpx 130rpx;
   margin-bottom: 40rpx;
+  background: #f9f9fa;
   .custom-card {
     margin-top: 25rpx;
-  }
+    .photo-upload {
+      margin: 15rpx 0rpx 30rpx 15rpx;
+      .title {
+        font-size: 36rpx;
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 25rpx;
 
-  :deep(.uni-cell) {
-    padding-bottom: 16rpx; 
+        &::after {
+          border: 0;
+        }
+      }
+    }
+  }
+  :deep(.uni-easyinput) {
+    .is-disabled {
+      color: #333333;
+      background-color: #ffffff !important;
+    }
   }
   :deep(.uni-forms-item__content) {
-    display: flex !important;
+    display: flex;
+    text-align: right;
+    .uni-easyinput__content {
+      text-align: right;
+      border: 0;
+    }
+    .uni-select {
+      border: none !important;
+    }
+    .uni-date-editor--x {
+      border: none !important;
+    }
+    .uni-switch-wrapper {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .select-switch {
+      position: absolute;
+      right: 10rpx;
+    }
+    .uni-data-tree {
+      .input-value-border {
+        border: none !important;
+      }
+      .uni-data-tree-input {
+        .input-value {
+          text-align: center !important;
+        }
+        .selected-list,
+        .selected-area {
+          display: block;
+          text-align: end;
+          margin-right: 10rpx;
+        }
+      }
+    }
   }
-  :deep(.uni-forms-item__label){
-    width: 200rpx !important;
+  :deep(.uni-forms-item__label) {
+    width: 220rpx !important;
   }
-  :deep(.uni-forms-item){
-    border-bottom: 2rpx solid #ebedf0; 
+  :deep(.uni-forms-item) {
+    border-bottom: 2rpx solid #ebedf0;
     padding: 10rpx;
   }
 
@@ -955,33 +1020,33 @@ const getCookie = (name) => {
         // }
 
         .uni-button {
-          border-radius: 36rpx; 
-          border: 2rpx solid #df3030; 
+          border-radius: 36rpx;
+          border: 2rpx solid #df3030;
           background: #fff;
-          font-size: 28rpx; 
+          font-size: 28rpx;
           color: #df3030;
-          width: 110rpx; 
-          height: 50rpx; 
+          width: 110rpx;
+          height: 50rpx;
           line-height: normal;
         }
       }
       .copy-box {
         width: 91%;
         margin: 0 auto;
-        border-bottom: 2rpx solid #ebedf0; 
+        border-bottom: 2rpx solid #ebedf0;
         display: flex;
         justify-content: right;
       }
       .copy-btn {
-        border: 2rpx solid #df3030; 
-        border-radius: 200rpx; 
+        border: 2rpx solid #df3030;
+        border-radius: 200rpx;
         text-align: center;
         color: #df3030;
-        font-size: 26rpx; 
-        padding: 0rpx 50rpx 0rpx 50rpx; 
-        margin: 20rpx 0rpx 20rpx 0rpx; 
-        height: 70rpx; 
-        line-height: 70rpx; 
+        font-size: 26rpx;
+        padding: 0rpx 50rpx 0rpx 50rpx;
+        margin: 20rpx 0rpx 20rpx 0rpx;
+        height: 70rpx;
+        line-height: 70rpx;
       }
     }
 
@@ -989,16 +1054,16 @@ const getCookie = (name) => {
       .fba-goods {
         display: flex;
         align-items: center;
-        padding: 36rpx 30rpx 36rpx; 
+        padding: 36rpx 30rpx 36rpx;
 
         .title {
           flex: 1;
-          font-size: 30rpx; 
+          font-size: 30rpx;
           color: #666;
         }
 
         .van-switch {
-          font-size: 42rpx; 
+          font-size: 42rpx;
         }
       }
 
@@ -1010,29 +1075,29 @@ const getCookie = (name) => {
           box-sizing: border-box;
           content: " ";
           pointer-events: none;
-          right: 30rpx; 
+          right: 30rpx;
           bottom: 0;
-          left: 30rpx; 
-          border-bottom: 2rpx solid #ebedf0; 
+          left: 30rpx;
+          border-bottom: 2rpx solid #ebedf0;
           transform: scaleY(0.5);
         }
       }
     }
 
     .container4 {
-      padding: 30rpx 30rpx; 
+      padding: 30rpx 30rpx;
 
       .van-checkbox {
-        margin-bottom: 30rpx; 
+        margin-bottom: 30rpx;
 
         .van-checkbox__label {
-          font-size: 30rpx; 
+          font-size: 30rpx;
         }
 
         .ico-unchecked {
           display: inline-block;
-          width: 30rpx; 
-          height: 30rpx; 
+          width: 30rpx;
+          height: 30rpx;
           background: url("../../../../assets/images/common/ico-unchecked.png")
             no-repeat;
           background-size: contain;
@@ -1040,8 +1105,8 @@ const getCookie = (name) => {
 
         .ico-checked {
           display: inline-block;
-          width: 30rpx; 
-          height: 30rpx; 
+          width: 30rpx;
+          height: 30rpx;
           background: url("../../../../assets/images/common/ico-checked.png")
             no-repeat;
           background-size: contain;
@@ -1049,45 +1114,17 @@ const getCookie = (name) => {
       }
 
       .other-property {
-        padding: 20rpx 30rpx; 
-        margin-bottom: 20rpx; 
-        border-radius: 10rpx; 
-        border: 2rpx solid #aeaeae; 
+        padding: 20rpx 30rpx;
+        margin-bottom: 20rpx;
+        border-radius: 10rpx;
+        border: 2rpx solid #aeaeae;
 
         .uni-field__control {
           text-align: left;
         }
       }
     }
-    .footerBtn {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      margin: auto;
-      width: 100%;
-      height: 200rpx; 
-      max-width: 750rpx; 
-      background: #ffffff;
-      padding: 24rpx 0; 
-      text-align: center;
-      box-shadow: 0rpx -4rpx 8rpx 2rpx rgba(230, 220, 220, 0.3); 
-      border-radius: 40rpx 40rpx 0rpx 0rpx;
-      padding-bottom: 0;
-      .uni-button {
-        font-size: 28rpx; 
-        height: 88rpx; 
-        width: 600rpx; 
-        line-height: 90rpx; 
-        padding: 0 30rpx; 
-        color: #ffffff;
-        background: #df3030;
-        border-radius: 50rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
+
     .container5 {
       .trans-count {
         .van-field__button {
@@ -1128,11 +1165,11 @@ const getCookie = (name) => {
         }
       }
 
-      .query-price {
-        .van-field__label {
-          width: 240rpx;
-        }
-      }
+      // .query-price {
+      //   .van-field__label {
+      //     width: 240rpx;
+      //   }
+      // }
 
       .upload {
         .title {
@@ -1153,36 +1190,36 @@ const getCookie = (name) => {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 180rpx; 
-          height: 180rpx; 
+          width: 180rpx;
+          height: 180rpx;
           background: #f9f9f9;
-          border-radius: 6rpx 6rpx 6rpx 6rpx; 
+          border-radius: 6rpx 6rpx 6rpx 6rpx;
           opacity: 1;
-          border: 2rpx dashed #b9b9b9; 
+          border: 2rpx dashed #b9b9b9;
 
           .ico-upload-img {
-            width: 70rpx; 
-            height: 54rpx; 
+            width: 70rpx;
+            height: 54rpx;
           }
         }
 
         .van-uploader__preview {
-          margin-right: 40rpx; 
+          margin-right: 40rpx;
           &:nth-of-type(3n) {
             margin-right: 0;
           }
         }
 
         .van-uploader__preview-image {
-          width: 180rpx; 
-          height: 180rpx; 
+          width: 180rpx;
+          height: 180rpx;
         }
 
         .van-uploader__preview-delete {
           display: inline-block;
-          top: -20rpx; 
-          right: -20rpx; 
-          width: 48rpx; 
+          top: -20rpx;
+          right: -20rpx;
+          width: 48rpx;
           height: 48rpx;
           background: url("../../../../assets/images/common/ico-upload-close.png")
             no-repeat;
@@ -1190,88 +1227,121 @@ const getCookie = (name) => {
         }
       }
     }
-    .order-batch {
-      .uni-cell__title {
-        //解决文件名过长  将下载按钮挤压
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-      .container1 {
-        margin: 0 30rpx; 
-        margin-bottom: 30rpx; 
-        text-align: center;
+  }
+  .agreement-age{
+    margin-bottom: 100rpx;
+  }
+  .footerBtn {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+    height: 200rpx;
+    max-width: 750rpx;
+    background: #ffffff;
+    padding: 24rpx 0;
+    text-align: center;
+    box-shadow: 0rpx -4rpx 8rpx 2rpx rgba(230, 220, 220, 0.3);
+    border-radius: 40rpx 40rpx 0rpx 0rpx;
+    padding-bottom: 0;
+    > uni-button {
+      font-size: 28rpx;
+      height: 88rpx;
+      width: 600rpx;
+      line-height: 90rpx;
+      padding: 0 30rpx;
+      color: #ffffff;
+      background: #df3030;
+      border-radius: 50rpx;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .order-batch {
+    margin-top: 30rpx;
+    // .uni-cell__title {
+    //   //解决文件名过长  将下载按钮挤压
+    //   overflow: hidden;
+    //   white-space: nowrap;
+    //   text-overflow: ellipsis;
+    // }
+    .container1 {
+      margin: 0 30rpx;
+      margin-bottom: 30rpx;
+      text-align: center;
 
-        .uni-button {
-          width: 100%;
-          height: 100rpx; 
-          margin-top: 20rpx;
-          border-radius: 100rpx; 
-          line-height: 100rpx; 
-          padding: 0 45rpx; 
-          font-size: 28rpx; 
-          color: #15ce87;
-          background: #ffffff;
-          border: 2rpx dashed #15ce87;
-          &:last-child {
-            color: #2a8dff;
-            border: 2rpx dashed #2a8dff;
-          }
-        }
-        .upload {
-          padding: 0 178rpx;
-          border: 2rpx dashed #2a8dff; 
+      .operat-btn {
+        width: 100%;
+        height: 100rpx;
+        margin-top: 20rpx;
+        border-radius: 100rpx;
+        line-height: 100rpx;
+        padding: 0 45rpx;
+        font-size: 28rpx;
+        color: #15ce87;
+        background: #ffffff;
+        border: 2rpx dashed #15ce87;
+        &:last-child {
           color: #2a8dff;
-        }
-        .ico-download {
-          display: inline-block;
-          vertical-align: sub;
-          margin-right: 32rpx; 
-          width: 40rpx; 
-          height: 40rpx; 
-          background: url("../../../../assets/images/order/ico-download.png");
-          background-size: contain;
-        }
-        .ico-upload {
-          display: inline-block;
-          vertical-align: sub;
-          margin-right: 32rpx;
-          width: 40rpx;
-          height: 40rpx;
-          background: url("../../../../assets/images/order/ico-upload-btn.png");
-          background-size: contain;
+          border: 2rpx dashed #2a8dff;
         }
       }
-      .container2 {
-        min-height: 40vh; 
-        width: 690rpx;
-        margin-top: 30rpx;
-        margin-bottom: 20rpx;
-        .uni-cell {
-          align-items: center;
-        }
-        .uni-cell__title {
-          font-size: 30rpx;
-          flex: 1;
-        }
-        .van-icon__image {
-          margin-right: 20rpx; 
-          width: 44rpx; 
-          height: 48rpx;
-        }
-        .uni-button {
-          height: 70rpx; 
-          background: #ffffff;
-          border-radius: 36rpx; 
-          border: 2rpx solid #df3030; 
-          font-size: 22rpx;
-          padding-left: 10rpx; 
-          padding-right: 10rpx;
-          color: #df3030;
-        }
-        .uni-button + .uni-button {
-          margin-left: 20rpx; 
-        }
+      // .upload {
+      //   padding: 0 178rpx;
+      //   border: 2rpx dashed #2a8dff;
+      //   color: #2a8dff;
+      // }
+      .ico-download {
+        display: inline-block;
+        vertical-align: sub;
+        margin-right: 32rpx;
+        width: 40rpx;
+        height: 40rpx;
+        background: url("../../../../static/order/ico-download.png");
+        background-size: contain;
+      }
+      .ico-upload {
+        display: inline-block;
+        vertical-align: sub;
+        margin-right: 32rpx;
+        width: 40rpx;
+        height: 40rpx;
+        background: url("../../../../static/order/ico-upload-btn.png");
+        background-size: contain;
+      }
+    }
+    .container2 {
+      min-height: 40vh;
+      width: 690rpx;
+      margin-top: 30rpx;
+      margin-bottom: 20rpx;
+      .uni-cell {
+        align-items: center;
+      }
+      .uni-cell__title {
+        font-size: 30rpx;
+        flex: 1;
+      }
+      .van-icon__image {
+        margin-right: 20rpx;
+        width: 44rpx;
+        height: 48rpx;
+      }
+      .uni-button {
+        height: 70rpx;
+        background: #ffffff;
+        border-radius: 36rpx;
+        border: 2rpx solid #df3030;
+        font-size: 22rpx;
+        padding-left: 10rpx;
+        padding-right: 10rpx;
+        color: #df3030;
+      }
+      .uni-button + .uni-button {
+        margin-left: 20rpx;
       }
     }
   }
@@ -1283,26 +1353,26 @@ const getCookie = (name) => {
   margin-top: -30rpx;
   .phone-prefix {
     color: #333333;
-    font-size: 30rpx; 
+    font-size: 30rpx;
     display: flex;
     align-items: center;
-    margin-top: 14rpx; 
-    margin-left: 84rpx; 
+    margin-top: 14rpx;
+    margin-left: 84rpx;
     .ico-phone {
-      width: 20rpx; 
-      height: 10rpx; 
+      width: 20rpx;
+      height: 10rpx;
       background: url("../../../../assets/images/common/icon-phonePreFix.png")
         no-repeat;
       background-size: contain;
-      margin-left: 16rpx; 
+      margin-left: 16rpx;
     }
   }
   .uni-cell {
-    margin-right: -26rpx; 
+    margin-right: -26rpx;
   }
   .areaphone-select {
-    width: 386rpx; 
-    // margin-right: -30rpx; 
+    width: 386rpx;
+    // margin-right: -30rpx;
     .uni-field::before {
       // 去除手机区域号码边框下划线
       border-top: none;
@@ -1315,7 +1385,7 @@ const getCookie = (name) => {
 .ico-date {
   width: 33rpx;
   height: auto;
-  margin-right: 10rpx; 
+  margin-right: 10rpx;
   vertical-align: text-top;
 }
 </style>

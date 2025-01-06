@@ -19,3 +19,17 @@ uni-page-wrapper{
     border-radius: 30rpx;
     overflow: hidden;
 }
+
+.footer-btn >uni-button {
+    font-size: 28rpx;
+    height: 88rpx;
+    width: 600rpx;
+    line-height: 90rpx;
+    padding: 0 30rpx;
+    color: #ffffff;
+    background: #DF3030;
+    border-radius: 50rpx;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
