@@ -8,7 +8,7 @@
         }}</view
       >
     </view>
-    <uni-forms :model="form" @submit="onSubmit">
+    <uni-forms :model="form" :rules="rules" ref="formRef">
       <view class="custom-card container1" id="app">
         <uni-forms-item label="渠道" required>
           <uni-easyinput
@@ -18,7 +18,7 @@
           />
         </uni-forms-item>
         <!-- 付款方式 -->
-        <uni-forms-item label="付款方式" required>
+        <uni-forms-item label="付款方式" required name="baseInfo.payKind">
           <uni-data-select
             v-model="form.baseInfo.payKind"
             :localdata="payKind"
@@ -27,7 +27,7 @@
           />
         </uni-forms-item>
         <!-- 订单类型 -->
-        <uni-forms-item label="订单类型" required>
+        <uni-forms-item label="订单类型" required name="baseInfo.packageKind">
           <uni-data-select
             v-model="form.baseInfo.packageKind"
             :localdata="orderType"
@@ -36,7 +36,7 @@
           />
         </uni-forms-item>
         <!-- 入库类型 -->
-        <uni-forms-item label="入库类型" required>
+        <uni-forms-item label="入库类型" name="baseInfo.sendPlanKind" required>
           <uni-data-select
             v-model="form.baseInfo.sendPlanKind"
             :localdata="incomingType"
@@ -44,7 +44,7 @@
             :clear="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="是否单证报关" required>
+        <uni-forms-item label="是否单证报关" name="baseInfo.isSingle" required>
           <uni-data-select
             v-model="form.baseInfo.isSingle"
             :localdata="sysYesNo"
@@ -364,7 +364,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-import { getDictTypes, getWarehouseList,getOrderTemplate } from "@/api/common";
+import { getDictTypes, getWarehouseList, getOrderTemplate } from "@/api/common";
 import { getCity } from "@/api/other";
 import Agreement from "../../../components/agreement/index.vue";
 // import Compressor from 'compressorjs';
@@ -392,7 +392,7 @@ const form = reactive({
     fbaWarehouseName: "",
     isFba: "否",
     isSingle: "",
-    payKind: "1",
+    payKind: "",
     wantBeginDate: "",
     wantEndDate: "",
     title: "",
@@ -455,6 +455,128 @@ const form = reactive({
   },
   queryPriceHistoryId: "",
 });
+const rules = {
+  "baseInfo.payKind": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择付款方式",
+      },
+    ],
+  },
+  "baseInfo.packageKind": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择订单类型",
+      },
+    ],
+  },
+  "baseInfo.sendPlanKind": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择入库类型",
+      },
+    ],
+  },
+  "baseInfo.isSingle": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择是否单证报关",
+      },
+    ],
+  },
+  "baseInfo.wantBeginDate": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择预计交货日期",
+      },
+    ],
+  },
+  "sendInfo.senderName": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入发货人",
+      },
+    ],
+  },
+  "sendInfo.senderPhone": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入发货人电话",
+      },
+    ],
+  },
+  "sendInfo.area": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请选择发货人地区",
+      },
+    ],
+  },
+  "sendInfo.senderAddr": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入详细地址",
+      },
+    ],
+  },
+  "receiveInfo.receiverName": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入收货人",
+      },
+    ],
+  },
+  "receiveInfo.receiverPhone": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入收货人电话",
+      },
+    ],
+  },
+  "receiveInfo.receiverAddr": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入详细地址",
+      },
+    ],
+  },
+  "productsInfo.transCount": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入总箱数",
+      },
+    ],
+  },
+  "productsInfo.weight": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入重量",
+      },
+    ],
+  },
+  "productsInfo.squares": {
+    rules: [
+      {
+        required: true,
+        errorMessage: "请输入方数",
+      },
+    ],
+  },
+};
 const templateUrl = ref("");
 const zxPackingList = ref([]);
 const transKind = ref([]);
@@ -486,6 +608,7 @@ const receiverShow = ref(false);
 const spareReceiverCountryName = ref("");
 const agreement = ref("");
 const selectedRegion = ref([]);
+const formRef = ref("");
 
 // 生命周期钩子
 onLoad((options) => {
@@ -530,9 +653,42 @@ onMounted(() => {
   // getPhonePrefix();
   showLang.value = uni.getStorageSync("lang");
   areaPhonePreFix.value = getCookie("areaNumber");
-  // console.log('@@@',form.baseInfo.payKind)
 });
+const dynamicRules = computed(() => {
+  const rules = {
+    "baseInfo.payKind": {
+      rules: [
+        {
+          required: true,
+          errorMessage: "请选择付款方式",
+          trigg: "change",
+        },
+      ],
+    },
+    "baseInfo.packageKind": {
+      rules: [
+        {
+          required: true,
+          errorMessage: "请选择订单类型",
+        },
+      ],
+    },
+  };
 
+  if (form.baseInfo.isFba === "是") {
+    rules["baseInfo.fbaWarehouseName"] = {
+      rules: [{ required: true, errorMessage: "请选择FBA仓库" }],
+    };
+    rules["baseInfo.fbaCode"] = {
+      rules: [{ required: true, errorMessage: "请输入FBA编号" }],
+    };
+    rules["baseInfo.amazonRID"] = {
+      rules: [{ required: true, errorMessage: "请输入Amazon RID" }],
+    };
+  }
+
+  return rules;
+});
 // 方法
 const getDictTypesData = () => {
   getDictTypes({
@@ -730,11 +886,19 @@ const onConfirmTime = (value) => {
 };
 
 const onSubmit = () => {
-  if (!agreement.value.getChecked()) {
-    showToast("请阅读运输协议");
-    return;
-  }
-  showConfirm.value = true;
+  formRef.value.validate().then((res) => {
+    // if (!agreement.value.getChecked()) {
+    //   showToast("请阅读运输协议");
+    //   return;
+    // }
+    // showConfirm.value = true;
+    console.log('ref',formRef.value)
+    console.log("eee", res);
+  }).catch((err) => {
+    console.log("@@@", err);
+    console.log('ref',formRef.value)
+    showToast("请填写完必填选项");
+  });
 };
 
 const onConfirm = () => {
@@ -826,13 +990,15 @@ const beforeDelete = (file) => {
 };
 
 const downloadOrderTemplate = () => {
-  const fileUrl = 'https://www.gosun2.com/tms-app/common/download/resource?resource=' + encodeURIComponent(templateUrl.value)
+  const fileUrl =
+    "https://www.gosun2.com/tms-app/common/download/resource?resource=" +
+    encodeURIComponent(templateUrl.value);
   uni.downloadFile({
     url: fileUrl,
     success: (res) => {
       if (res.statusCode === 200) {
         // this.downloadStatus = "下载完成，正在保存...";
-        showToast('下载成功')
+        showToast("下载成功");
         // 保存文件到本地
         uni.saveFile({
           tempFilePath: res.tempFilePath,
@@ -1067,6 +1233,9 @@ const getCookie = (name) => {
         }
       }
     }
+    .uni-forms-item__error {
+      right: 25rpx;
+    }
     .copy-btn {
       border: 2rpx solid #df3030;
       border-radius: 200rpx;
@@ -1080,7 +1249,7 @@ const getCookie = (name) => {
       background: #ffffff;
       position: absolute;
       right: 15rpx;
-      bottom: -22rpx;
+      bottom: -20rpx;
     }
     .choice-btn {
       border-radius: 100rpx;
