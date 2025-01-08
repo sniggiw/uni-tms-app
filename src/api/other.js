@@ -1,8 +1,12 @@
-import { http } from "./http";
+import {
+    http
+} from "./http";
 
-const getCity = () => {
+const getCity = (params) => {
     return new Promise((resolve, reject) => {
-        http.get("/tms-app/common/list-area")
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/common/list-area?${queryString}`;
+        http.get(url)
             .then((response) => {
                 resolve(response);
             })
@@ -11,6 +15,7 @@ const getCity = () => {
             });
     });
 };
+
 
 const getCustomerInfo = () => {
     return new Promise((resolve, reject) => {
@@ -24,4 +29,7 @@ const getCustomerInfo = () => {
     });
 };
 
-export { getCity, getCustomerInfo };
+export {
+    getCity,
+    getCustomerInfo
+};

@@ -146,7 +146,7 @@ defineExpose({
   align-items: center;
   justify-content: flex-start; /* 内容从顶部开始 */
   position: relative;
-  padding: 60rpx;
+  padding: 30rpx;
 }
 .agress_con {
   position: relative;

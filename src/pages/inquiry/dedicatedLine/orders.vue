@@ -82,7 +82,6 @@
           <uni-forms-item label="FBA编号" required>
             <uni-easyinput v-model="form.baseInfo.fbaCode" placeholder="" />
           </uni-forms-item>
-
           <!-- Amazon RID -->
           <uni-forms-item label="amazonRID" required>
             <uni-easyinput v-model="form.baseInfo.amazonRID" placeholder="" />
@@ -94,10 +93,10 @@
         <uni-forms-item label="发货人">
           <uni-easyinput
             v-model="form.sendInfo.senderName"
-            placeholder="请输入"
+            placeholder="请输入发货人"
             :border="true"
           />
-          <!-- <button @tap="checkAddress('发货人')">选择</button> -->
+          <button @tap="checkAddress('发货人')" class="choice-btn">选择</button>
         </uni-forms-item>
         <uni-forms-item label="发货人电话">
           <view class="area-phone">
@@ -132,9 +131,7 @@
             v-model="form.receiveInfo.receiverName"
             placeholder="请输入收货人"
           />
-          <!-- <button @tap="checkAddress('收货人')">
-            选择
-          </button> -->
+          <button @tap="checkAddress('收货人')" class="choice-btn">选择</button>
         </uni-forms-item>
         <uni-forms-item label="收货人电话1">
           <view class="area-phone">
@@ -149,11 +146,13 @@
           </view>
         </uni-forms-item>
         <uni-forms-item label="收货人国家">
-          <uni-data-select
-            v-model="form.receiveInfo.area"
+          <uni-data-picker
             :localdata="receiveInfoCity"
-            placeholder=""
-          />
+            popup-title="请选择收货人国家"
+            :map="{ text: 'areaName', value: 'areaScode' }"
+            v-model="selectedRegion"
+            @change="handleReceiveInfoChange"
+          ></uni-data-picker>
         </uni-forms-item>
         <uni-forms-item label="详细地址">
           <uni-easyinput
@@ -254,19 +253,32 @@
       </view>
       <!-- 发货信息 -->
       <view class="custom-card container5">
-        <uni-forms-item label="收货仓库">
+        <uni-forms-item label="收货仓库" required>
           <uni-data-picker
             :localdata="warehouseList"
             popup-title="请选择仓库"
             :map="{ text: 'title', value: 'title' }"
             v-model="form.sendPlanInfo.warehouse"
+            @change="handleWarehouseChange"
           ></uni-data-picker>
         </uni-forms-item>
-        <!-- <uni-cell v-if="form.sendPlanInfo.warehouse" :value="warehouse.contactMan + ' ' + warehouse.contactPhone + ' ' + warehouse.addr" />
-        <uni-cell v-if="form.sendPlanInfo.warehouse" :value="warehouse.memo" /> -->
-        <view class="copy-box">
-          <button class="copy-btn" @tap="onCopy"></button>
-        </view>
+        <uni-forms-item label="" v-if="form.sendPlanInfo.warehouse">
+          <view>
+            {{
+              warehouse.contactMan +
+              " " +
+              warehouse.contactPhone +
+              " " +
+              warehouse.addr
+            }}
+          </view>
+        </uni-forms-item>
+        <uni-forms-item label="" v-if="form.sendPlanInfo.warehouse">
+          <view>{{ warehouse.memo }}</view>
+        </uni-forms-item>
+        <uni-forms-item label="" v-if="form.sendPlanInfo.warehouse">
+          <button class="copy-btn" @tap="onCopy">一键复制仓库地址</button>
+        </uni-forms-item>
         <uni-forms-item label="货运方式">
           <uni-data-picker
             :localdata="transKind"
@@ -275,15 +287,33 @@
             v-model="form.sendPlanInfo.transKind"
           ></uni-data-picker>
         </uni-forms-item>
-        <!-- <uni-forms-item v-if="form.sendPlanInfo.transKind === '快递送货' || form.sendPlanInfo.transKind === 'express delivery'" :label="$t('deliverGoods.courierNumber')" name="sendPlanInfo.transNum">
-          <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.courierNumberPlaceholder')" />
+        <uni-forms-item
+          v-if="
+            form.sendPlanInfo.transKind === '快递送货' ||
+            form.sendPlanInfo.transKind === 'express delivery'
+          "
+          label="快递单号"
+        >
+          <uni-easyinput v-model="form.sendPlanInfo.transNum" />
         </uni-forms-item>
-        <uni-forms-item v-if="form.sendPlanInfo.transKind === '司机送货' || form.sendPlanInfo.transKind === 'driver delivery'" :label="$t('deliverGoods.licensePlate')" name="sendPlanInfo.transNum">
-          <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.licensePlatePlaceholder')" />
+        <uni-forms-item
+          v-if="
+            form.sendPlanInfo.transKind === '司机送货' ||
+            form.sendPlanInfo.transKind === 'driver delivery'
+          "
+          label="车牌号码"
+        >
+          <uni-easyinput v-model="form.sendPlanInfo.transNum" />
         </uni-forms-item>
-        <uni-forms-item v-if="form.sendPlanInfo.transKind === '物流送货' || form.sendPlanInfo.transKind === 'logistics delivery'" :label="$t('deliverGoods.oddNumber')" name="sendPlanInfo.transNum">
-          <uni-easyinput v-model="form.sendPlanInfo.transNum" :placeholder="$t('deliverGoods.oddNumberPlaceholder')" />
-        </uni-forms-item> -->
+        <uni-forms-item
+          v-if="
+            form.sendPlanInfo.transKind === '物流送货' ||
+            form.sendPlanInfo.transKind === 'logistics delivery'
+          "
+          label="物流单号"
+        >
+          <uni-easyinput v-model="form.sendPlanInfo.transNum" />
+        </uni-forms-item>
       </view>
       <!-- 箱单上传 -->
       <view class="order-batch">
@@ -292,21 +322,11 @@
             <i class="ico-download"></i>
             <text>下载装箱单文件</text>
           </button>
-          <!-- <uni-file-picker
-            accept=".pdf,.xls,.doc,.jpg,.png,.docx,.xlsx,.zip,.7z,.rar"
-            @success="packUpload"
-          >
-            <button class="operat-btn">
-              <i class="ico-upload"></i>
-              装箱单附件上传
-            </button>
-          </uni-file-picker> -->
           <uni-file-picker
-            limit="5"
             file-mediatype="all"
             class="operat-btn"
             accept=".pdf,.xls,.doc,.jpg,.png,.docx,.xlsx,.zip,.7z,.rar"
-            >装箱单附件上传</uni-file-picker
+            ><i class="ico-upload"></i>装箱单附件上传</uni-file-picker
           >
         </view>
         <view
@@ -325,24 +345,11 @@
         </view>
       </view>
       <!-- 运输协议 -->
-      <Agreement ref="agreement" class="agreement-age"/>
+      <Agreement ref="agreement" class="agreement-age" />
       <view class="footerBtn">
         <button @tap="onSubmit">提交订单</button>
       </view>
-     
     </uni-forms>
-    
-    <!-- <uni-popup ref="popup" type="bottom">
-      <uni-datetime-picker
-        v-model="currentDate"
-        type="date"
-        title="$t('placeOrder.currentDatePlaceholder')"
-        @cancel="showDateTimePicker = false"
-        @confirm="onConfirmTime"
-        :start="minDate"
-        :end="maxDate"
-      />
-    </uni-popup> -->
     <uni-popup ref="confirmPopup" type="dialog">
       <uni-popup-dialog
         title="$t('confirmTips.confirmOrder')"
@@ -357,7 +364,8 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-import { getDictTypes, getWarehouseList } from "@/api/common";
+import { getDictTypes, getWarehouseList,getOrderTemplate } from "@/api/common";
+import { getCity } from "@/api/other";
 import Agreement from "../../../components/agreement/index.vue";
 // import Compressor from 'compressorjs';
 // import CustomSelect from "../../../components/selectComponent/index.vue";
@@ -476,7 +484,8 @@ const receiverCityParams = reactive({
 const receiverCityData = ref([]);
 const receiverShow = ref(false);
 const spareReceiverCountryName = ref("");
-const agreement = ref('')
+const agreement = ref("");
+const selectedRegion = ref([]);
 
 // 生命周期钩子
 onLoad((options) => {
@@ -515,7 +524,8 @@ onMounted(() => {
   // uni.showLoading({ title: '加载中...' });
   getDictTypesData();
   getWarehouseListData();
-  // getCity();
+  getReceiveInfoCityData();
+  getOrderTemplateData();
   // getContract();
   // getPhonePrefix();
   showLang.value = uni.getStorageSync("lang");
@@ -586,6 +596,26 @@ const clickSwitch = (event) => {
   }
 };
 
+const handleReceiveInfoChange = (e) => {
+  const [receiveCity] = e.detail.value;
+  // 将选中的值绑定到表单
+  form.receiveInfo.receiverCityName = receiveCity ? receiveCity.text : "";
+  form.receiveInfo.cityCode = receiveCity ? receiveCity.value : "";
+};
+
+const handleWarehouseChange = (e) => {
+  if (e.detail.value && e.detail.value.length > 0) {
+    const [warehouseData] = e.detail.value;
+    if (warehouseData && warehouseData.text) {
+      warehouse.value = warehouseList.value.find(
+        (item) => item.title === warehouseData.text
+      );
+    } else {
+      console.error("warehouseData 或 warehouseData.text 不存在");
+    }
+  }
+};
+
 const getWarehouseListData = () => {
   getWarehouseList().then((res) => {
     if (res.code === 200) {
@@ -596,10 +626,10 @@ const getWarehouseListData = () => {
   });
 };
 
-const getCity = () => {
-  Api.getCity(receiveInfoParams).then((res) => {
+const getReceiveInfoCityData = () => {
+  getCity(receiveInfoParams).then((res) => {
     if (res.code === 200) {
-      receiveInfoCity.value = [...receiveInfoCity.value, ...res.data];
+      receiveInfoCity.value = res.data;
     } else {
       showToast(res.msg);
     }
@@ -701,7 +731,7 @@ const onConfirmTime = (value) => {
 
 const onSubmit = () => {
   if (!agreement.value.getChecked()) {
-    showToast('您有必填选项未填写');
+    showToast("请阅读运输协议");
     return;
   }
   showConfirm.value = true;
@@ -795,11 +825,52 @@ const beforeDelete = (file) => {
   form.productsInfo.lookPictures.splice(file.index, 1);
 };
 
-const downloadOrderTemplate = (path, title) => {
-  window.location.href = Api.downloadResource({
-    resource: encodeURIComponent(path),
-    downloadName: title,
+const downloadOrderTemplate = () => {
+  const fileUrl = 'https://www.gosun2.com/tms-app/common/download/resource?resource=' + encodeURIComponent(templateUrl.value)
+  uni.downloadFile({
+    url: fileUrl,
+    success: (res) => {
+      if (res.statusCode === 200) {
+        // this.downloadStatus = "下载完成，正在保存...";
+        showToast('下载成功')
+        // 保存文件到本地
+        uni.saveFile({
+          tempFilePath: res.tempFilePath,
+          success: (saveRes) => {
+            // this.downloadStatus = `文件已保存到：${saveRes.savedFilePath}`;
+            // 打开文件（可选）
+            uni.openDocument({
+              filePath: saveRes.savedFilePath,
+              success: () => {
+                console.log("文件打开成功");
+              },
+              fail: (err) => {
+                console.error("文件打开失败", err);
+              },
+            });
+          },
+          fail: (err) => {
+            // this.downloadStatus = "文件保存失败";
+            console.error("文件保存失败", err);
+          },
+        });
+      } else {
+        // this.downloadStatus = "下载失败";
+        console.error("下载失败，状态码：", res.statusCode);
+      }
+    },
+    fail: (err) => {
+      // this.downloadStatus = "下载失败";
+      console.error("下载失败", err);
+    },
+    complete: () => {
+      console.log("下载完成");
+    },
   });
+  // window.location.href = Api.downloadResource({
+  //   resource: encodeURIComponent(path),
+  //   downloadName: title,
+  // });
 };
 
 // const packCommonUpload = (file) => {
@@ -816,9 +887,9 @@ const downloadOrderTemplate = (path, title) => {
 //   });
 // };
 
-const getOrderTemplate = () => {
+const getOrderTemplateData = () => {
   uni.showLoading({ title: "加载中..." });
-  Api.getOrderTemplate({ title: "专线装箱单模板" }).then((res) => {
+  getOrderTemplate({ title: "专线装箱单模板" }).then((res) => {
     uni.hideLoading();
     if (res.code === 200) {
       templateUrl.value = res.data.path;
@@ -876,11 +947,27 @@ const deleteFile = (title) => {
 };
 
 const onCopy = () => {
-  showToast("overseasTaobao.copySuccess");
-};
-
-const onError = () => {
-  showToast("overseasTaobao.copyError");
+  uni.setClipboardData({
+    data:
+      warehouse.value.contactMan +
+      " " +
+      warehouse.value.contactPhone +
+      " " +
+      warehouse.value.addr +
+      warehouse.value.memo,
+    success: () => {
+      uni.showToast({
+        title: "复制成功",
+        icon: "none",
+      });
+    },
+    fail: () => {
+      uni.showToast({
+        title: "复制失败",
+        icon: "none",
+      });
+    },
+  });
 };
 
 const showToast = (message, duration = 2000) => {
@@ -980,6 +1067,32 @@ const getCookie = (name) => {
         }
       }
     }
+    .copy-btn {
+      border: 2rpx solid #df3030;
+      border-radius: 200rpx;
+      text-align: center;
+      color: #df3030;
+      font-size: 26rpx;
+      padding: 0rpx 50rpx 0rpx 50rpx;
+      margin: 20rpx 0rpx 20rpx 0rpx;
+      height: 70rpx;
+      line-height: 70rpx;
+      background: #ffffff;
+      position: absolute;
+      right: 15rpx;
+      bottom: -22rpx;
+    }
+    .choice-btn {
+      border-radius: 100rpx;
+      border: 2rpx solid #df3030;
+      background: #fff;
+      font-size: 28rpx;
+      color: #df3030;
+      height: 50rpx;
+      line-height: 50rpx;
+      margin-top: 10rpx;
+      margin-left: 15rpx;
+    }
   }
   :deep(.uni-forms-item__label) {
     width: 220rpx !important;
@@ -987,6 +1100,7 @@ const getCookie = (name) => {
   :deep(.uni-forms-item) {
     border-bottom: 2rpx solid #ebedf0;
     padding: 10rpx;
+    margin-bottom: 0rpx;
   }
 
   .opinion {
@@ -1013,40 +1127,6 @@ const getCookie = (name) => {
       padding: 15rpx;
       &:last-child {
         margin-bottom: 20rpx;
-      }
-      .uni-cell {
-        // .van-field__button {
-        //   line-height: 1;
-        // }
-
-        .uni-button {
-          border-radius: 36rpx;
-          border: 2rpx solid #df3030;
-          background: #fff;
-          font-size: 28rpx;
-          color: #df3030;
-          width: 110rpx;
-          height: 50rpx;
-          line-height: normal;
-        }
-      }
-      .copy-box {
-        width: 91%;
-        margin: 0 auto;
-        border-bottom: 2rpx solid #ebedf0;
-        display: flex;
-        justify-content: right;
-      }
-      .copy-btn {
-        border: 2rpx solid #df3030;
-        border-radius: 200rpx;
-        text-align: center;
-        color: #df3030;
-        font-size: 26rpx;
-        padding: 0rpx 50rpx 0rpx 50rpx;
-        margin: 20rpx 0rpx 20rpx 0rpx;
-        height: 70rpx;
-        line-height: 70rpx;
       }
     }
 
@@ -1228,7 +1308,7 @@ const getCookie = (name) => {
       }
     }
   }
-  .agreement-age{
+  .agreement-age {
     margin-bottom: 100rpx;
   }
   .footerBtn {
@@ -1350,37 +1430,21 @@ const getCookie = (name) => {
   // 去除手机区号下拉框下划线
   display: flex;
   align-items: center;
-  margin-top: -30rpx;
   .phone-prefix {
     color: #333333;
     font-size: 30rpx;
     display: flex;
     align-items: center;
-    margin-top: 14rpx;
     margin-left: 84rpx;
     .ico-phone {
       width: 20rpx;
       height: 10rpx;
-      background: url("../../../../assets/images/common/icon-phonePreFix.png")
+      background: url("../../../../static/common/icon-phonePreFix.png")
         no-repeat;
       background-size: contain;
       margin-left: 16rpx;
     }
   }
-  .uni-cell {
-    margin-right: -26rpx;
-  }
-  .areaphone-select {
-    width: 386rpx;
-    // margin-right: -30rpx;
-    .uni-field::before {
-      // 去除手机区域号码边框下划线
-      border-top: none;
-    }
-  }
-  // /deep/.areaphone-select::after{  // 去除手机区域号码边框下划线
-  //   border-bottom: none;
-  // }
 }
 .ico-date {
   width: 33rpx;

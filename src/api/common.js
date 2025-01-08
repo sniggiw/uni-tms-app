@@ -60,9 +60,24 @@ const commonListArgeement = (params) => {
     });
 };
 
+const getOrderTemplate = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/order/template/${params.title}?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
 export {
     getDictTypes,
     login,
     getWarehouseList,
-    commonListArgeement
+    commonListArgeement,
+    getOrderTemplate
 };
