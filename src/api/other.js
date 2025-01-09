@@ -1,6 +1,6 @@
 import { http } from "./http";
 
-const getCity = () => {
+const getAreaList = () => {
     return new Promise((resolve, reject) => {
         http.get("/tms-app/common/list-area")
             .then((response) => {
@@ -24,4 +24,4 @@ const getCustomerInfo = () => {
     });
 };
 
-export { getCity, getCustomerInfo };
+export { getAreaList, getCustomerInfo };

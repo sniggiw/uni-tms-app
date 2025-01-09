@@ -19,7 +19,7 @@
             <!-- 列表，默认为一列，可多列 -->
             <picker-view class="popup-picker-view" :value="pickerValue" @change="onPickerChange">
                 <picker-view-column v-for="(column, index) in columns" :key="index">
-                    <view v-for="(item, i) in filteredItems[index]" :key="i">{{ item }}</view>
+                    <view class="item" v-for="(item, i) in filteredItems[index]" :key="i">{{ item }}</view>
                 </picker-view-column>
             </picker-view>
         </view>
@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import CustomPicker from "@/components/CustomPicker";
+import { useAreaList } from "@/hooks/area";
 
 const props = defineProps({
     columns: {
@@ -41,7 +41,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["headerBtnStart", "headerBtnEnd", "update:modelValue"]);
+const emit = defineEmits(["pickerChange", "headerBtnStart", "headerBtnEnd", "update:modelValue"]);
 
 const popupRef = ref(null);
 const pickerValue = ref(props.modelValue);
@@ -56,6 +56,8 @@ const filteredItems = computed(() => {
 
 const onPickerChange = (e) => {
     pickerValue.value = e.detail.value;
+
+    emit("pickerChange", pickerValue.value, props.modelValue);
     emit("update:modelValue", pickerValue.value);
 };
 
@@ -166,6 +168,12 @@ $gray-text-color: #969799;
 
     .popup-picker-view {
         flex: 1;
+
+        .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     }
 }
 </style>

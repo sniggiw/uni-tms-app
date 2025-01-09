@@ -7,6 +7,7 @@
             ref="customPopupPickerRef"
             v-model="selectedValue"
             :columns="columns"
+            @pickerChange="handleChangeSelectAreaText"
             @headerBtnStart="handleHideCustomPopupPicker"
             @headerBtnEnd="handleShowCustomPopupPicker"
         />
@@ -14,9 +15,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useAuthStore } from "@/stores";
+import { ref, computed, onMounted } from "vue";
 import CustomPopupPicker from "@/components/CustomPopupPicker";
+import { useAuthStore } from "@/stores";
+import { useAreaList } from "@/hooks/area";
+
+const { originAreaList, countryList, provinceList, cityList, selectAreaCode, changeSelectAreaText } = useAreaList();
 
 const authStore = useAuthStore();
 
@@ -31,13 +35,6 @@ const judgeToLoginPage = () => {
     });
 };
 
-const columns = ref([
-    ["选项1", "选项2", "选项3", "选项4", "选项5"],
-    ["选项A", "选项B", "选项C", "选项D", "选项E"],
-]);
-
-const selectedValue = ref([2, 1]);
-
 const customPopupPickerRef = ref(null);
 
 const handleShowCustomPopupPicker = () => {
@@ -46,6 +43,29 @@ const handleShowCustomPopupPicker = () => {
 
 const handleHideCustomPopupPicker = () => {
     customPopupPickerRef.value.close();
+};
+
+const columns = computed(() => {
+    return [countryList.value, provinceList.value, cityList.value];
+});
+
+const selectedValue = ref([0, 0, 0]);
+
+const findChangedIndices = (newArray, oldArray) => {
+    const changedIndices = [];
+    for (let i = 0; i < newArray.length; i++) {
+        if (newArray[i] !== oldArray[i]) {
+            changedIndices.push(i);
+        }
+    }
+    return changedIndices;
+};
+
+const handleChangeSelectAreaText = (newValue, oldValue) => {
+    const changedIndices = findChangedIndices(newValue, oldValue);
+    if (changedIndices?.length > 0) {
+        changeSelectAreaText(changedIndices[0], newValue[changedIndices[0]]);
+    }
 };
 </script>
 
