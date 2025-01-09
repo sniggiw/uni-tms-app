@@ -74,10 +74,30 @@ const getOrderTemplate = (params) => {
     });
 };
 
+const commonUpload = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        http.post({
+            url: `/tms-app/common/upload?${queryString}`,
+            data: params,
+            headers: {
+                'Content-Type': 'multipart/form-data;'
+            }
+        })
+        .then((response) => {
+            resolve(response.data);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
+};
+
 export {
     getDictTypes,
     login,
     getWarehouseList,
     commonListArgeement,
-    getOrderTemplate
+    getOrderTemplate,
+    commonUpload
 };

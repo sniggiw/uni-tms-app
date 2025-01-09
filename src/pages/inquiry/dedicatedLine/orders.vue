@@ -8,7 +8,7 @@
         }}</view
       >
     </view>
-    <uni-forms :model="form" :rules="rules" ref="formRef">
+    <uni-forms :model="form" ref="formRef">
       <view class="custom-card container1" id="app">
         <uni-forms-item label="渠道" required>
           <uni-easyinput
@@ -18,7 +18,7 @@
           />
         </uni-forms-item>
         <!-- 付款方式 -->
-        <uni-forms-item label="付款方式" required name="baseInfo.payKind">
+        <uni-forms-item label="付款方式" required :name="['baseInfo','payKind']" :rules="[{required: true,errorMessage:'请选择付款方式'}]">
           <uni-data-select
             v-model="form.baseInfo.payKind"
             :localdata="payKind"
@@ -27,7 +27,7 @@
           />
         </uni-forms-item>
         <!-- 订单类型 -->
-        <uni-forms-item label="订单类型" required name="baseInfo.packageKind">
+        <uni-forms-item label="订单类型" required :name="['baseInfo','packageKind']" :rules="[{required: true,errorMessage:'请选择订单类型'}]">
           <uni-data-select
             v-model="form.baseInfo.packageKind"
             :localdata="orderType"
@@ -36,7 +36,7 @@
           />
         </uni-forms-item>
         <!-- 入库类型 -->
-        <uni-forms-item label="入库类型" name="baseInfo.sendPlanKind" required>
+        <uni-forms-item label="入库类型" required :name="['baseInfo','sendPlanKind']" :rules="[{required: true,errorMessage:'请选择入库类型'}]">
           <uni-data-select
             v-model="form.baseInfo.sendPlanKind"
             :localdata="incomingType"
@@ -44,7 +44,7 @@
             :clear="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="是否单证报关" name="baseInfo.isSingle" required>
+        <uni-forms-item label="是否单证报关" required :name="['baseInfo','isSingle']" :rules="[{required: true,errorMessage:'请选择是否单证报关'}]">
           <uni-data-select
             v-model="form.baseInfo.isSingle"
             :localdata="sysYesNo"
@@ -53,7 +53,7 @@
           />
         </uni-forms-item>
         <!-- 预计交货日期 -->
-        <uni-forms-item label="预计交货日期" required>
+        <uni-forms-item label="预计交货日期" required :name="['baseInfo','wantBeginDate']" :rules="[{required: true,errorMessage:'请选择预计交货日期'}]">
           <uni-datetime-picker
             type="date"
             v-model="form.baseInfo.wantBeginDate"
@@ -70,7 +70,7 @@
           />
         </uni-forms-item>
         <template v-if="form.baseInfo.isFba === '是'">
-          <uni-forms-item label="FBA仓库" required>
+          <uni-forms-item label="FBA仓库" required :name="['baseInfo','fbaWarehouseName']" :rules="[{required: true,errorMessage:'请选择FBA仓库'}]">
             <uni-data-select
               v-model="form.baseInfo.fbaWarehouseName"
               :localdata="fbaWarehouseName"
@@ -79,18 +79,18 @@
             />
           </uni-forms-item>
           <!-- FBA编号 -->
-          <uni-forms-item label="FBA编号" required>
+          <uni-forms-item label="FBA编号" required :name="['baseInfo','fbaCode']" :rules="[{required: true,errorMessage:'请输入FBA编号'}]">
             <uni-easyinput v-model="form.baseInfo.fbaCode" placeholder="" />
           </uni-forms-item>
           <!-- Amazon RID -->
-          <uni-forms-item label="amazonRID" required>
+          <uni-forms-item label="amazonRID" required :name="['baseInfo','amazonRID']" :rules="[{required: true,errorMessage:'请输入amzaonRID'}]">
             <uni-easyinput v-model="form.baseInfo.amazonRID" placeholder="" />
           </uni-forms-item>
         </template>
       </view>
       <!-- 发货人 -->
       <view class="custom-card container2">
-        <uni-forms-item label="发货人">
+        <uni-forms-item label="发货人" required :name="['sendInfo','senderName']" :rules="[{required: true,errorMessage:'请输入发货人'}]">
           <uni-easyinput
             v-model="form.sendInfo.senderName"
             placeholder="请输入发货人"
@@ -98,7 +98,7 @@
           />
           <button @tap="checkAddress('发货人')" class="choice-btn">选择</button>
         </uni-forms-item>
-        <uni-forms-item label="发货人电话">
+        <uni-forms-item label="发货人电话" required :name="['sendInfo','senderName']" :rules="[{required: true,errorMessage:'请输入发货人电话'}]">
           <view class="area-phone">
             <view class="phone-prefix">
               <view>{{ form.sendInfo.senderPhonePrefix }}</view>
@@ -110,13 +110,13 @@
             />
           </view>
         </uni-forms-item>
-        <uni-forms-item label="发货人地区">
+        <uni-forms-item label="发货人地区" required>
           <uni-data-select
             v-model="form.sendInfo.area"
             placeholder="请选择发货人地区"
           />
         </uni-forms-item>
-        <uni-forms-item label="详细地址">
+        <uni-forms-item label="详细地址" required :name="['sendInfo','senderAddr']" :rules="[{required: true,errorMessage:'请输入详细地址'}]">
           <uni-easyinput
             v-model="form.sendInfo.senderAddr"
             placeholder="请输入详细地址"
@@ -126,14 +126,14 @@
       <!-- 收货人 -->
       <view class="custom-card container3">
         <!-- <uni-cell :title="$t('orderDetail.lang')" :value="lang" /> -->
-        <uni-forms-item label="收货人">
+        <uni-forms-item label="收货人" required :name="['receiveInfo','receiverName']" :rules="[{required: true,errorMessage:'请输入收货人'}]">
           <uni-easyinput
             v-model="form.receiveInfo.receiverName"
             placeholder="请输入收货人"
           />
           <button @tap="checkAddress('收货人')" class="choice-btn">选择</button>
         </uni-forms-item>
-        <uni-forms-item label="收货人电话1">
+        <uni-forms-item label="收货人电话1" required :name="['receiveInfo','receiverPhonePrefix']" :rules="[{required: true,errorMessage:'请输入收货人电话'}]">
           <view class="area-phone">
             <view class="phone-prefix">
               <view>{{ form.receiveInfo.receiverPhonePrefix }}</view>
@@ -145,7 +145,7 @@
             />
           </view>
         </uni-forms-item>
-        <uni-forms-item label="收货人国家">
+        <uni-forms-item label="收货人国家" required>
           <uni-data-picker
             :localdata="receiveInfoCity"
             popup-title="请选择收货人国家"
@@ -187,13 +187,13 @@
       <view class="custom-card container5">
         <!-- <uni-cell :title="$t('inquiry.productsAttr')" :value="form.attrInfo.productsAttr" /> -->
         <template v-if="showLang === 'zh_CN' || areaPhonePreFix != '+968'">
-          <uni-forms-item label="中文品名">
+          <uni-forms-item label="中文品名" required :name="['productsInfo','productsCn']" :rules="[{required: true,errorMessage:'请输入中文品名'}]">
             <uni-easyinput
               v-model="form.productsInfo.productsCn"
               placeholder="请输入中文品名"
             />
           </uni-forms-item>
-          <uni-forms-item label="英文品名">
+          <uni-forms-item label="英文品名" required :name="['productsInfo','productsOthers']" :rules="[{required: true,errorMessage:'请输入英文品名'}]">
             <uni-easyinput
               v-model="form.productsInfo.productsOthers"
               placeholder="请输入英文品名"
@@ -201,20 +201,20 @@
           </uni-forms-item>
         </template>
         <template v-else>
-          <uni-forms-item label="英文品名">
+          <uni-forms-item label="英文品名" required :name="['productsInfo','productsOthers']" :rules="[{required: true,errorMessage:'请输入英文品名'}]">
             <uni-easyinput
               v-model="form.productsInfo.productsOthers"
               placeholder=""
             />
           </uni-forms-item>
-          <uni-forms-item label="中文品名">
+          <uni-forms-item label="中文品名" required :name="['productsInfo','productsCn']" :rules="[{required: true,errorMessage:'请输入中文品名'}]">
             <uni-easyinput
               v-model="form.productsInfo.productsCn"
               placeholder=""
             />
           </uni-forms-item>
         </template>
-        <uni-forms-item label="总箱数">
+        <uni-forms-item label="总箱数" required :name="['productsInfo','transCount']" :rules="[{required: true,errorMessage:'请输入总箱数'}]">
           <uni-easyinput
             v-model="form.productsInfo.transCount"
             placeholder="$t('goods.transCountPlaceholder')"
@@ -225,10 +225,10 @@
             :clear="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="重量(KG)">
+        <uni-forms-item label="重量(KG)" required :name="['productsInfo','weight']" :rules="[{required: true,errorMessage:'请输入重量'}]">
           <uni-easyinput v-model="form.productsInfo.weight" placeholder="" />
         </uni-forms-item>
-        <uni-forms-item label="方数">
+        <uni-forms-item label="方数" required :name="['productsInfo','squares']" :rules="[{required: true,errorMessage:'请输入方数'}]">
           <uni-easyinput v-model="form.productsInfo.squares" placeholder="" />
         </uni-forms-item>
         <uni-forms-item label="参考重量区间单价">
@@ -243,8 +243,9 @@
           <view class="content">
             <uni-file-picker
               v-model="form.productsInfo.lookPictures"
-              :auto-upload="false"
-              @success="afterRead"
+              file-mediatype="image"
+              file-extname="png,jpg"
+              @progress="commonUploadData"
               @fail="beforeRead"
               @delete="beforeDelete"
             />
@@ -253,7 +254,7 @@
       </view>
       <!-- 发货信息 -->
       <view class="custom-card container5">
-        <uni-forms-item label="收货仓库" required>
+        <uni-forms-item label="收货仓库" required :name="['sendPlanInfo','warehouse']" :rules="[{required: true,errorMessage:'请选择仓库'}]">
           <uni-data-picker
             :localdata="warehouseList"
             popup-title="请选择仓库"
@@ -364,7 +365,7 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-import { getDictTypes, getWarehouseList, getOrderTemplate } from "@/api/common";
+import { getDictTypes, getWarehouseList, getOrderTemplate,commonUpload } from "@/api/common";
 import { getCity } from "@/api/other";
 import Agreement from "../../../components/agreement/index.vue";
 // import Compressor from 'compressorjs';
@@ -456,7 +457,7 @@ const form = reactive({
   queryPriceHistoryId: "",
 });
 const rules = {
-  "baseInfo.payKind": {
+  "baseInfoPayKind": {
     rules: [
       {
         required: true,
@@ -887,16 +888,13 @@ const onConfirmTime = (value) => {
 
 const onSubmit = () => {
   formRef.value.validate().then((res) => {
-    // if (!agreement.value.getChecked()) {
-    //   showToast("请阅读运输协议");
-    //   return;
-    // }
-    // showConfirm.value = true;
-    console.log('ref',formRef.value)
+    if (!agreement.value.getChecked()) {
+      showToast("请阅读运输协议");
+      return;
+    }
+    showConfirm.value = true;
     console.log("eee", res);
   }).catch((err) => {
-    console.log("@@@", err);
-    console.log('ref',formRef.value)
     showToast("请填写完必填选项");
   });
 };
@@ -948,15 +946,16 @@ const beforeRead = (file) => {
 };
 
 const afterRead = (file) => {
+  console.log('@@@',file)
   if (file.file.size < 2 * 1024 * 1024) {
-    commonUpload(file);
+    commonUploadData(file);
     return;
   }
   // new Compressor(file.file, {
   //   quality: 0.6,
   //   success(result) {
   //     file.file = result;
-  //     commonUpload(file);
+  //     commonUploadData(file);
   //   },
   //   error(err) {
   //     console.log(err.message);
@@ -964,26 +963,27 @@ const afterRead = (file) => {
   // });
 };
 
-// const commonUpload = (file) => {
-//   file.status = 'uploading';
-//   file.message = "common.uploading";
-//   const formData = new FormData();
-//   formData.append('file', file.file);
-//   Api.commonUpload(formData).then(res => {
-//     if (res.code === 200) {
-//       file.status = 'done';
-//       const lookPicture = { ...res.data, ...form.productsInfo.lookPictures[form.productsInfo.lookPictures.length - 1] };
-//       form.productsInfo.lookPictures[form.productsInfo.lookPictures.length - 1] = lookPicture;
-//     } else {
-//       file.status = 'failed';
-//       file.message = "common.uploadFailed";
-//       showToast(res.msg);
-//     }
-//   }).catch(() => {
-//     file.status = 'failed';
-//     file.message = "common.uploadFailed";
-//   });
-// };
+const commonUploadData = (e) => {
+  console.log('@@',e)
+  // file.status = 'uploading';
+  // file.message = "common.uploading";
+  // const formData = new FormData();
+  // formData.append('file', file.file);
+  // commonUpload(formData).then(res => {
+  //   if (res.code === 200) {
+  //     file.status = 'done';
+  //     const lookPicture = { ...res.data, ...form.productsInfo.lookPictures[form.productsInfo.lookPictures.length - 1] };
+  //     form.productsInfo.lookPictures[form.productsInfo.lookPictures.length - 1] = lookPicture;
+  //   } else {
+  //     file.status = 'failed';
+  //     file.message = "common.uploadFailed";
+  //     showToast(res.msg);
+  //   }
+  // }).catch(() => {
+  //   file.status = 'failed';
+  //   file.message = "common.uploadFailed";
+  // });
+};
 
 const beforeDelete = (file) => {
   form.productsInfo.lookPictures.splice(file.index, 1);
@@ -1042,7 +1042,7 @@ const downloadOrderTemplate = () => {
 // const packCommonUpload = (file) => {
 //   const formData = new FormData();
 //   formData.append('file', file);
-//   Api.commonUpload(formData).then(res => {
+//   commonUpload(formData).then(res => {
 //     if (res.code === 200) {
 //       showToast('common.processedSuccess');
 //       form.productsInfo.packingList.push(res.data);
@@ -1235,6 +1235,7 @@ const getCookie = (name) => {
     }
     .uni-forms-item__error {
       right: 25rpx;
+      top: 50rpx;
     }
     .copy-btn {
       border: 2rpx solid #df3030;
