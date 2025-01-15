@@ -893,7 +893,6 @@ const onSubmit = () => {
       return;
     }
     showConfirm.value = true;
-    console.log("eee", res);
   }).catch((err) => {
     showToast("请填写完必填选项");
   });

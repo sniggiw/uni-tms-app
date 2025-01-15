@@ -20,7 +20,8 @@
         <view class="ico-line ico-line-right"></view>
       </view>
 
-      <view class="right" @tap="toJump(2)">
+      <view
+       class="right" @tap="toJump(2)">
         <view>{{
           inquirySearch[flow]
             ? inquirySearch[flow].descTitle || "目的港"

@@ -100,5 +100,18 @@ const postinquiryHistory = (params) => {
     });
 };
 
+const listReceiverCity = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/zx/inquiry/country/list-receiver-city?${queryString}`;
+        http.get(url) // 直接将 params 作为请求体传递
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
 
-export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory };
+export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory,listReceiverCity };

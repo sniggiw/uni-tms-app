@@ -20,29 +20,40 @@
         >{{ searchParams.weight }}kg | {{ searchParams.squares }}CBM |
         {{ searchParams.transCount }}{{ searchParams.transUnit }}</view
       >
-      <!-- <van-dropdown-menu duration="0.5" :close-on-click-outside="false" :z-index="5500">
-        <van-dropdown-item ref="cargoInfo" class="dropdown-cargoInfoBy" @open="handleDropdownOpen" @close="handleDropdownClose">
-          <template #title>
-            <i class="ico-arrow-up"></i>
-          </template>
+      <dropdown-menu class="cargoInfo-content">
+        <dropdown-item ref="cargoInfo" title=" ">
           <view class="popupTxet">
-            <CargoInfoByDetail :searchData="searchParams" @closeFloor="closeFloor"
-              @cargoInfoCallback="cargoInfoCallback" :Kind="searchParams.transKind" :receiverCityData="receiverCity"></CargoInfoByDetail>
+            <CargoInfoByDetail
+              :searchData="searchParams"
+              @closeFloor="closeFloor"
+              @cargoInfoCallback="cargoInfoCallback"
+              :Kind="searchParams.transKind"
+              :receiverCityData="receiverCity"
+              ref="cargoInfoByDetailRef"
+            ></CargoInfoByDetail>
           </view>
-        </van-dropdown-item>
-      </van-dropdown-menu> -->
+        </dropdown-item>
+      </dropdown-menu>
     </view>
     <view class="container">
       <!-- 价格筛选 -->
       <view class="choice">
-        <!-- <van-dropdown-menu>
-          <van-dropdown-item :title="$t('inquiry.sort')" v-model="searchParams.sort" :options="sort"
-            @change="getInquiryZx" />
-          
-          <van-dropdown-item :title="$t('inquiry.zxtransKind')" ref="item" class="right" v-model="searchParams.transKind" :options="transKind"
-            @change="getInquiryZx">
-          </van-dropdown-item>
-        </van-dropdown-menu> -->
+        <dropdown-menu activeColor="#ee0a24" sticky>
+          <dropdown-item
+            title="全部"
+            :options="sort"
+            v-model="searchParams.sort"
+            @change="getInquiryZx"
+          >
+          </dropdown-item>
+          <dropdown-item
+            title="运输方式"
+            :options="transKind"
+            v-model="searchParams.transKind"
+            @change="getInquiryZx"
+          >
+          </dropdown-item>
+        </dropdown-menu>
       </view>
       <!-- 内容div -->
       <template v-if="inquiryList.length > 0">
@@ -220,12 +231,14 @@
 
 <script setup>
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
-import { getInquiryZxData } from "@/api/inquiry";
+import { getInquiryZxData, listReceiverCity } from "@/api/inquiry";
+import { getDictTypes } from "@/api/common";
 import { onLoad } from "@dcloudio/uni-app";
 import EmptyComponent from "../../../components/EmptyComponent/index.vue";
 // import addressList from "@/views/components/addressList/index.vue"; // 起运地目的地列表
-// import CargoInfoByDetail from "@/views/inquiry/components/cargoInfoByDetail/index.vue";
-
+import CargoInfoByDetail from "../components/cargoInfoByDetail/index.vue";
+import dropdownMenu from "../../../components/dropdownMenu/index.vue";
+import dropdownItem from "../../../components/dropdownMenu/item.vue";
 // 定义 props
 const props = defineProps({
   show: {
@@ -237,10 +250,9 @@ const props = defineProps({
     default: () => ({}),
   },
 });
-
 // 定义响应式变量
 const lang = ref(""); // 登录时选择的语言
-const sort = ref([]); // 排序
+
 const transKind = ref([]); // 运输方式筛选数据来源
 const inquiryList = ref([]); // 请求专线列表
 const paramsData = ref({});
@@ -269,16 +281,37 @@ const searchParams = reactive({
 const closeAddressList = ref(false);
 const receiverCity = ref([]);
 const homeTop = ref(0);
+const sort = ref([
+  {
+    name: "价格",
+    value: "1",
+  },
+  {
+    name: "时效",
+    value: "2",
+  },
+]);
+const cargoInfoByDetailRef = ref(null);
+const cargoInfo = ref(null);
 
 // 生命周期钩子
 onMounted(() => {
   lang.value = uni.getStorageSync("lang");
-
   getInquiryZx();
-  // listReceiverCityData();
+  let dicTitles = "专线设置.运输类别,专线设置.件数单位";
+  getDictTypes({ dicTitles }).then((response) => {
+    transKind.value = response.data["专线设置.运输类别"];
+  });
+  listReceiverCityData();
 });
 
 onLoad((options) => {
+  // 将 options.products 转换为数组
+  if (options.products && !Array.isArray(options.products)) {
+    options.products = [options.products];
+  } else if (!options.products) {
+    options.products = []; // 如果 options.products 不存在，初始化为空数组
+  }
   Object.assign(searchParams, options);
 });
 
@@ -324,16 +357,7 @@ const cargoInfoCallback = (data) => {
 
 const closeFloor = () => {
   // 手动控制菜单的显示
-};
-
-const handleDropdownOpen = () => {
-  document.getElementById("app").style.overflow = "hidden";
-  closeAddressList.value = true;
-};
-
-const handleDropdownClose = () => {
-  document.getElementById("app").style.overflow = "auto";
-  closeAddressList.value = false;
+  cargoInfo.value.onClose();
 };
 
 const placeOrder = (
@@ -367,24 +391,27 @@ const checkCityCallback = (data) => {
   getInquiryZx();
 };
 
-// const listReceiverCityData = () => {
-//   let params = {
-//     descTitle: searchParams.descTitle,
-//     descScode: searchParams.descScode,
-//     descTitleEn: searchParams.descTitleEn
-//   };
-//   listReceiverCity(params).then(res => {
-//     if (res.code === 200) {
-//       receiverCity.value = res.rows;
-//     } else {
-//       uni.showToast({
-//         title: res.msg,
-//         icon: 'none',
-//         duration: 2000
-//       });
-//     }
-//   });
-// };
+const listReceiverCityData = () => {
+  let params = {
+    descTitle: searchParams.descTitle,
+    descScode: searchParams.descScode,
+    descTitleEn: searchParams.descTitleEn,
+  };
+  listReceiverCity(params).then((res) => {
+    if (res.code === 200) {
+      receiverCity.value = res.rows.map((item) => ({
+        ...item,
+        text: item.name,
+      }));
+    } else {
+      uni.showToast({
+        title: res.msg,
+        icon: "none",
+        duration: 2000,
+      });
+    }
+  });
+};
 
 const service = () => {
   uni.showToast({
@@ -405,6 +432,13 @@ const service = () => {
   .search {
     padding: 30rpx 20rpx 40rpx;
     background: #df3030;
+    .popupTxet {
+      .cargo-info-by-detail {
+        max-height: 800rpx;
+        height: auto;
+        overflow-y: auto;
+      }
+    }
     .city-info {
       display: flex;
       flex-wrap: wrap;
@@ -467,6 +501,7 @@ const service = () => {
       //     max-height: 90%;
       //   }
       // }
+
       .city-info-center {
         display: flex;
         align-items: center;
@@ -484,6 +519,9 @@ const service = () => {
           pointer-events: none;
         }
       }
+    }
+    .cargoInfo-content {
+      background: #df3030;
     }
     // /deep/.van-dropdown-menu {
     //   flex: 1;
@@ -539,8 +577,7 @@ const service = () => {
     text-align: center;
   }
   .container {
-    position: relative;
-    top: -40rpx;
+    margin-top: -40rpx;
     left: 0;
     overflow: hidden;
     border-radius: 40rpx 40rpx 0px 0px;
@@ -548,44 +585,10 @@ const service = () => {
 
     //价格  运输方式筛选样式
     .choice {
-      width: 750rpx;
-      height: 40rpx;
-      background: #f9f9fa;
       display: flex;
       justify-content: flex-end;
       font-size: 28rpx;
-      margin: 22rpx 0px;
-
-      // /deep/.van-dropdown-menu__bar {
-      //   height: 60rpx;
-      //   width: 750rpx;
-      //   margin: -16rpx 0px;
-      //   background: #f9f9fa;
-
-      //   > div {
-      //     background: #f9f9fa;
-      //     width: 40rpx;
-      //     flex: 1;
-      //   }
-      // }
-      // /deep/ .van-dropdown-menu__title::after {
-      //   position: absolute;
-      //   top: 50%;
-      //   right: -0.10667rem;
-      //   margin-top: -0.13333rem;
-      //   border: 0.08rem solid;
-      //   border-color: transparent transparent #000000 #000000;
-      //   -webkit-transform: rotate(-45deg);
-      //   transform: rotate(-45deg);
-      //   opacity: .8;
-      //   content: "";
-      // }
-      // /deep/.van-dropdown-menu__title--down:after {
-      //   margin-top: -0.02667rem;
-      //   -webkit-transform: rotate(135deg);
-      //   transform: rotate(135deg);
-      //   border-color: transparent transparent #ef1a1a #e12121;
-      // }
+      margin: 0rpx 0px;
     }
 
     .center {
@@ -594,7 +597,7 @@ const service = () => {
       box-shadow: 0px 12rpx 20rpx #e8e1e157;
       border-radius: 30rpx;
       margin: 30rpx 30rpx 40rpx 30rpx;
-      position: relative;
+
       .title {
         .imgage {
           width: 114rpx;
@@ -626,7 +629,7 @@ const service = () => {
           font-size: 34rpx;
           color: #f86e21;
           margin: 10rpx 0px 0px 38rpx;
-          padding-top: 70rpx;
+          padding-top: 60rpx;
           font-weight: 600;
         }
       }
@@ -642,7 +645,9 @@ const service = () => {
         font-size: 28rpx;
         height: auto;
         display: flex;
-        position: relative;
+        justify-content: center; /* 垂直居中 */
+        align-items: flex-end; /* 底部居中 */
+
         .leftBox {
           margin: 2rpx 40rpx;
           width: 400rpx;
@@ -667,12 +672,8 @@ const service = () => {
 
         .right {
           color: #df3030;
-          // margin: -37px 210px;
-          // margin: 0px 0px 5px -10px;
           width: 194rpx;
-          position: absolute;
-          bottom: 0px;
-          right: 44rpx;
+          margin-right: 45rpx;
           font-size: 40rpx;
 
           .top {
@@ -693,21 +694,7 @@ const service = () => {
             width: 240rpx;
             height: 20rpx;
           }
-          .interview {
-            width: 180rpx;
-            height: 100rpx;
-            font-size: 30rpx;
-            text-align: center;
-            background: #df3030;
-            color: #ffffff;
-            border-radius: 30rpx;
-            border: 1px solid #df3030;
-            > div {
-              width: 140rpx;
-              margin-left: 20rpx;
-              margin-top: 6rpx;
-            }
-          }
+
           .jumpDetail {
             border-radius: 200rpx;
             background: #f54543;
@@ -729,7 +716,6 @@ const service = () => {
       }
 
       .matter {
-        position: relative;
         height: auto;
         width: 630rpx;
         margin: -20rpx 30rpx;
