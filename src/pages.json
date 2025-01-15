@@ -7,7 +7,6 @@
 		}
 	},
 	"pages": [
-		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -57,6 +56,12 @@
 			"style": {
 				"navigationBarTitleText": "在线下单"
 			}
+		},
+		{
+			"path": "pages/account/index",
+			"style": {
+				"navigationBarTitleText": "个人设置"
+			}
 		}
 	],
 	"globalStyle": {
@@ -64,5 +69,28 @@
 		"navigationBarTitleText": "tms-app",
 		"navigationBarBackgroundColor": "#DD312F",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"borderStyle": "black",
+		"selectedColor": "#EE0A24",
+		"color": "#646566",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/common/ico-order-default.png",
+				"selectedIconPath": "static/common/ico-order-checked.png",
+				"text": "首页"
+			},{
+				"pagePath": "pages/inquiry/index",
+				"iconPath": "static/common/ico-search-default.png",
+				"selectedIconPath": "static/common/ico-search-checked.png",
+				"text": "询价"
+			},{
+				"pagePath": "pages/account/index",
+				"iconPath": "static/common/ico-setting-default.png",
+				"selectedIconPath": "static/common/ico-setting-checked.png",
+				"text": "我的"
+			}
+		]
 	}
 }

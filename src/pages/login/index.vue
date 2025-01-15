@@ -195,7 +195,7 @@ const handleLogin = async () => {
             icon: "none",
             success: () => {
                 setTimeout(() => {
-                    uni.navigateTo({
+                    uni.switchTab({
                         url: "/pages/index/index",
                     });
                 }, 1500);

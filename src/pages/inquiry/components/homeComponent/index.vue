@@ -20,8 +20,7 @@
         <view class="ico-line ico-line-right"></view>
       </view>
 
-      <view
-       class="right" @tap="toJump(2)">
+      <view class="right" @tap="toJump(2)">
         <view>{{
           inquirySearch[flow]
             ? inquirySearch[flow].descTitle || "目的港"
@@ -42,7 +41,7 @@
     </view>
 
     <!-- 历史询价 -->
-    <!-- <view
+    <view
       v-if="historyList[flow] && historyList[flow].length > 0"
       class="inquiry-history"
     >
@@ -68,7 +67,7 @@
           </view>
         </view>
       </view>
-    </view> -->
+    </view>
   </view>
 </template>
 
@@ -78,8 +77,6 @@ import { useRoute } from "vue-router";
 import { inquiryHistory } from "@/api/inquiry";
 // 获取当前路由实例
 const route = useRoute();
-
-// Props
 const props = defineProps({
   flow: {
     type: String,
@@ -87,10 +84,7 @@ const props = defineProps({
   },
 });
 
-// Emits
 const emit = defineEmits(["searchInquiryCallback"]);
-
-// State
 const lang = ref("");
 const searchData = reactive({});
 const historyList = reactive({});
@@ -153,7 +147,6 @@ onMounted(() => {
       destScode: "",
     };
   });
-  // inquiryHistoryData();
 });
 
 watch(
@@ -224,8 +217,8 @@ const toJumpDetail = (item) => {
     descTitleEn: item.endPos.titleEn,
     transCount: item.transCount,
     flow: item.flowId,
-    squares:item.squares,
-    weight:item.weight
+    squares: item.squares,
+    weight: item.weight,
   });
 
   // 根据条件添加其他参数
@@ -277,18 +270,28 @@ const toJumpDetail = (item) => {
 };
 
 const inquiryHistoryData = () => {
-  inquiryHistory({ flow: props.flow }).then((response) => {
-    if (response.code === 200) {
-      historyList[props.flow] = response.data;
+  inquiryHistory({ flow: props.flow }).then((res) => {
+    if (res.code === 200) {
+      historyList[props.flow] = res.data;
     } else {
       uni.showToast({
-        title: response.msg,
+        title: res.msg,
         icon: "none",
         mask: true,
       });
     }
   });
 };
+
+watch(
+  () => props.flow,
+  () => {
+    if (props.flow) {
+      inquiryHistoryData();
+    }
+  },
+  { immediate: true }
+);
 
 // Expose state and methods
 defineExpose({
@@ -306,7 +309,7 @@ defineExpose({
 .homeCollapse-page {
   width: 94%;
   margin: 24rpx auto;
-  margin-bottom: 48rpx;
+  margin-bottom: 60rpx;
 }
 .open-content {
   display: flex;

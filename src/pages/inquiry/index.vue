@@ -8,11 +8,9 @@
       :duration="500"
       :circular="true"
     >
-      <!-- swiper-item 组件 -->
       <swiper-item v-for="(item, index) in bannerData" :key="index">
-        <!-- image 标签 -->
         <image
-          src="https://www.gosun2.com/tms-app/profile\\\\\\20221022\\55ca068bda4246838f2ab211707c7b42.png"
+          :src="item.imgFilePath"
           class="banner-image"
           mode="widthFix"
         ></image>
@@ -20,7 +18,12 @@
     </swiper>
     <!-- 折叠面板 -->
     <view class="container">
-      <uni-collapse accordion v-model="activeName">
+      <uni-collapse
+        accordion
+        v-model="activeName"
+        ref="collapseItemRef"
+        @change="collapseChange"
+      >
         <uni-collapse-item
           name="1"
           :open="true"
@@ -41,6 +44,7 @@
           </template>
           <HomeCollapseItem
             :flow="activeName"
+            :initialData="parentData"
             @searchInquiryCallback="searchInquiryCallback"
           ></HomeCollapseItem>
         </uni-collapse-item>
@@ -211,42 +215,35 @@ import { ref, onMounted, reactive, toRefs } from "vue";
 import { getBannerData, inquiryHotToday } from "@/api/inquiry";
 import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
 import CargoInfoDialog from "../inquiry/components/cargoInfoDialog/index.vue";
-
+const collapseItemRef = ref(null);
 const activeName = ref("1");
 const searchData = ref({});
 const show = ref(true);
 const hotToday = ref([]);
 const lang = ref("");
-const data = reactive({
-  bannerParams: {
-    kind: "询价首页",
-    pageNum: 1, // 当前页数
-    pageSize: 20, // 分页大小
-  },
+const parentData = ref("");
+const bannerParams = reactive({
+  kind: "询价首页",
+  pageNum: 1, // 当前页数
+  pageSize: 20, // 分页大小
 });
-const { bannerParams } = toRefs(data);
-// const bannerData = ref([]);
-const bannerData = ref([
-  {
-    image:
-      "https://www.gosun2.com/tms-app/profile\\\\\\20221022\\55ca068bda4246838f2ab211707c7b42.png",
-  },
-  {
-    image:
-      "https://www.gosun2.com/tms-app/profile\\\\\\20221022\\55ca068bda4246838f2ab211707c7b42.png",
-  },
-  { image: "https://via.placeholder.com/600x300?text=Banner3" },
-]);
+const bannerData = ref([]);
+
 onMounted(() => {
-  // bannerList();
+  bannerList();
   inquiryHotTodayData();
   lang.value = uni.getStorageSync("lang");
+  setTimeout(() => {
+    collapseItemRef.value.resize();
+  }, 1500);
 });
+
 function bannerList() {
-  getBannerData(bannerParams.value).then((response) => {
+  getBannerData(bannerParams).then((response) => {
     bannerData.value = response.rows;
   });
 }
+
 function searchInquiryCallback(data) {
   searchData.value = data;
   show.value.openPopup();
@@ -255,14 +252,16 @@ function searchInquiryCallback(data) {
 function inquiryHotTodayData() {
   inquiryHotToday().then((response) => {
     hotToday.value = response.data;
-    // bannerData.value = response.rows;
-    // console.log("@@", bannerData.value);
   });
 }
 
-// 定义方法
+const collapseChange = () => {
+  setTimeout(() => {
+    collapseItemRef.value.resize();
+  }, 1000);
+};
+
 const toJumpList = (channel, flowTemplateId) => {
-  // 创建一个参数对象
   const params = reactive({
     srcTitle: channel.startPos.title,
     srcScode: channel.startPos.scode,
@@ -315,7 +314,6 @@ const toJumpList = (channel, flowTemplateId) => {
       return;
   }
 
-  // 使用 uni.navigateTo 跳转页面
   uni.navigateTo({
     url: `${path}?${Object.keys(params)
       .map((key) => `${key}=${encodeURIComponent(params[key])}`)
