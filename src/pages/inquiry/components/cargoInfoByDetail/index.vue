@@ -91,8 +91,6 @@
 import { ref, computed, watch, onMounted, reactive } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { getDictTypes } from "@/api/common";
-// import SelectComponent from '@/components/selectComponent.vue';
-// import Api from '@/api/index.js';
 
 const props = defineProps({
   searchData: {
@@ -114,7 +112,6 @@ const showTransUnit = ref(false);
 const transUnit = ref([]);
 const products = ref([]);
 const flow = ref("");
-const transKind = ref(uni.getStorageSync("transKind"));
 const form = reactive({
   weight: "",
   transCount: "",
@@ -141,10 +138,6 @@ watch(
     deep: true, // 深度监听
   }
 );
-
-// onLoad(() => {
-//   getDictTypesData();
-// });
 
 onMounted(() => {
   getDictTypesData();
@@ -380,16 +373,13 @@ const close = () => {
         }
       }
     }
+    
     .footer-btn {
       display: flex;
       align-items: center;
       padding: 20rpx;
     }
-
-    .close,
-    .confirm {
-    }
-
+    
     .close {
       background: #ffffff;
       box-shadow: 0rpx 1.6rpx 1.6rpx 1.6rpx rgba(221, 49, 47, 0.1);

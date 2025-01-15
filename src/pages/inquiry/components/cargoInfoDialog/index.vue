@@ -294,6 +294,7 @@ const portSpecKind = ref([]);
 const range = ref([]);
 const receiverCity = ref([]);
 const formRef = ref(null);
+const popupShow = ref(false);
 // Props
 const props = defineProps({
   // show: {
@@ -309,6 +310,18 @@ const props = defineProps({
     default: () => {},
   },
 });
+
+watch(
+  () => popupShow.value,
+  (newVal) => {
+    if (newVal) {
+      listReceiverCityData();
+    }else{
+      form.destCity = ''
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
   let dicTitles =
@@ -339,9 +352,6 @@ onMounted(() => {
 // 打开弹窗
 const openPopup = () => {
   show.value.open();
-  if (props.flow === 1) {
-    listReceiverCityData();
-  }
 };
 
 // 关闭弹窗
@@ -355,6 +365,7 @@ const emit = defineEmits(["close", "update:show"]);
 
 // 监听弹窗状态变化
 const handlePopupChange = (e) => {
+  popupShow.value = e.show;
   if (!e.show) {
     emit("close"); // 如果弹窗关闭，通知父组件
   }
@@ -388,9 +399,9 @@ const confirm = () => {
 
 const listReceiverCityData = () => {
   let params = {
-    descTitle: form.descTitle,
-    descScode: form.descScode,
-    descTitleEn: form.descTitleEn,
+    descTitle: props.searchData.descTitle,
+    descScode: props.searchData.destScode,
+    descTitleEn: props.searchData.descTitleEn,
   };
   listReceiverCity(params).then((res) => {
     if (res.code === 200) {
