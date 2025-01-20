@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import { inject, computed, watch } from "vue";
 
 // 定义 props
 const props = defineProps({
@@ -28,6 +28,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  isDefault: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -43,6 +47,17 @@ const isChecked = computed(() => {
   const values = Array.isArray(modelValue.value) ? modelValue.value : [];
   return values.includes(props.value);
 });
+
+// 监听 isDefault 的变化，当 isDefault 为 1 时自动勾选
+watch(
+  () => props.isDefault,
+  (newVal) => {
+    if (newVal === 1 && !isChecked.value) {
+      toggleCheckbox(props.value);
+    }
+  },
+  { immediate: true }
+);
 
 // 点击事件，调用父组件的方法
 const handleClick = () => {

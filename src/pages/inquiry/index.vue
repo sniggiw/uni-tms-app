@@ -156,7 +156,7 @@
                   <template v-if="item.flowTemplateId === 2">
                     <!-- 国际机场 -->
                     {{ channel.startPos.scode }}
-                    <text class="desc">{{ channel.startPos.title }}</text>
+                    <!-- <text class="desc">{{ channel.startPos.title }}</text> -->
                   </template>
                   <template v-else>
                     {{ channel.startPos.title }}
@@ -169,7 +169,7 @@
                   <template v-if="item.flowTemplateId === 2">
                     <!-- 国际机场 -->
                     {{ channel.endPos.scode }}
-                    <text class="desc">{{ channel.endPos.title }}</text>
+                    <!-- <text class="desc">{{ channel.endPos.title }}</text> -->
                   </template>
                   <template v-else>
                     {{ channel.endPos.title }}

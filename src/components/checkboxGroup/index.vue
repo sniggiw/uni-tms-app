@@ -10,7 +10,7 @@ import { provide, ref, watch } from "vue";
 // 定义 props
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: [Array, String,Number], // 允许 Array 或 String 类型
     default: () => [],
   },
 });
@@ -19,7 +19,12 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 // 将 modelValue 转换为响应式对象
-const modelValue = ref(props.modelValue);
+const modelValue = ref(Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue]);
+
+// 监听 props.modelValue 的变化
+watch(() => props.modelValue, (newValue) => {
+  modelValue.value = Array.isArray(newValue) ? newValue : [newValue];
+});
 
 // 提供给子组件的方法，用于更新选中的值
 const toggleCheckbox = (value) => {

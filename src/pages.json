@@ -62,6 +62,30 @@
 			"style": {
 				"navigationBarTitleText": "个人设置"
 			}
+		},
+		{
+			"path": "pages/account/updateInfo",
+			"style": {
+				"navigationBarTitleText": "更新资料"
+			}
+		},
+		{
+			"path": "pages/account/changePassword",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+		{
+			"path": "pages/account/address/index/index",
+			"style": {
+				"navigationBarTitleText": "地址列表"
+			}
+		},
+		{
+			"path": "pages/account/address/save/index",
+			"style": {
+				"navigationBarTitleText": "编辑地址"
+			}
 		}
 	],
 	"globalStyle": {
@@ -80,12 +104,14 @@
 				"iconPath": "static/common/ico-order-default.png",
 				"selectedIconPath": "static/common/ico-order-checked.png",
 				"text": "首页"
-			},{
+			},
+			{
 				"pagePath": "pages/inquiry/index",
 				"iconPath": "static/common/ico-search-default.png",
 				"selectedIconPath": "static/common/ico-search-checked.png",
 				"text": "询价"
-			},{
+			},
+			{
 				"pagePath": "pages/account/index",
 				"iconPath": "static/common/ico-setting-default.png",
 				"selectedIconPath": "static/common/ico-setting-checked.png",

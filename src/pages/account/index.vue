@@ -259,35 +259,29 @@ const getCustomerInfo = () => {
 
 // 跳转修改密码
 const jumpChangePassword = () => {
-  router.push({
-    path: "/account/changePassword",
+  uni.navigateTo({
+    url: "/pages/account/changePassword",
   });
 };
 
 // 跳转修改资料
 const jumpUpdateInfo = () => {
-  router.push({
-    path: "/account/updateInfo",
+  uni.navigateTo({
+    url: "/pages/account/updateInfo",
   });
 };
 
 // 跳转发货人
 const jumpShipper = () => {
-  router.push({
-    path: "/account/address",
-    query: {
-      kind: "发货人",
-    },
+  uni.navigateTo({
+    url: "/pages/account/address/index/index?kind=发货人",
   });
 };
 
 // 跳转收货人
 const jumpConsignee = () => {
-  router.push({
-    path: "/account/address",
-    query: {
-      kind: "收货人",
-    },
+  uni.navigateTo({
+    url: "/pages/account/address/index/index?kind=收货人",
   });
 };
 
@@ -319,21 +313,21 @@ const jumpState = () => {
 // 跳转待我处理
 const jumpPending = () => {
   uni.navigateTo({
-    url: '/pages/order/list?active=1'
+    url: "/pages/order/list?active=1",
   });
 };
 
 // 跳转后台处理中
 const jumpProcess = () => {
   uni.navigateTo({
-    url: '/pages/order/list?active=2'
+    url: "/pages/order/list?active=2",
   });
 };
 
 // 跳转已完成
 const jumpComplete = () => {
   uni.navigateTo({
-    url: '/pages/order/list?active=3'
+    url: "/pages/order/list?active=3",
   });
 };
 

@@ -2,6 +2,7 @@ import {
     http
 } from "./http";
 
+// 字典数据
 const getDictTypes = (params, callback) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
@@ -19,6 +20,7 @@ const getDictTypes = (params, callback) => {
     });
 };
 
+// 登录
 const login = (params) => {
     return new Promise((resolve, reject) => {
         const url = `/tms-app/customer/login`;
@@ -32,6 +34,7 @@ const login = (params) => {
     });
 };
 
+// 仓库地址信息
 const getWarehouseList = (params) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
@@ -46,6 +49,7 @@ const getWarehouseList = (params) => {
     });
 };
 
+// 运输协议
 const commonListArgeement = (params) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
@@ -60,6 +64,7 @@ const commonListArgeement = (params) => {
     });
 };
 
+// 上传接口
 const getOrderTemplate = (params) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
@@ -74,6 +79,7 @@ const getOrderTemplate = (params) => {
     });
 };
 
+// 通用上传接口
 const commonUpload = (params) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
@@ -93,11 +99,40 @@ const commonUpload = (params) => {
     });
 };
 
+// 个人信息接口
 const getCustomerInfoData = (params) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
         const url = `/tms-app/customer/info?${queryString}`;
         http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+// 发货/收货人地址信息
+const getContractListData = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/customer/setting/contract/list?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+const settingContract = (params) => {
+    return new Promise((resolve, reject) => {
+        const url = `/tms-app/customer/setting/contract`;
+        http.put(url,params)
             .then((response) => {
                 resolve(response);
             })
@@ -114,5 +149,7 @@ export {
     commonListArgeement,
     getOrderTemplate,
     commonUpload,
-    getCustomerInfoData
+    getCustomerInfoData,
+    getContractListData,
+    settingContract
 };
