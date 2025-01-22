@@ -58,6 +58,12 @@
 			}
 		},
 		{
+			"path": "pages/inquiry/quickOrder",
+			"style": {
+				"navigationBarTitleText": "快速下单"
+			}
+		},
+		{
 			"path": "pages/account/index",
 			"style": {
 				"navigationBarTitleText": "个人设置"

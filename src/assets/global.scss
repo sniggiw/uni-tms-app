@@ -12,12 +12,16 @@ uni-page-wrapper{
     background: #f9f9fa;
     height: 100vh;
 }
+uni-page{
+  background: #f9f9fa;
+  height: 100vh;
+}
 /* 自定义卡片样式 */
 .custom-card {
     background: #FFFFFF;
     box-shadow: 0px 6rpx 10rpx 2rpx rgba(232,225,225,0.34);
     border-radius: 30rpx;
-    overflow: hidden;
+    
 }
 
 .footer-btn {
@@ -51,4 +55,16 @@ uni-page-wrapper{
     text-overflow:ellipsis;
     white-space: nowrap;
     margin: 20rpx auto;
+  }
+
+  .uni-forms-item__label {
+    width: 220rpx !important;
+  }
+  .uni-forms-item {
+    border-bottom: 2rpx solid #ebedf0;
+    padding: 10rpx;
+    margin-bottom: 0rpx;
+  }
+  .uni-select {
+    border: none !important;
   }

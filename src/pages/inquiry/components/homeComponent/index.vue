@@ -34,7 +34,7 @@
       </view>
     </view>
     <view class="check-box">
-      <button type="default" class="shortcut-price" v-if="flow == 1">
+      <button type="default" class="shortcut-price" @tap="toQuickOrder" v-if="flow == 1">
         快速下单
       </button>
       <button class="check-price" @tap="toSearchInquiry">查价</button>
@@ -176,7 +176,31 @@ watch(
   { immediate: true } // Run the effect immediately on component mount
 );
 
-// Methods
+// 快速下单
+const toQuickOrder = () =>{
+  const inquirySearchData = inquirySearch[props.flow];
+  if (!inquirySearchData.srcTitle) {
+    uni.showToast({
+      title: "请选择起运地",
+      icon: "none",
+      duration: 2000,
+    });
+    return;
+  }
+  if (!inquirySearchData.descTitle) {
+    uni.showToast({
+      title: "请选择目的地",
+      icon: "none",
+      duration: 2000,
+    });
+    return;
+  }
+  uni.navigateTo({
+    url: `/pages/inquiry/quickOrder?srcTitle=${inquirySearchData.srcTitle}&srcTitleEn=${inquirySearchData.srcTitleEn}&srcScode=${inquirySearchData.srcScode}&descScode=${inquirySearchData.destScode}&descTitle=${inquirySearchData.descTitle}&descTitleEn=${inquirySearchData.descTitleEn}`
+  });
+}
+
+// Methodsc
 const toSearchInquiry = () => {
   const inquirySearchData = inquirySearch[props.flow];
   if (!inquirySearchData.srcTitle) {

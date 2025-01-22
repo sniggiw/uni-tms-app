@@ -79,7 +79,7 @@
             </template> -->
           </view>
         </view>
-        <view class="footer-btn">
+        <view class="footer-detail-btn">
           <button class="close" @click="close">关闭</button>
           <button class="confirm" @click="onSubmit">获取价格</button>
         </view>
@@ -200,7 +200,7 @@ const onSubmit = () => {
         uni.showToast({
           title: "请选择货物品名",
           duration: 2000,
-          icon:'none'
+          icon: "none",
         });
       }
     })
@@ -208,7 +208,7 @@ const onSubmit = () => {
       uni.showToast({
         title: "请填写完必填选项",
         duration: 2000,
-        icon:'none'
+        icon: "none",
       });
     });
 };
@@ -373,23 +373,37 @@ const close = () => {
         }
       }
     }
-    
-    .footer-btn {
+
+    .footer-detail-btn {
       display: flex;
       align-items: center;
       padding: 20rpx;
+      > uni-button {
+        display: block;
+        font-size: 28rpx;
+        height: 88rpx;
+        line-height: 90rpx;
+        padding: 0 30rpx;
+        border-radius: 50rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 20rpx auto;
+      }
     }
-    
+
     .close {
       background: #ffffff;
       box-shadow: 0rpx 1.6rpx 1.6rpx 1.6rpx rgba(221, 49, 47, 0.1);
       color: #dd312f;
+      width: 45%;
     }
 
     .confirm {
       background: #dd312f;
       box-shadow: 0rpx 1.6rpx 1.6rpx 1.6rpx rgba(221, 49, 47, 0.1);
       color: #ffffff;
+      width: 60%;
     }
   }
 }

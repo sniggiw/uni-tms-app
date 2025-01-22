@@ -114,4 +114,32 @@ const listReceiverCity = (params) => {
     });
 };
 
-export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory,listReceiverCity };
+const getChannelCode = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/zx/inquiry/list-channel-code?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+// 快捷下单
+const submitQuick = (params) => {
+    return new Promise((resolve, reject) => {
+        const url = `/tms-app/zx/order/submit-quick`;
+        http.post(url, params) // 直接将 params 作为请求体传递
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory,listReceiverCity,getChannelCode,submitQuick };
