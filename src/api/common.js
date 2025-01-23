@@ -142,6 +142,20 @@ const settingContract = (params) => {
     });
 };
 
+// 修改密码
+const changePwd = (params) => {
+    return new Promise((resolve, reject) => {
+        const url = `/tms-app/customer/setting/changePwd`;
+        http.post(url, params) // 直接将 params 作为请求体传递
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
 export {
     getDictTypes,
     login,
@@ -151,5 +165,6 @@ export {
     commonUpload,
     getCustomerInfoData,
     getContractListData,
-    settingContract
+    settingContract,
+    changePwd
 };

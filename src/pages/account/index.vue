@@ -305,9 +305,9 @@ const toJumpReferrer = () => {
 
 // 跳转订单统计
 const jumpState = () => {
-  uni.navigateTo({
-    url: "/pages/login/index",
-  });
+  // uni.navigateTo({
+  //   url: "/pages/login/index",
+  // });
 };
 
 // 跳转待我处理
