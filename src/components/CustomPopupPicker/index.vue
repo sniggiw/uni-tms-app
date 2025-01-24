@@ -10,7 +10,7 @@
             <view class="popup-search-box">
                 <view class="popup-search-box-input">
                     <uni-icons type="search" size="20" color="#999" @tap="handleSearch"></uni-icons>
-                    <input type="text" placeholder="请输入搜索内容" />
+                    <input type="text" placeholder="请输入搜索内容" v-model="searchText" @input="handleSearch" />
                     <uni-icons type="close" size="20" color="#999" @tap="handleClearSearchContent"></uni-icons>
                 </view>
                 <view class="popup-search-box-btn" @tap="handleSearch">查询</view>
@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useAreaList } from "@/hooks/area";
+import { useDebounce } from "@/hooks/debounce";
 
 const props = defineProps({
     columns: {
@@ -51,7 +51,8 @@ const filteredItems = computed(() => {
     if (!searchText.value) {
         return props.columns;
     }
-    return props.columns.map((column) => column.filter((item) => item.includes(searchText.value)));
+    // return props.columns.map((column) => column.filter((item) => item.includes(searchText.value)));
+    return [[""], [""], [""]];
 });
 
 const onPickerChange = (e) => {
@@ -87,13 +88,14 @@ const handleHeaderBtnEnd = () => {
 };
 
 // 搜索按钮点击事件
-const handleSearch = () => {
-    console.log("search");
-};
+const handleSearch = useDebounce((e) => {
+    console.log("search - e.detail.value: ", e.detail.value);
+}, 500);
 
 // 清除搜索内容按钮点击事件
 const handleClearSearchContent = () => {
     console.log("clear search content");
+    searchText.value = "";
 };
 
 // 暴露方法给父组件使用（注意暴露方法的时候，需要在定义的方法后面，因为方法不会自动提升）

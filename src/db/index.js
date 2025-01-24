@@ -56006,3 +56006,26 @@ export const areaList = [
         children: [],
     },
 ];
+
+export const createAreaListMapList = (areaList) => {
+    const areaListMapList = [];
+
+    function traverseAreaList(areaList, prefixValue = "", prefixLabel = "") {
+        areaList.forEach((area) => {
+            const value = prefixValue ? `${prefixValue}-${area.areaCode}` : area.areaCode;
+            const label = prefixLabel ? `${prefixLabel}-${area.areaName}` : area.areaName;
+            areaListMapList.push({ label, value });
+
+            if (area.children) {
+                traverseAreaList(area.children, value, label);
+            }
+        });
+    }
+
+    traverseAreaList(areaList);
+
+    return areaListMapList;
+};
+
+// console.log("@@@", createAreaListMapList(areaList));
+console.log("@@@", createAreaListMapList(areaList).filter(item=>item.label.includes('香港')));
