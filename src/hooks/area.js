@@ -31,7 +31,7 @@ export function useAreaList() {
             originAreaList.value
                 .find((item) => item.areaName === selectAreaText.countryText)
                 .children.find((pItem) => pItem.areaName === selectAreaText.provinceText)
-                ?.children?.map((cItem) => cItem.areaName) || []
+                ?.children?.map((cItem) => cItem.areaName) || [""]
         );
     });
 

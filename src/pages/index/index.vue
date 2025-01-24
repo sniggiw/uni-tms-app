@@ -51,18 +51,13 @@ const columns = computed(() => {
 
 const selectedValue = ref([0, 0, 0]);
 
-const findChangedIndices = (newArray, oldArray) => {
+const handleChangeSelectAreaText = (newValue, oldValue) => {
     const changedIndices = [];
-    for (let i = 0; i < newArray.length; i++) {
-        if (newArray[i] !== oldArray[i]) {
+    for (let i = 0; i < newValue.length; i++) {
+        if (newValue[i] !== oldValue[i]) {
             changedIndices.push(i);
         }
     }
-    return changedIndices;
-};
-
-const handleChangeSelectAreaText = (newValue, oldValue) => {
-    const changedIndices = findChangedIndices(newValue, oldValue);
     if (changedIndices?.length > 0) {
         changeSelectAreaText(changedIndices[0], newValue[changedIndices[0]]);
     }
