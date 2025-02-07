@@ -18,7 +18,12 @@
           />
         </uni-forms-item>
         <!-- 付款方式 -->
-        <uni-forms-item label="付款方式" required :name="['baseInfo','payKind']" :rules="[{required: true,errorMessage:'请选择付款方式'}]">
+        <uni-forms-item
+          label="付款方式"
+          required
+          :name="['baseInfo', 'payKind']"
+          :rules="[{ required: true, errorMessage: '请选择付款方式' }]"
+        >
           <uni-data-select
             v-model="form.baseInfo.payKind"
             :localdata="payKind"
@@ -27,7 +32,12 @@
           />
         </uni-forms-item>
         <!-- 订单类型 -->
-        <uni-forms-item label="订单类型" required :name="['baseInfo','packageKind']" :rules="[{required: true,errorMessage:'请选择订单类型'}]">
+        <uni-forms-item
+          label="订单类型"
+          required
+          :name="['baseInfo', 'packageKind']"
+          :rules="[{ required: true, errorMessage: '请选择订单类型' }]"
+        >
           <uni-data-select
             v-model="form.baseInfo.packageKind"
             :localdata="orderType"
@@ -36,7 +46,12 @@
           />
         </uni-forms-item>
         <!-- 入库类型 -->
-        <uni-forms-item label="入库类型" required :name="['baseInfo','sendPlanKind']" :rules="[{required: true,errorMessage:'请选择入库类型'}]">
+        <uni-forms-item
+          label="入库类型"
+          required
+          :name="['baseInfo', 'sendPlanKind']"
+          :rules="[{ required: true, errorMessage: '请选择入库类型' }]"
+        >
           <uni-data-select
             v-model="form.baseInfo.sendPlanKind"
             :localdata="incomingType"
@@ -44,7 +59,12 @@
             :clear="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="是否单证报关" required :name="['baseInfo','isSingle']" :rules="[{required: true,errorMessage:'请选择是否单证报关'}]">
+        <uni-forms-item
+          label="是否单证报关"
+          required
+          :name="['baseInfo', 'isSingle']"
+          :rules="[{ required: true, errorMessage: '请选择是否单证报关' }]"
+        >
           <uni-data-select
             v-model="form.baseInfo.isSingle"
             :localdata="sysYesNo"
@@ -53,7 +73,12 @@
           />
         </uni-forms-item>
         <!-- 预计交货日期 -->
-        <uni-forms-item label="预计交货日期" required :name="['baseInfo','wantBeginDate']" :rules="[{required: true,errorMessage:'请选择预计交货日期'}]">
+        <uni-forms-item
+          label="预计交货日期"
+          required
+          :name="['baseInfo', 'wantBeginDate']"
+          :rules="[{ required: true, errorMessage: '请选择预计交货日期' }]"
+        >
           <uni-datetime-picker
             type="date"
             v-model="form.baseInfo.wantBeginDate"
@@ -70,27 +95,47 @@
           />
         </uni-forms-item>
         <template v-if="form.baseInfo.isFba === '是'">
-          <uni-forms-item label="FBA仓库" required :name="['baseInfo','fbaWarehouseName']" :rules="[{required: true,errorMessage:'请选择FBA仓库'}]">
-            <uni-data-select
-              v-model="form.baseInfo.fbaWarehouseName"
+          <uni-forms-item
+            label="FBA仓库"
+            required
+            :name="['baseInfo', 'fbaWarehouseName']"
+            :rules="[{ required: true, errorMessage: '请选择FBA仓库' }]"
+          >
+            <uni-data-picker
               :localdata="fbaWarehouseName"
-              placeholder=""
-              :clear="false"
+              popup-title="请选择FBA仓库"
+              placeholder="请选择FBA仓库" 
+              v-model="form.baseInfo.fbaWarehouseName"
             />
           </uni-forms-item>
           <!-- FBA编号 -->
-          <uni-forms-item label="FBA编号" required :name="['baseInfo','fbaCode']" :rules="[{required: true,errorMessage:'请输入FBA编号'}]">
-            <uni-easyinput v-model="form.baseInfo.fbaCode" placeholder="" />
+          <uni-forms-item
+            label="FBA编号"
+            required
+            :name="['baseInfo', 'fbaCode']"
+            :rules="[{ required: true, errorMessage: '请输入FBA编号' }]"
+          >
+            <uni-easyinput v-model="form.baseInfo.fbaCode" placeholder="请输入FBA编号" />
           </uni-forms-item>
           <!-- Amazon RID -->
-          <uni-forms-item label="amazonRID" required :name="['baseInfo','amazonRID']" :rules="[{required: true,errorMessage:'请输入amzaonRID'}]">
-            <uni-easyinput v-model="form.baseInfo.amazonRID" placeholder="" />
+          <uni-forms-item
+            label="amazonRID"
+            required
+            :name="['baseInfo', 'amazonRID']"
+            :rules="[{ required: true, errorMessage: '请输入amzaonRID' }]"
+          >
+            <uni-easyinput v-model="form.baseInfo.amazonRID" placeholder="请输入amazonRID" />
           </uni-forms-item>
         </template>
       </view>
       <!-- 发货人 -->
       <view class="custom-card container2">
-        <uni-forms-item label="发货人" required :name="['sendInfo','senderName']" :rules="[{required: true,errorMessage:'请输入发货人'}]">
+        <uni-forms-item
+          label="发货人"
+          required
+          :name="['sendInfo', 'senderName']"
+          :rules="[{ required: true, errorMessage: '请输入发货人' }]"
+        >
           <uni-easyinput
             v-model="form.sendInfo.senderName"
             placeholder="请输入发货人"
@@ -98,7 +143,12 @@
           />
           <button @tap="checkAddress('发货人')" class="choice-btn">选择</button>
         </uni-forms-item>
-        <uni-forms-item label="发货人电话" required :name="['sendInfo','senderName']" :rules="[{required: true,errorMessage:'请输入发货人电话'}]">
+        <uni-forms-item
+          label="发货人电话"
+          required
+          :name="['sendInfo', 'senderName']"
+          :rules="[{ required: true, errorMessage: '请输入发货人电话' }]"
+        >
           <view class="area-phone">
             <view class="phone-prefix">
               <view>{{ form.sendInfo.senderPhonePrefix }}</view>
@@ -116,7 +166,12 @@
             placeholder="请选择发货人地区"
           />
         </uni-forms-item>
-        <uni-forms-item label="详细地址" required :name="['sendInfo','senderAddr']" :rules="[{required: true,errorMessage:'请输入详细地址'}]">
+        <uni-forms-item
+          label="详细地址"
+          required
+          :name="['sendInfo', 'senderAddr']"
+          :rules="[{ required: true, errorMessage: '请输入详细地址' }]"
+        >
           <uni-easyinput
             v-model="form.sendInfo.senderAddr"
             placeholder="请输入详细地址"
@@ -126,14 +181,24 @@
       <!-- 收货人 -->
       <view class="custom-card container3">
         <!-- <uni-cell :title="$t('orderDetail.lang')" :value="lang" /> -->
-        <uni-forms-item label="收货人" required :name="['receiveInfo','receiverName']" :rules="[{required: true,errorMessage:'请输入收货人'}]">
+        <uni-forms-item
+          label="收货人"
+          required
+          :name="['receiveInfo', 'receiverName']"
+          :rules="[{ required: true, errorMessage: '请输入收货人' }]"
+        >
           <uni-easyinput
             v-model="form.receiveInfo.receiverName"
             placeholder="请输入收货人"
           />
           <button @tap="checkAddress('收货人')" class="choice-btn">选择</button>
         </uni-forms-item>
-        <uni-forms-item label="收货人电话1" required :name="['receiveInfo','receiverPhonePrefix']" :rules="[{required: true,errorMessage:'请输入收货人电话'}]">
+        <uni-forms-item
+          label="收货人电话1"
+          required
+          :name="['receiveInfo', 'receiverPhonePrefix']"
+          :rules="[{ required: true, errorMessage: '请输入收货人电话' }]"
+        >
           <view class="area-phone">
             <view class="phone-prefix">
               <view>{{ form.receiveInfo.receiverPhonePrefix }}</view>
@@ -187,13 +252,23 @@
       <view class="custom-card container5">
         <!-- <uni-cell :title="$t('inquiry.productsAttr')" :value="form.attrInfo.productsAttr" /> -->
         <template v-if="showLang === 'zh_CN' || areaPhonePreFix != '+968'">
-          <uni-forms-item label="中文品名" required :name="['productsInfo','productsCn']" :rules="[{required: true,errorMessage:'请输入中文品名'}]">
+          <uni-forms-item
+            label="中文品名"
+            required
+            :name="['productsInfo', 'productsCn']"
+            :rules="[{ required: true, errorMessage: '请输入中文品名' }]"
+          >
             <uni-easyinput
               v-model="form.productsInfo.productsCn"
               placeholder="请输入中文品名"
             />
           </uni-forms-item>
-          <uni-forms-item label="英文品名" required :name="['productsInfo','productsOthers']" :rules="[{required: true,errorMessage:'请输入英文品名'}]">
+          <uni-forms-item
+            label="英文品名"
+            required
+            :name="['productsInfo', 'productsOthers']"
+            :rules="[{ required: true, errorMessage: '请输入英文品名' }]"
+          >
             <uni-easyinput
               v-model="form.productsInfo.productsOthers"
               placeholder="请输入英文品名"
@@ -201,20 +276,35 @@
           </uni-forms-item>
         </template>
         <template v-else>
-          <uni-forms-item label="英文品名" required :name="['productsInfo','productsOthers']" :rules="[{required: true,errorMessage:'请输入英文品名'}]">
+          <uni-forms-item
+            label="英文品名"
+            required
+            :name="['productsInfo', 'productsOthers']"
+            :rules="[{ required: true, errorMessage: '请输入英文品名' }]"
+          >
             <uni-easyinput
               v-model="form.productsInfo.productsOthers"
               placeholder=""
             />
           </uni-forms-item>
-          <uni-forms-item label="中文品名" required :name="['productsInfo','productsCn']" :rules="[{required: true,errorMessage:'请输入中文品名'}]">
+          <uni-forms-item
+            label="中文品名"
+            required
+            :name="['productsInfo', 'productsCn']"
+            :rules="[{ required: true, errorMessage: '请输入中文品名' }]"
+          >
             <uni-easyinput
               v-model="form.productsInfo.productsCn"
               placeholder=""
             />
           </uni-forms-item>
         </template>
-        <uni-forms-item label="总箱数" required :name="['productsInfo','transCount']" :rules="[{required: true,errorMessage:'请输入总箱数'}]">
+        <uni-forms-item
+          label="总箱数"
+          required
+          :name="['productsInfo', 'transCount']"
+          :rules="[{ required: true, errorMessage: '请输入总箱数' }]"
+        >
           <uni-easyinput
             v-model="form.productsInfo.transCount"
             placeholder="$t('goods.transCountPlaceholder')"
@@ -225,10 +315,20 @@
             :clear="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="重量(KG)" required :name="['productsInfo','weight']" :rules="[{required: true,errorMessage:'请输入重量'}]">
+        <uni-forms-item
+          label="重量(KG)"
+          required
+          :name="['productsInfo', 'weight']"
+          :rules="[{ required: true, errorMessage: '请输入重量' }]"
+        >
           <uni-easyinput v-model="form.productsInfo.weight" placeholder="" />
         </uni-forms-item>
-        <uni-forms-item label="方数" required :name="['productsInfo','squares']" :rules="[{required: true,errorMessage:'请输入方数'}]">
+        <uni-forms-item
+          label="方数"
+          required
+          :name="['productsInfo', 'squares']"
+          :rules="[{ required: true, errorMessage: '请输入方数' }]"
+        >
           <uni-easyinput v-model="form.productsInfo.squares" placeholder="" />
         </uni-forms-item>
         <uni-forms-item label="参考重量区间单价">
@@ -254,7 +354,12 @@
       </view>
       <!-- 发货信息 -->
       <view class="custom-card container5">
-        <uni-forms-item label="收货仓库" required :name="['sendPlanInfo','warehouse']" :rules="[{required: true,errorMessage:'请选择仓库'}]">
+        <uni-forms-item
+          label="收货仓库"
+          required
+          :name="['sendPlanInfo', 'warehouse']"
+          :rules="[{ required: true, errorMessage: '请选择仓库' }]"
+        >
           <uni-data-picker
             :localdata="warehouseList"
             popup-title="请选择仓库"
@@ -365,8 +470,14 @@ import { ref, reactive, computed, watch, onMounted } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-import { getDictTypes, getWarehouseList, getOrderTemplate,commonUpload } from "@/api/common";
+import {
+  getDictTypes,
+  getWarehouseList,
+  getOrderTemplate,
+  commonUpload,
+} from "@/api/common";
 import { getCity } from "@/api/other";
+import { getStore } from "@/utils/index";
 import Agreement from "../../../components/agreement/index.vue";
 // import Compressor from 'compressorjs';
 // import CustomSelect from "../../../components/selectComponent/index.vue";
@@ -456,128 +567,6 @@ const form = reactive({
   },
   queryPriceHistoryId: "",
 });
-const rules = {
-  "baseInfoPayKind": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请选择付款方式",
-      },
-    ],
-  },
-  "baseInfo.packageKind": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请选择订单类型",
-      },
-    ],
-  },
-  "baseInfo.sendPlanKind": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请选择入库类型",
-      },
-    ],
-  },
-  "baseInfo.isSingle": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请选择是否单证报关",
-      },
-    ],
-  },
-  "baseInfo.wantBeginDate": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请选择预计交货日期",
-      },
-    ],
-  },
-  "sendInfo.senderName": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入发货人",
-      },
-    ],
-  },
-  "sendInfo.senderPhone": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入发货人电话",
-      },
-    ],
-  },
-  "sendInfo.area": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请选择发货人地区",
-      },
-    ],
-  },
-  "sendInfo.senderAddr": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入详细地址",
-      },
-    ],
-  },
-  "receiveInfo.receiverName": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入收货人",
-      },
-    ],
-  },
-  "receiveInfo.receiverPhone": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入收货人电话",
-      },
-    ],
-  },
-  "receiveInfo.receiverAddr": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入详细地址",
-      },
-    ],
-  },
-  "productsInfo.transCount": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入总箱数",
-      },
-    ],
-  },
-  "productsInfo.weight": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入重量",
-      },
-    ],
-  },
-  "productsInfo.squares": {
-    rules: [
-      {
-        required: true,
-        errorMessage: "请输入方数",
-      },
-    ],
-  },
-};
 const templateUrl = ref("");
 const zxPackingList = ref([]);
 const transKind = ref([]);
@@ -655,42 +644,104 @@ onMounted(() => {
   showLang.value = uni.getStorageSync("lang");
   areaPhonePreFix.value = getCookie("areaNumber");
 });
-const dynamicRules = computed(() => {
-  const rules = {
-    "baseInfo.payKind": {
-      rules: [
-        {
-          required: true,
-          errorMessage: "请选择付款方式",
-          trigg: "change",
-        },
-      ],
-    },
-    "baseInfo.packageKind": {
-      rules: [
-        {
-          required: true,
-          errorMessage: "请选择订单类型",
-        },
-      ],
-    },
-  };
 
-  if (form.baseInfo.isFba === "是") {
-    rules["baseInfo.fbaWarehouseName"] = {
-      rules: [{ required: true, errorMessage: "请选择FBA仓库" }],
-    };
-    rules["baseInfo.fbaCode"] = {
-      rules: [{ required: true, errorMessage: "请输入FBA编号" }],
-    };
-    rules["baseInfo.amazonRID"] = {
-      rules: [{ required: true, errorMessage: "请输入Amazon RID" }],
-    };
+// 监听路由变化
+watch(
+  () => route.path,
+  (to, from) => {
+    if (to !== from) {
+      // 地址回显
+      const sendInfo = getStore("sendInfo");
+      if (sendInfo) {
+        if (sendInfo.phonePrefix === null) {
+          form.sendInfo = {
+            cityCode: sendInfo.data.cityCode,
+            countryCode: sendInfo.data.countryCode,
+            id: sendInfo.data.id,
+            provinceCode: sendInfo.data.provinceCode,
+            senderAddr: sendInfo.data.addr,
+            senderCityName: sendInfo.data.cityName,
+            senderCountryName: sendInfo.data.countryName,
+            senderName: sendInfo.data.realname,
+            senderPhone: sendInfo.data.phone1,
+            senderProvinceName: sendInfo.data.provinceName,
+            senderPhonePrefix: "+86",
+          };
+        } else {
+          form.sendInfo = {
+            cityCode: sendInfo.data.cityCode,
+            countryCode: sendInfo.data.countryCode,
+            id: sendInfo.data.id,
+            provinceCode: sendInfo.data.provinceCode,
+            senderAddr: sendInfo.data.addr,
+            senderCityName: sendInfo.data.cityName,
+            senderCountryName: sendInfo.data.countryName,
+            senderName: sendInfo.data.realname,
+            senderPhone: sendInfo.data.phone1,
+            senderProvinceName: sendInfo.data.provinceName,
+            senderPhonePrefix: sendInfo.data.phonePrefix,
+          };
+        }
+      }
+
+      const receiveInfo = getStore("receiveInfo");
+      if (receiveInfo) {
+        if (receiveInfo.phonePrefix === null) {
+          form.receiveInfo = {
+            receiverLang: form.receiveInfo.receiverLang,
+            countryCode: receiveInfo.data.countryCode,
+            id: receiveInfo.data.id,
+            receiverAddr: receiveInfo.data.addr,
+            receiverCountryName: selectedRegion.value.push(
+              receiveInfo.data.countryName
+            ),
+            receiverEmail: receiveInfo.data.email,
+            receiverName: receiveInfo.data.realname,
+            receiverPhone: receiveInfo.data.phone1,
+            receiverPhone1: receiveInfo.data.phone2,
+            receiverPhone2: receiveInfo.data.phone3,
+            // area: getAllArea(receiveInfo.countryName),
+            receiverPhonePrefix: "+971",
+          };
+        } else {
+          form.receiveInfo = {
+            receiverLang: form.receiveInfo.receiverLang,
+            countryCode: receiveInfo.data.countryCode,
+            id: receiveInfo.data.id,
+            receiverAddr: receiveInfo.data.addr,
+            receiverCountryName: selectedRegion.value.push(
+              receiveInfo.data.countryName
+            ),
+            receiverEmail: receiveInfo.data.email,
+            receiverName: receiveInfo.data.realname,
+            receiverPhone: receiveInfo.data.phone1,
+            receiverPhone1: receiveInfo.data.phone2,
+            receiverPhone2: receiveInfo.data.phone3,
+            // area: getAllArea(receiveInfo.countryName),
+            receiverPhonePrefix: receiveInfo.data.phonePrefix,
+          };
+        }
+      }
+      console.log("@@", selectedRegion.value);
+      const senderPhonePrefix = getStore("senderPhonePrefix");
+      if (senderPhonePrefix) {
+        form.sendInfo.senderPhonePrefix = senderPhonePrefix;
+        setTimeout(() => {
+          removeStore("senderPhonePrefix");
+        }, 150);
+      }
+
+      const zxReceiverPhonePrefix = getStore("receiverPhonePrefix");
+      if (zxReceiverPhonePrefix) {
+        form.receiveInfo.receiverPhonePrefix = zxReceiverPhonePrefix;
+        setTimeout(() => {
+          removeStore("receiverPhonePrefix");
+        }, 150);
+      }
+    }
   }
+);
 
-  return rules;
-});
-// 方法
 const getDictTypesData = () => {
   getDictTypes({
     dicTitles:
@@ -887,15 +938,18 @@ const onConfirmTime = (value) => {
 };
 
 const onSubmit = () => {
-  formRef.value.validate().then((res) => {
-    if (!agreement.value.getChecked()) {
-      showToast("请阅读运输协议");
-      return;
-    }
-    showConfirm.value = true;
-  }).catch((err) => {
-    showToast("请填写完必填选项");
-  });
+  formRef.value
+    .validate()
+    .then((res) => {
+      if (!agreement.value.getChecked()) {
+        showToast("请阅读运输协议");
+        return;
+      }
+      showConfirm.value = true;
+    })
+    .catch((err) => {
+      showToast("请填写完必填选项");
+    });
 };
 
 const onConfirm = () => {
@@ -930,7 +984,7 @@ const onConfirm = () => {
 
 const checkAddress = (kind) => {
   uni.navigateTo({
-    url: `/pages/account/address?kind=${kind}&sourceUrl=${encodeURIComponent(
+    url: `/pages/account/address/index/index?kind=${kind}&sourceUrl=${encodeURIComponent(
       location.href
     )}`,
   });
@@ -945,7 +999,7 @@ const beforeRead = (file) => {
 };
 
 const afterRead = (file) => {
-  console.log('@@@',file)
+  console.log("@@@", file);
   if (file.file.size < 2 * 1024 * 1024) {
     commonUploadData(file);
     return;
@@ -963,7 +1017,7 @@ const afterRead = (file) => {
 };
 
 const commonUploadData = (e) => {
-  console.log('@@',e)
+  console.log("@@", e);
   // file.status = 'uploading';
   // file.message = "common.uploading";
   // const formData = new FormData();

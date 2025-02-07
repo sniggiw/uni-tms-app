@@ -26,7 +26,10 @@
         <view class="list-item-btn">
           <view class="left-btn" v-if="kind == '发货人'">
             <CheckboxGroup v-model="item.isDefault">
-              <Checkbox :value="radio" :isDefault="item.isDefault"  @tap="clickRadio(item)"
+              <Checkbox
+                :value="radio"
+                :isDefault="item.isDefault"
+                @tap="clickRadio(item)"
                 >设置为默认发货地址</Checkbox
               >
             </CheckboxGroup>
@@ -66,7 +69,7 @@ import Checkbox from "../../../../components/checkbox/index.vue";
 
 // 响应式数据
 const kind = ref("");
-// const sourceUrl = ref(route.query.sourceUrl);
+const sourceUrl = ref("");
 const loading = ref(false);
 const finished = ref(true);
 const addressList = ref([]);
@@ -75,6 +78,7 @@ const radio = ref(1);
 
 onLoad((options) => {
   kind.value = options.kind;
+  sourceUrl.value = options.sourceUrl;
 });
 
 // 获取联系人信息
@@ -135,14 +139,17 @@ const toDetele = async (id) => {
 
 // 选择地址
 const checkAddress = (item) => {
-  // if (sourceUrl.value) {
-  //   if (kind.value === "发货人") {
-  //     uni.setStorageSync("sendInfo", item);
-  //   } else if (kind.value === "收货人") {
-  //     uni.setStorageSync("receiveInfo", item);
-  //   }
-  //   router.go(-1);
-  // }
+  if (sourceUrl.value) {
+    if (kind.value === "发货人") {
+      uni.setStorageSync("sendInfo", item);
+    } else if (kind.value === "收货人") {
+      uni.setStorageSync("receiveInfo", item);
+    }
+    // router.go(-1);
+    uni.navigateBack({
+      delta: 1,
+    });
+  }
 };
 
 // 设置默认地址

@@ -11,6 +11,16 @@ const getDictTypesData = (params, callback) => {
   })
 }
 
+function getStore(name) {
+  if (!name) return
+  if (window.localStorage.getItem(name)) {
+    return JSON.parse(window.localStorage.getItem(name))
+  } else {
+    return ''
+  }
+}
+
 export {
-  getDictTypesData
+  getDictTypesData,
+  getStore
 };
