@@ -48,18 +48,11 @@ const pickerValue = ref(props.modelValue);
 const searchText = ref("");
 
 const filteredItems = computed(() => {
-    // if (!searchText.value) {
-    //     return props.columns;
-    // }
-    // return props.columns.map((column) => column.filter((item) => item.includes(searchText.value)));
-    // return [[""], [""], [""]];
-
     return props.columns;
 });
 
 const onPickerChange = (e) => {
     pickerValue.value = e.detail.value;
-
     emit("pickerChange", pickerValue.value, props.modelValue);
     emit("update:modelValue", pickerValue.value);
 };
