@@ -1,5 +1,38 @@
 import { ref, computed, reactive } from "vue";
-import { areaList, areaListMapList } from "@/db";
+import { areaList, createAreaListMap } from "@/db";
+
+// 转换 areaListMap 的方法
+const transformAreaListMapToAreaList = (data) => {
+    const result = [];
+
+    data.forEach(({ areaCode, areaName }) => {
+        const codes = areaCode.split("-");
+        const names = areaName.split("-");
+
+        let currentLevel = result;
+
+        codes.forEach((code, index) => {
+            let existingNode = currentLevel.find((item) => item.areaCode === code);
+
+            if (!existingNode) {
+                existingNode = {
+                    areaCode: code,
+                    areaName: names[index],
+                    children: [],
+                };
+                currentLevel.push(existingNode);
+            }
+
+            if (index === codes.length - 1) {
+                existingNode.children = null;
+            } else {
+                currentLevel = existingNode.children;
+            }
+        });
+    });
+
+    return result;
+};
 
 export function useAreaList() {
     // 当前选择的地区信息
@@ -17,14 +50,19 @@ export function useAreaList() {
      * @param {*} isSearch 是否在搜索条件下，true 为搜索条件下，false 为非搜索条件下
      * @param {*} val 如果是在非搜索条件下可以不传，如果是搜索条件下，需要传筛选出来的 list
      */
-    const handleChangeOriginAreaList = (isSearch, val = "") => {
+    const changeOriginAreaList = (isSearch = false, val = "") => {
         if (isSearch && val) {
-            /**
-             * todo
-             * 1.
-             */
+            const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(areaList).filter((item) => item.areaName.includes(val)));
+            originAreaList.value = _originAreaList;
+            selectAreaText.countryText = _originAreaList[0] ? _originAreaList[0]?.areaName : "";
+            selectAreaText.provinceText = _originAreaList[0] && _originAreaList[0]?.children[0] ? _originAreaList[0]?.children[0]?.areaName : "";
+            selectAreaText.cityText =
+                _originAreaList[0] && _originAreaList[0]?.children[0] && _originAreaList[0]?.children[0]?.children[0] ? _originAreaList[0]?.children[0]?.children[0]?.areaName : "";
         } else {
             originAreaList.value = areaList;
+            selectAreaText.countryText = "中国";
+            selectAreaText.provinceText = "北京市";
+            selectAreaText.cityText = "";
         }
     };
 
@@ -103,5 +141,6 @@ export function useAreaList() {
         cityList,
         selectAreaCode,
         changeSelectAreaText,
+        changeOriginAreaList,
     };
 }

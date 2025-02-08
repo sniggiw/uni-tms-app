@@ -41,18 +41,20 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["pickerChange", "headerBtnStart", "headerBtnEnd", "update:modelValue"]);
+const emit = defineEmits(["pickerChange", "headerBtnStart", "headerBtnEnd", "update:modelValue", "changeOriginAreaList"]);
 
 const popupRef = ref(null);
 const pickerValue = ref(props.modelValue);
 const searchText = ref("");
 
 const filteredItems = computed(() => {
-    if (!searchText.value) {
-        return props.columns;
-    }
+    // if (!searchText.value) {
+    //     return props.columns;
+    // }
     // return props.columns.map((column) => column.filter((item) => item.includes(searchText.value)));
-    return [[""], [""], [""]];
+    // return [[""], [""], [""]];
+
+    return props.columns;
 });
 
 const onPickerChange = (e) => {
@@ -90,11 +92,13 @@ const handleHeaderBtnEnd = () => {
 // 搜索按钮点击事件
 const handleSearch = useDebounce((e) => {
     console.log("search - e.detail.value: ", e.detail.value);
+    emit("changeOriginAreaList", true, e.detail.value);
 }, 500);
 
 // 清除搜索内容按钮点击事件
 const handleClearSearchContent = () => {
     console.log("clear search content");
+    emit("changeOriginAreaList", false, "");
     searchText.value = "";
 };
 

@@ -10,6 +10,7 @@
             @pickerChange="handleChangeSelectAreaText"
             @headerBtnStart="handleHideCustomPopupPicker"
             @headerBtnEnd="handleShowCustomPopupPicker"
+            @changeOriginAreaList="handleChangeOriginAreaList"
         />
     </view>
 </template>
@@ -20,7 +21,7 @@ import CustomPopupPicker from "@/components/CustomPopupPicker";
 import { useAuthStore } from "@/stores";
 import { useAreaList } from "@/hooks/area";
 
-const { originAreaList, countryList, provinceList, cityList, selectAreaCode, changeSelectAreaText } = useAreaList();
+const { originAreaList, countryList, provinceList, cityList, selectAreaCode, changeSelectAreaText, changeOriginAreaList } = useAreaList();
 
 const authStore = useAuthStore();
 
@@ -61,6 +62,10 @@ const handleChangeSelectAreaText = (newValue, oldValue) => {
     if (changedIndices?.length > 0) {
         changeSelectAreaText(changedIndices[0], newValue[changedIndices[0]]);
     }
+};
+
+const handleChangeOriginAreaList = (isSearch = false, val = "") => {
+    changeOriginAreaList(isSearch, val);
 };
 </script>
 
