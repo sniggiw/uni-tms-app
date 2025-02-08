@@ -85,7 +85,7 @@ const handleHeaderBtnEnd = () => {
 // 搜索按钮点击事件
 const handleSearch = useDebounce((e) => {
     console.log("search - e.detail.value: ", e.detail.value);
-    emit("changeOriginAreaList", true, e.detail.value);
+    emit("changeOriginAreaList", true, e.detail.value || searchText.value);
 }, 500);
 
 // 清除搜索内容按钮点击事件
