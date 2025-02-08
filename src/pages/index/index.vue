@@ -3,6 +3,24 @@
         <button @tap="judgeToLoginPage">跳转 login</button>
         <button @tap="clearAuthInfoData">清除登录状态</button>
         <button @tap="handleShowCustomPopupPicker">显示自定义弹出层选择器</button>
+
+        <view
+            >当前选中的地点为：{{
+                Object.entries(selectAreaText)
+                    .map(([key, value]) => value)
+                    .filter((item) => !!item)
+                    .join("-")
+            }}</view
+        >
+        <view
+            >当前选中地点的 areaCode 为：{{
+                Object.entries(selectAreaCode)
+                    .map(([key, value]) => value)
+                    .filter((item) => !!item)
+                    .join("-")
+            }}</view
+        >
+
         <CustomPopupPicker
             ref="customPopupPickerRef"
             v-model="selectedValue"
@@ -21,7 +39,7 @@ import CustomPopupPicker from "@/components/CustomPopupPicker";
 import { useAuthStore } from "@/stores";
 import { useAreaList } from "@/hooks/area";
 
-const { originAreaList, countryList, provinceList, cityList, selectAreaCode, changeSelectAreaText, changeOriginAreaList } = useAreaList();
+const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, changeSelectAreaText, changeOriginAreaList } = useAreaList();
 
 const authStore = useAuthStore();
 

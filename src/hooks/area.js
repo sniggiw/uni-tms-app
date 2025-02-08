@@ -55,9 +55,9 @@ export function useAreaList() {
             const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(areaList).filter((item) => item.areaName.includes(val)));
             originAreaList.value = _originAreaList;
             selectAreaText.countryText = _originAreaList[0] ? _originAreaList[0]?.areaName : "";
-            selectAreaText.provinceText = _originAreaList[0] && _originAreaList[0]?.children[0] ? _originAreaList[0]?.children[0]?.areaName : "";
+            selectAreaText.provinceText = _originAreaList[0] && _originAreaList[0]?.children ? _originAreaList[0]?.children[0]?.areaName : "";
             selectAreaText.cityText =
-                _originAreaList[0] && _originAreaList[0]?.children[0] && _originAreaList[0]?.children[0]?.children[0] ? _originAreaList[0]?.children[0]?.children[0]?.areaName : "";
+                _originAreaList[0] && _originAreaList[0]?.children && _originAreaList[0]?.children[0]?.children ? _originAreaList[0]?.children[0]?.children[0]?.areaName : "";
         } else {
             originAreaList.value = areaList;
             selectAreaText.countryText = "中国";
@@ -139,6 +139,7 @@ export function useAreaList() {
         countryList,
         provinceList,
         cityList,
+        selectAreaText,
         selectAreaCode,
         changeSelectAreaText,
         changeOriginAreaList,
