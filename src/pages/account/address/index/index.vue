@@ -116,9 +116,8 @@ const add = () => {
 
 // 编辑地址
 const toEdit = (id) => {
-  router.push({
-    path: "/account/address/edit",
-    query: { kind: kind.value, id: id },
+  uni.navigateTo({
+    url: `/pages/account/address/save/index?kind=${kind.value}&id=${id}`,
   });
 };
 
