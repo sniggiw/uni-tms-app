@@ -45,12 +45,16 @@ const emit = defineEmits(["pickerChange", "headerBtnStart", "headerBtnEnd", "upd
 
 const popupRef = ref(null);
 const pickerValue = ref(props.modelValue);
+
+// 搜索框的搜索内容
 const searchText = ref("");
 
+// 当前最新的 columns 数据
 const filteredItems = computed(() => {
     return props.columns;
 });
 
+// 选择器改变事件
 const onPickerChange = (e) => {
     pickerValue.value = e.detail.value;
     emit("pickerChange", pickerValue.value, props.modelValue);
@@ -59,38 +63,32 @@ const onPickerChange = (e) => {
 
 // 显示弹出层选择器
 const handleShow = () => {
-    console.log("show");
     popupRef.value.open("bottom");
 };
 
 // 隐藏弹出层选择器
 const handleHide = () => {
-    console.log("hide");
     popupRef.value.close();
 };
 
 // 顶部左边按钮点击事件
 const handleHeaderBtnStart = () => {
-    console.log("btn end");
     handleHide();
 };
 
 // 顶部右边按钮点击事件
 const handleHeaderBtnEnd = () => {
-    console.log("btn start");
     emit("headerBtnEnd", pickerValue.value);
     handleHide();
 };
 
 // 搜索按钮点击事件
 const handleSearch = useDebounce((e) => {
-    console.log("search - e.detail.value: ", e.detail.value);
     emit("changeOriginAreaList", true, e.detail.value || searchText.value);
 }, 500);
 
 // 清除搜索内容按钮点击事件
 const handleClearSearchContent = () => {
-    console.log("clear search content");
     emit("changeOriginAreaList", false, "");
     searchText.value = "";
 };

@@ -35,11 +35,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import CustomPopupPicker from "@/components/CustomPopupPicker";
 import { useAuthStore } from "@/stores";
 import { useAreaList } from "@/hooks/area";
-
-const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, changeSelectAreaText, changeOriginAreaList } = useAreaList();
+import CustomPopupPicker from "@/components/CustomPopupPicker";
 
 const authStore = useAuthStore();
 
@@ -54,34 +52,54 @@ const judgeToLoginPage = () => {
     });
 };
 
+const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, changeSelectAreaText, changeOriginAreaList } = useAreaList();
+
 const customPopupPickerRef = ref(null);
 
-const handleShowCustomPopupPicker = () => {
-    customPopupPickerRef.value.show();
-};
+// CustomPopupPicker 组件中初始选中的值，是一个数组，数组中的每一项对应 columns 中的每一列的索引（三列都要给默认值）
+const selectedValue = ref([0, 0, 0]);
 
-const handleHideCustomPopupPicker = () => {
-    customPopupPickerRef.value.close();
-};
-
+// 传递给 CustomPopupPicker 组件的 columns 数据
 const columns = computed(() => {
     return [countryList.value, provinceList.value, cityList.value];
 });
 
-const selectedValue = ref([0, 0, 0]);
+// 显示 CustomPopupPicker 组件
+const handleShowCustomPopupPicker = () => {
+    customPopupPickerRef.value.show();
+};
 
+// 隐藏 CustomPopupPicker 组件
+const handleHideCustomPopupPicker = () => {
+    customPopupPickerRef.value.close();
+};
+
+/**
+ * 当 CustomPopupPicker 组件中某一列的值发生变化时，触发该函数
+ *
+ * @param newValue 新的数组索引值 如：[1, 0, 0]
+ * @param oldValue 旧的数组索引值 如：[0, 0, 0]
+ */
 const handleChangeSelectAreaText = (newValue, oldValue) => {
+    // 找到新旧数组中发生变化的某一（多）项的索引，push 到 changedIndices 数组中
     const changedIndices = [];
     for (let i = 0; i < newValue.length; i++) {
         if (newValue[i] !== oldValue[i]) {
             changedIndices.push(i);
         }
     }
+
+    // 如果 changedIndices 数组中存在元素，则说明某一（多）列的值发生了变化，此时需要更新 CustomPopupPicker 组件中对应列的值（展示的值）
     if (changedIndices?.length > 0) {
         changeSelectAreaText(changedIndices[0], newValue[changedIndices[0]]);
     }
 };
 
+/**
+ * 修改 CustomPopupPicker 组件中的 columns 数据
+ * @param isSearch 是否是在搜索条件下
+ * @param val 是否有输入搜索内容
+ */
 const handleChangeOriginAreaList = (isSearch = false, val = "") => {
     changeOriginAreaList(isSearch, val);
 };
