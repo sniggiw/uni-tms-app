@@ -26,8 +26,8 @@
             v-model="selectedValue"
             :columns="columns"
             @pickerChange="handleChangeSelectAreaText"
-            @headerBtnStart="handleHideCustomPopupPicker"
-            @headerBtnEnd="handleShowCustomPopupPicker"
+            @headerBtnStart="handleStart"
+            @headerBtnEnd="handleEnd"
             @changeOriginAreaList="handleChangeOriginAreaList"
         />
     </view>
@@ -70,8 +70,12 @@ const handleShowCustomPopupPicker = () => {
 };
 
 // 隐藏 CustomPopupPicker 组件
-const handleHideCustomPopupPicker = () => {
+const handleStart = () => {
     customPopupPickerRef.value.close();
+};
+
+const handleEnd = () => {
+    console.log("handleEnd");
 };
 
 /**
