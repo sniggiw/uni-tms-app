@@ -58,15 +58,15 @@ const filteredItems = computed(() => {
 const onPickerChange = (e) => {
     const newValue = e.detail.value;
     const oldValue = pickerValue.value;
-
+    
     const changedIndices = newValue.map((value, index) => (value !== oldValue[index] ? index : -1)).filter((index) => index !== -1);
 
     if (changedIndices.length > 0) {
         const firstChangedIndex = changedIndices[0];
         pickerValue.value = [
             firstChangedIndex === 0 ? newValue[0] : pickerValue.value[0],
-            firstChangedIndex === 1 ? newValue[1] : pickerValue.value[1],
-            firstChangedIndex === 2 ? newValue[2] : pickerValue.value[2],
+            firstChangedIndex === 1 ? newValue[1] : firstChangedIndex === 2 ? pickerValue.value[1] : 0,
+            firstChangedIndex === 2 ? newValue[2] : 0,
         ];
     }
 

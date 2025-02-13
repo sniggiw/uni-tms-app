@@ -91,7 +91,8 @@ export function useAreaList(params) {
         );
     });
 
-    const selectAreaIndexArr = computed(() => {
+    // 初始默认传递进来的地区信息 获取对应的数组索引值（除了第一次的值有用，后续的值无用）
+    const defaultSelectAreaIndexArr = computed(() => {
         return handleGetDefaultValue({ ...params.selectAreaText } || { countryText: "中国", provinceText: "北京市", cityText: "" });
     });
 
@@ -157,7 +158,7 @@ export function useAreaList(params) {
         cityList,
         selectAreaText,
         selectAreaCode,
-        selectAreaIndexArr,
+        defaultSelectAreaIndexArr,
         changeSelectAreaText,
         changeOriginAreaList,
     };
