@@ -34,13 +34,15 @@ const transformAreaListMapToAreaList = (data) => {
     return result;
 };
 
-export function useAreaList() {
+export function useAreaList(params) {
     // 当前选择的地区信息
-    const selectAreaText = reactive({
-        countryText: "中国",
-        provinceText: "北京市",
-        cityText: "",
-    });
+    const selectAreaText = reactive(
+        { ...params.selectAreaText } || {
+            countryText: "中国",
+            provinceText: "北京市",
+            cityText: "",
+        }
+    );
 
     // 原始的地区信息（根据接口返回的数据）
     const originAreaList = ref(areaList);
@@ -88,6 +90,20 @@ export function useAreaList() {
                 ?.children?.map((cItem) => cItem.areaName) || [""]
         );
     });
+
+    const selectAreaIndexArr = computed(() => {
+        return handleGetDefaultValue({ ...params.selectAreaText } || { countryText: "中国", provinceText: "北京市", cityText: "" });
+    });
+
+    const handleGetDefaultValue = (params) => {
+        const { countryText, provinceText, cityText } = params;
+
+        const countryIndex = countryList.value.findIndex((item) => item === countryText);
+        const provinceIndex = provinceList.value.findIndex((item) => item === provinceText);
+        const cityIndex = cityList.value.findIndex((item) => item === cityText);
+
+        return [countryIndex, provinceIndex, cityIndex];
+    };
 
     // 当前选择的地区的 areaCode 值
     const selectAreaCode = computed(() => {
@@ -141,6 +157,7 @@ export function useAreaList() {
         cityList,
         selectAreaText,
         selectAreaCode,
+        selectAreaIndexArr,
         changeSelectAreaText,
         changeOriginAreaList,
     };

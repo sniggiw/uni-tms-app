@@ -21,9 +21,11 @@
             }}</view
         >
 
+        <view>{{ selectAreaIndexArr }}</view>
+
         <CustomPopupPicker
             ref="customPopupPickerRef"
-            v-model="selectedValue"
+            v-model="defaultSelectedValue"
             :columns="columns"
             @pickerChange="handleChangeSelectAreaText"
             @headerBtnStart="handleStart"
@@ -52,12 +54,18 @@ const judgeToLoginPage = () => {
     });
 };
 
-const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, changeSelectAreaText, changeOriginAreaList } = useAreaList();
+const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, selectAreaIndexArr, changeSelectAreaText, changeOriginAreaList } = useAreaList({
+    selectAreaText: {
+        countryText: "中国",
+        provinceText: "江苏省",
+        cityText: "南京市",
+    },
+});
 
 const customPopupPickerRef = ref(null);
 
 // CustomPopupPicker 组件中初始选中的值，是一个数组，数组中的每一项对应 columns 中的每一列的索引（三列都要给默认值）
-const selectedValue = ref([0, 0, 0]);
+const defaultSelectedValue = ref(selectAreaIndexArr.value);
 
 // 传递给 CustomPopupPicker 组件的 columns 数据
 const columns = computed(() => {
