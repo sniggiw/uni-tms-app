@@ -27,6 +27,13 @@
                 "navigationStyle": "custom",
                 "navigationBarTitleText": "登录"
             }
+        },
+        {
+            "path": "pages/testCustomPopPickerComponent/index",
+            "style": {
+                "navigationStyle": "custom",
+                "navigationBarTitleText": "测试自定义的地区查找组件"
+            }
         }
     ],
     "globalStyle": {

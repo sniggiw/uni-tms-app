@@ -2,6 +2,9 @@
     <view class="index-page">
         <button @tap="judgeToLoginPage">跳转 login</button>
         <button @tap="clearAuthInfoData">清除登录状态</button>
+
+        <button @tap="judgeToTestCustomPopPickerComponentPage">跳转 测试自定义的地区查找组件 页面</button>
+
         <button @tap="handleShowCustomPopupPicker">显示自定义弹出层选择器</button>
 
         <view
@@ -51,6 +54,12 @@ const clearAuthInfoData = () => {
 const judgeToLoginPage = () => {
     uni.navigateTo({
         url: "/pages/login/index",
+    });
+};
+
+const judgeToTestCustomPopPickerComponentPage = () => {
+    uni.navigateTo({
+        url: "/pages/testCustomPopPickerComponent/index",
     });
 };
 
