@@ -84,18 +84,18 @@ const commonUpload = (params) => {
     return new Promise((resolve, reject) => {
         const queryString = new URLSearchParams(params).toString();
         http.post({
-            url: `/tms-app/common/upload?${queryString}`,
-            data: params,
-            headers: {
-                'Content-Type': 'multipart/form-data;'
-            }
-        })
-        .then((response) => {
-            resolve(response.data);
-        })
-        .catch((error) => {
-            reject(error);
-        });
+                url: `/tms-app/common/upload?${queryString}`,
+                data: params,
+                headers: {
+                    'Content-Type': 'multipart/form-data;'
+                }
+            })
+            .then((response) => {
+                resolve(response.data);
+            })
+            .catch((error) => {
+                reject(error);
+            });
     });
 };
 
@@ -132,7 +132,7 @@ const getContractListData = (params) => {
 const settingContract = (params) => {
     return new Promise((resolve, reject) => {
         const url = `/tms-app/customer/setting/contract`;
-        http.put(url,params)
+        http.put(url, params)
             .then((response) => {
                 resolve(response);
             })
@@ -156,6 +156,80 @@ const changePwd = (params) => {
     });
 };
 
+// 首页
+const getNewIndex = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/order/index-new?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+// 首页统计数据
+const orderIndex = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/order/index?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+// 首页待我处理汇总
+const orderPendingIndex = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/order/pending/index?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+
+const orderPendingList = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/order/pending?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+// 我的订单
+const orderProcessing = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/order/processing?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
 export {
     getDictTypes,
     login,
@@ -166,5 +240,10 @@ export {
     getCustomerInfoData,
     getContractListData,
     settingContract,
-    changePwd
+    changePwd,
+    getNewIndex,
+    orderIndex,
+    orderPendingIndex,
+    orderPendingList,
+    orderProcessing
 };

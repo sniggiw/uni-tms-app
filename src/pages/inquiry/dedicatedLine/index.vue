@@ -123,6 +123,7 @@
               </view>
               <view>
                 时效说明
+                <text></text>
                 <text>{{ item.needTimesDesc }}</text>
               </view>
               <!-- <view>

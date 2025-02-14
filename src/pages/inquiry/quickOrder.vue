@@ -266,6 +266,11 @@ const onSubmit = () => {
         }
       }
     }
+    :deep(.uni-forms-item) {
+      border-bottom: 2rpx solid #ebedf0;
+      padding: 10rpx;
+      margin-bottom: 0rpx;
+    }
   }
 }
 </style>

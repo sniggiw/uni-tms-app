@@ -240,6 +240,7 @@ const toJumpDetail = (item) => {
     destScode: item.endPos.scode,
     descTitleEn: item.endPos.titleEn,
     transCount: item.transCount,
+    transUnit:item.transUnit,
     flow: item.flowId,
     squares: item.squares,
     weight: item.weight,
