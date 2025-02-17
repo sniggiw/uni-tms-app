@@ -2,6 +2,7 @@
     <view class="testCustomPopPickerComponentPage">
         <uni-forms :modelValue="formData">
             <view class="itemWrap">
+                <!-- 发货人地址 -->
                 <uni-forms-item label-width="90px" label="发货人地区" name="shipperRegion" @tap="handleShowCustomPopupPicker('shipperRegion')">
                     <view class="regionWrap">
                         <view
@@ -29,13 +30,42 @@
                 <uni-forms-item label-width="90px" label="详细地址" name="shipperAddress">
                     <uni-easyinput type="text" v-model="formData.shipperAddress" placeholder="请输入详细地址" :inputBorder="false" :clearable="false" style="text-align: right" />
                 </uni-forms-item>
+
+                <!-- 收货人地址 -->
+                <uni-forms-item label-width="90px" label="收货人地区" name="consigneeRegion" @tap="handleShowCustomPopupPicker('consigneeRegion')">
+                    <view class="regionWrap">
+                        <view
+                            v-if="
+                                mergeStr({
+                                    countryText: formData.consigneeRegion.countryText,
+                                    provinceText: formData.consigneeRegion.provinceText,
+                                    cityText: formData.consigneeRegion.cityText,
+                                })
+                            "
+                            class="region"
+                            >{{
+                                mergeStr({
+                                    countryText: formData.consigneeRegion.countryText,
+                                    provinceText: formData.consigneeRegion.provinceText,
+                                    cityText: formData.consigneeRegion.cityText,
+                                })
+                            }}</view
+                        >
+                        <view v-else class="region_unSelected">请选择收货人地区</view>
+                        <uni-icons type="right" size="20" color="#999"></uni-icons>
+                    </view>
+                </uni-forms-item>
             </view>
         </uni-forms>
+
+        <view class="btnFixed">
+            <view class="btn" @click="handleSubmit">提交</view>
+        </view>
 
         <CustomPopupPicker
             v-if="isShowCustomPopupPicker"
             ref="customPopupPickerRef"
-            v-model="formData[currentRegionType == 'shipperRegion' ? 'shipperRegion' : '']"
+            v-model="formData[currentRegionType == 'shipperRegion' ? 'shipperRegion' : 'consigneeRegion']"
             @headerBtnStart="handleStart"
             @headerBtnEnd="handleEnd"
             @destroyCustomPopupPicker="handleDestroyCustomPopupPicker"
@@ -60,8 +90,20 @@ const formData = reactive({
     },
     // 发货人详细地址
     shipperAddress: "",
+
+    // 收货人地址
+    consigneeRegion: {
+        countryText: "",
+        provinceText: "",
+        cityText: "",
+        countryAreaCode: "",
+        provinceAreaCode: "",
+        cityAreaCode: "",
+    },
 });
 
+// 当存在多个位置需要使用到 CustomPopupPicker 组件时，为了避免多次创建 CustomPopupPicker 组件，可以在采用动态传递参数的方式，通过传递不同的参数来控制显示 CustomPopupPicker 组件该显示什么内容
+// 现在的 demo 是有两个情况，一是发货人地区，用 shipperRegion 来表示，二是收货人地区，用 consigneeRegion 来表示
 const currentRegionType = ref("");
 
 const mergeStr = (obj) => {
@@ -95,6 +137,10 @@ const handleEnd = () => {
     console.log("handleEnd");
 };
 
+const handleSubmit = () => {
+    console.log("handleSubmit", formData);
+};
+
 onMounted(() => {
     formData.shipperRegion.countryText = "中国";
     formData.shipperRegion.provinceText = "江苏省";
@@ -111,6 +157,8 @@ onMounted(() => {
     padding: 26rpx;
     height: 100vh;
     background-color: #f9f9fa;
+
+    position: relative;
 
     .itemWrap {
         padding: 20rpx 40rpx;
@@ -153,6 +201,36 @@ onMounted(() => {
                 font-size: 24rpx;
                 color: #999;
             }
+        }
+    }
+
+    .btnFixed {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        height: 150rpx;
+        border-top-left-radius: 40rpx;
+        border-top-right-radius: 40rpx;
+        background-color: #fff;
+        box-shadow: 0 4rpx 4rpx 3rpx rgba(0, 0, 0, 0.2);
+
+        .btn {
+            width: 80%;
+            height: 80rpx;
+            font-size: 30rpx;
+            border-radius: 40rpx;
+            color: #fff;
+            background-color: red;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 }

@@ -34,10 +34,29 @@ const transformAreaListMapToAreaList = (data) => {
     return result;
 };
 
+// 检查传入的对象是否没有任何属性，或者所有属性都是空值（如空字符串、null 或 undefined）。如果满足条件，则返回 null，否则返回原对象
+function checkObjectEmpty(obj) {
+    // 如果对象为空或不是对象，直接返回 null
+    if (!obj || typeof obj !== "object") {
+        return null;
+    }
+
+    // 遍历对象的属性
+    for (const key in obj) {
+        // 如果属性值是字符串且不为空，或者属性值是其他类型且不为空，则返回原对象
+        if ((typeof obj[key] === "string" && obj[key].trim() !== "") || (obj[key] !== null && obj[key] !== undefined && obj[key] !== "")) {
+            return obj;
+        }
+    }
+
+    // 如果所有属性都为空，返回 null
+    return null;
+}
+
 export function useAreaList(params) {
     // 当前选择的地区信息
     const selectAreaText = reactive(
-        params
+        checkObjectEmpty(params.selectAreaText)
             ? { ...params.selectAreaText }
             : {
                   countryText: "中国",
@@ -88,14 +107,14 @@ export function useAreaList(params) {
         return (
             originAreaList.value
                 .find((item) => item.areaName === selectAreaText.countryText)
-                .children.find((pItem) => pItem.areaName === selectAreaText.provinceText)
+                ?.children?.find((pItem) => pItem.areaName === selectAreaText.provinceText)
                 ?.children?.map((cItem) => cItem.areaName) || [""]
         );
     });
 
     // 初始默认传递进来的地区信息 获取对应的数组索引值（除了第一次的值有用，后续的值无用）
     const defaultSelectAreaIndexArr = computed(() => {
-        return handleGetDefaultValue(params ? { ...params.selectAreaText } : { countryText: "中国", provinceText: "北京市", cityText: "" });
+        return handleGetDefaultValue(checkObjectEmpty(params.selectAreaText) ? { ...params.selectAreaText } : { countryText: "中国", provinceText: "北京市", cityText: "" });
     });
 
     const handleGetDefaultValue = (params) => {
