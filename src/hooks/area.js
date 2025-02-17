@@ -37,11 +37,13 @@ const transformAreaListMapToAreaList = (data) => {
 export function useAreaList(params) {
     // 当前选择的地区信息
     const selectAreaText = reactive(
-        { ...params.selectAreaText } || {
-            countryText: "中国",
-            provinceText: "北京市",
-            cityText: "",
-        }
+        params
+            ? { ...params.selectAreaText }
+            : {
+                  countryText: "中国",
+                  provinceText: "北京市",
+                  cityText: "",
+              }
     );
 
     // 原始的地区信息（根据接口返回的数据）
@@ -93,7 +95,7 @@ export function useAreaList(params) {
 
     // 初始默认传递进来的地区信息 获取对应的数组索引值（除了第一次的值有用，后续的值无用）
     const defaultSelectAreaIndexArr = computed(() => {
-        return handleGetDefaultValue({ ...params.selectAreaText } || { countryText: "中国", provinceText: "北京市", cityText: "" });
+        return handleGetDefaultValue(params ? { ...params.selectAreaText } : { countryText: "中国", provinceText: "北京市", cityText: "" });
     });
 
     const handleGetDefaultValue = (params) => {

@@ -1,5 +1,5 @@
 <template>
-    <uni-popup ref="popupRef" background-color="#fff" border-radius="24rpx 24rpx 0 0">
+    <uni-popup ref="popupRef" background-color="#fff" border-radius="24rpx 24rpx 0 0" @change="handlePopupStatusChange">
         <view class="popup-content">
             <view class="popup-header-btns">
                 <view class="popup-header-btns-start" @tap="handleHeaderBtnStart">取消</view>
@@ -19,7 +19,7 @@
             <!-- 列表，默认为一列，可多列 -->
             <picker-view class="popup-picker-view" :value="pickerValue" @change="onPickerChange">
                 <picker-view-column v-for="(column, index) in columns" :key="index">
-                    <view class="item" v-for="(item, i) in filteredItems[index]" :key="i">{{ item }}</view>
+                    <view class="item" v-for="(item, i) in columns[index]" :key="i">{{ item }}</view>
                 </picker-view-column>
             </picker-view>
         </view>
@@ -27,38 +27,45 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useDebounce } from "@/hooks/debounce";
+import { useAreaList } from "@/hooks/area";
 
 const props = defineProps({
-    columns: {
-        type: Array,
-        default: () => [[]],
-    },
     modelValue: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => {},
     },
 });
 
-const emit = defineEmits(["pickerChange", "headerBtnStart", "headerBtnEnd", "update:modelValue", "changeOriginAreaList"]);
+const emit = defineEmits(["headerBtnStart", "headerBtnEnd", "destroyCustomPopupPicker", "update:modelValue"]);
+
+const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, defaultSelectAreaIndexArr, changeSelectAreaText, changeOriginAreaList } = useAreaList({
+    selectAreaText: { countryText: props.modelValue.countryText, provinceText: props.modelValue.provinceText, cityText: props.modelValue.cityText },
+});
+
+const columns = computed(() => {
+    return [countryList.value, provinceList.value, cityList.value];
+});
+
+const pickerValue = ref(defaultSelectAreaIndexArr.value);
 
 const popupRef = ref(null);
-const pickerValue = ref(props.modelValue);
 
 // 搜索框的搜索内容
 const searchText = ref("");
 
-// 当前最新的 columns 数据
-const filteredItems = computed(() => {
-    return props.columns;
-});
+const handlePopupStatusChange = (e) => {
+    if (!e.show) {
+        emit("destroyCustomPopupPicker", e.show);
+    }
+};
 
 // 选择器改变事件
 const onPickerChange = (e) => {
     const newValue = e.detail.value;
     const oldValue = pickerValue.value;
-    
+
     const changedIndices = newValue.map((value, index) => (value !== oldValue[index] ? index : -1)).filter((index) => index !== -1);
 
     if (changedIndices.length > 0) {
@@ -70,8 +77,28 @@ const onPickerChange = (e) => {
         ];
     }
 
-    emit("pickerChange", pickerValue.value, props.modelValue);
-    emit("update:modelValue", pickerValue.value);
+    handleChangeSelectAreaText(pickerValue.value, defaultSelectAreaIndexArr.value);
+};
+
+/**
+ * 当 CustomPopupPicker 组件中某一列的值发生变化时，触发该函数
+ *
+ * @param newValue 新的数组索引值 如：[1, 0, 0]
+ * @param oldValue 旧的数组索引值 如：[0, 0, 0]
+ */
+const handleChangeSelectAreaText = (newValue, oldValue) => {
+    // 找到新旧数组中发生变化的某一（多）项的索引，push 到 changedIndices 数组中
+    const changedIndices = [];
+    for (let i = 0; i < newValue.length; i++) {
+        if (newValue[i] !== oldValue[i]) {
+            changedIndices.push(i);
+        }
+    }
+
+    // 如果 changedIndices 数组中存在元素，则说明某一（多）列的值发生了变化，此时需要更新 CustomPopupPicker 组件中对应列的值（展示的值）
+    if (changedIndices?.length > 0) {
+        changeSelectAreaText(changedIndices[0], newValue[changedIndices[0]]);
+    }
 };
 
 // 显示弹出层选择器
@@ -92,18 +119,28 @@ const handleHeaderBtnStart = () => {
 // 顶部右边按钮点击事件
 const handleHeaderBtnEnd = () => {
     emit("headerBtnEnd");
+    emit("update:modelValue", { ...selectAreaText, ...selectAreaCode.value });
     handleHide();
 };
 
 // 搜索按钮点击事件
 const handleSearch = useDebounce((e) => {
-    emit("changeOriginAreaList", true, e.detail.value || searchText.value);
+    handleChangeOriginAreaList(true, e.detail.value || searchText.value);
 }, 500);
 
 // 清除搜索内容按钮点击事件
 const handleClearSearchContent = () => {
-    emit("changeOriginAreaList", false, "");
+    handleChangeOriginAreaList(false, "");
     searchText.value = "";
+};
+
+/**
+ * 修改 CustomPopupPicker 组件中的 columns 数据
+ * @param isSearch 是否是在搜索条件下
+ * @param val 是否有输入搜索内容
+ */
+const handleChangeOriginAreaList = (isSearch = false, val = "") => {
+    changeOriginAreaList(isSearch, val);
 };
 
 // 暴露方法给父组件使用（注意暴露方法的时候，需要在定义的方法后面，因为方法不会自动提升）

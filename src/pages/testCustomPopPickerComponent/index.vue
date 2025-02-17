@@ -2,60 +2,88 @@
     <view class="testCustomPopPickerComponentPage">
         <uni-forms :modelValue="formData">
             <view class="itemWrap">
-                <uni-forms-item label-width="90px" label="姓名" name="name">
-                    <uni-easyinput type="text" v-model="formData.name" placeholder="请输入姓名" :inputBorder="false" :clearable="false" style="text-align: right" />
-                </uni-forms-item>
-                <uni-forms-item label-width="90px" label="发货人地区" name="region" @tap="handleShowCustomPopupPicker">
+                <uni-forms-item label-width="90px" label="发货人地区" name="shipperRegion" @tap="handleShowCustomPopupPicker('shipperRegion')">
                     <view class="regionWrap">
-                        <view v-if="formData.region" class="region">{{ formData.region }}</view>
+                        <view
+                            v-if="
+                                mergeStr({
+                                    countryText: formData.shipperRegion.countryText,
+                                    provinceText: formData.shipperRegion.provinceText,
+                                    cityText: formData.shipperRegion.cityText,
+                                })
+                            "
+                            class="region"
+                            >{{
+                                mergeStr({
+                                    countryText: formData.shipperRegion.countryText,
+                                    provinceText: formData.shipperRegion.provinceText,
+                                    cityText: formData.shipperRegion.cityText,
+                                })
+                            }}</view
+                        >
                         <view v-else class="region_unSelected">请选择发货人地区</view>
                         <uni-icons type="right" size="20" color="#999"></uni-icons>
                     </view>
+                </uni-forms-item>
+
+                <uni-forms-item label-width="90px" label="详细地址" name="shipperAddress">
+                    <uni-easyinput type="text" v-model="formData.shipperAddress" placeholder="请输入详细地址" :inputBorder="false" :clearable="false" style="text-align: right" />
                 </uni-forms-item>
             </view>
         </uni-forms>
 
         <CustomPopupPicker
+            v-if="isShowCustomPopupPicker"
             ref="customPopupPickerRef"
-            v-model="defaultSelectedValue"
-            :columns="columns"
-            @pickerChange="handleChangeSelectAreaText"
+            v-model="formData[currentRegionType == 'shipperRegion' ? 'shipperRegion' : '']"
             @headerBtnStart="handleStart"
             @headerBtnEnd="handleEnd"
-            @changeOriginAreaList="handleChangeOriginAreaList"
+            @destroyCustomPopupPicker="handleDestroyCustomPopupPicker"
         />
     </view>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
-import { useAreaList } from "@/hooks/area2";
-import CustomPopupPicker from "@/components/CustomPopupPicker/index2.vue";
+import { ref, reactive, computed, onMounted, nextTick } from "vue";
+import { useAreaList } from "@/hooks/area";
+import CustomPopupPicker from "@/components/CustomPopupPicker/index.vue";
 
 const formData = reactive({
-    name: "",
-    region: "",
-    counntryText: "",
-    provinceText: "",
-    cityText: "",
+    // 发货人地址
+    shipperRegion: {
+        countryText: "",
+        provinceText: "",
+        cityText: "",
+        countryAreaCode: "",
+        provinceAreaCode: "",
+        cityAreaCode: "",
+    },
+    // 发货人详细地址
+    shipperAddress: "",
 });
 
-const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, defaultSelectAreaIndexArr, changeSelectAreaText, changeOriginAreaList } =
-    useAreaList(null);
+const currentRegionType = ref("");
+
+const mergeStr = (obj) => {
+    return Object.values(obj).filter(Boolean).join("-");
+};
 
 const customPopupPickerRef = ref(null);
 
-// CustomPopupPicker 组件中初始选中的值，是一个数组，数组中的每一项对应 columns 中的每一列的索引（三列都要给默认值）
-const defaultSelectedValue = ref(defaultSelectAreaIndexArr.value);
+const isShowCustomPopupPicker = ref(false);
 
-// 传递给 CustomPopupPicker 组件的 columns 数据
-const columns = computed(() => {
-    return [countryList.value, provinceList.value, cityList.value];
-});
+const handleDestroyCustomPopupPicker = (status) => {
+    isShowCustomPopupPicker.value = status;
+};
 
 // 显示 CustomPopupPicker 组件
-const handleShowCustomPopupPicker = () => {
-    customPopupPickerRef.value.show();
+const handleShowCustomPopupPicker = (val) => {
+    currentRegionType.value = val;
+
+    isShowCustomPopupPicker.value = true;
+    nextTick(() => {
+        customPopupPickerRef.value.show();
+    });
 };
 
 // 隐藏 CustomPopupPicker 组件
@@ -67,35 +95,15 @@ const handleEnd = () => {
     console.log("handleEnd");
 };
 
-/**
- * 当 CustomPopupPicker 组件中某一列的值发生变化时，触发该函数
- *
- * @param newValue 新的数组索引值 如：[1, 0, 0]
- * @param oldValue 旧的数组索引值 如：[0, 0, 0]
- */
-const handleChangeSelectAreaText = (newValue, oldValue) => {
-    // 找到新旧数组中发生变化的某一（多）项的索引，push 到 changedIndices 数组中
-    const changedIndices = [];
-    for (let i = 0; i < newValue.length; i++) {
-        if (newValue[i] !== oldValue[i]) {
-            changedIndices.push(i);
-        }
-    }
+onMounted(() => {
+    formData.shipperRegion.countryText = "中国";
+    formData.shipperRegion.provinceText = "江苏省";
+    formData.shipperRegion.cityText = "南京市";
 
-    // 如果 changedIndices 数组中存在元素，则说明某一（多）列的值发生了变化，此时需要更新 CustomPopupPicker 组件中对应列的值（展示的值）
-    if (changedIndices?.length > 0) {
-        changeSelectAreaText(changedIndices[0], newValue[changedIndices[0]]);
-    }
-};
-
-/**
- * 修改 CustomPopupPicker 组件中的 columns 数据
- * @param isSearch 是否是在搜索条件下
- * @param val 是否有输入搜索内容
- */
-const handleChangeOriginAreaList = (isSearch = false, val = "") => {
-    changeOriginAreaList(isSearch, val);
-};
+    formData.shipperRegion.countryAreaCode = "001";
+    formData.shipperRegion.provinceAreaCode = "001010";
+    formData.shipperRegion.cityAreaCode = "00101001";
+});
 </script>
 
 <style lang="scss" scoped>
