@@ -31,15 +31,15 @@
       <view class="last-bottom">
         <view>
           <view class="num">0.00</view>
-          <view class="title">余额</view>
+          <view class="title">{{$t('myInfo.balance')}}</view>
         </view>
         <view>
           <view class="num">0</view>
-          <view class="title">积分</view>
+          <view class="title">{{$t('myInfo.integral')}}</view>
         </view>
         <view>
           <view class="num">0</view>
-          <view class="title">余额</view>
+          <view class="title">{{$t('myInfo.coupon')}}</view>
         </view>
         <image src="../../static/account/ico-myInfo.png"></image>
       </view>
@@ -49,50 +49,50 @@
         <view
           ><image src="../../static/account/ico-orderlist.png"></image
         ></view>
-        <view class="title">待我处理</view>
+        <view class="title">{{$t('orderList.pending')}}</view>
       </view>
       <view @tap="jumpProcess">
         <view
           ><image src="../../static/account/ico-processing.png"></image
         ></view>
-        <view class="title">后台处理中</view>
+        <view class="title">{{$t('orderList.process')}}</view>
       </view>
       <view @tap="jumpComplete">
         <view><image src="../../static/account/ico-complete.png"></image></view>
-        <view class="title">已完成</view>
+        <view class="title">{{$t('orderList.completed')}}</view>
       </view>
       <view @tap="jumpOrderTrack">
         <view
           ><image src="../../static/account/ico-queryTrack.png"></image
         ></view>
-        <view class="title">订单轨迹</view>
+        <view class="title">{{$t('orderDetail.orderTrack')}}</view>
       </view>
     </view>
 
     <view class="bottom">
       <view @tap="jumpState">
         <i class="ico-statistical"></i>
-        <view class="title">订单统计</view>
+        <view class="title">{{$t('router.statistical')}}</view>
       </view>
       <view @tap="jumpChangePassword">
         <view class="ico-updatePassword"></view>
-        <view class="title">修改密码</view>
+        <view class="title">{{$t('myInfo.updatePassword')}}</view>
       </view>
       <view @tap="jumpUpdateInfo">
         <view class="ico-updateData"></view>
-        <view class="title">更新资料</view>
+        <view class="title">{{$t('myInfo.updateData')}}</view>
       </view>
       <view @tap="jumpShipper">
         <view class="ico-shipAddr"></view>
-        <view class="title">发货人管理</view>
+        <view class="title">{{$t('myInfo.shipAddr')}}</view>
       </view>
       <view @tap="jumpConsignee">
         <view class="ico-deliveryAddr"></view>
-        <view class="title">收货人管理</view>
+        <view class="title">{{$t('myInfo.deliveryAddr')}}</view>
       </view>
       <view @tap="logoutNow">
         <view class="ico-logout"></view>
-        <view class="title">系统退出</view>
+        <view class="title">{{$t('myInfo.logout')}}</view>
       </view>
       <!--<view @tap="toJumpReferrer">
         <view class="ico-myReferrer"></view>

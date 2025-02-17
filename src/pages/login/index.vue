@@ -3,7 +3,7 @@
         <view class="header">
             <view class="top">
                 <view class="switchLanaguageBtn" @click="handleToggleLanguage('bottom')">
-                    <text>{{ languageList.find((item) => item.value === selectLanguage).text }}</text>
+                    <text>{{ languageList.find((item) => item.value === language).text }}</text>
                     <text :class="['triangle', { active: isShowPopupContainer }]"></text>
                 </view>
                 <view class="onlineServiceBtn"></view>
@@ -12,8 +12,8 @@
             <view class="mid">
                 <view class="logo"></view>
                 <view class="desc">
-                    <view class="title">欢迎使用运力引擎平台</view>
-                    <view class="subTitle">进出口供应链的运力超市，贸易人、货代人的好帮手</view>
+                    <view class="title">{{ $t('login.login') }}</view>
+                    <view class="subTitle">{{ $t('login.h2') }}</view>
                 </view>
             </view>
         </view>
@@ -28,14 +28,16 @@
                             <text class="text iconArrowDown"></text>
                         </view>
                         <!-- uniapp 中的 input，如果需要对 placeHolder 进行样式设置，需要使用 placeholder-class 添加类名 -->
-                        <input type="text" placeholder="请输入手机号" class="input" placeholder-class="placeholderClass" v-model="form.regPhone" />
+                        <input type="text" placeholder="请输入手机号" class="input" placeholder-class="placeholderClass"
+                            v-model="form.regPhone" />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUser.png" alt="" />
                         </view>
                     </view>
 
                     <view class="inputContainer">
-                        <input type="text" placeholder="请输入登录密码" class="input" placeholder-class="placeholderClass" v-model="form.regPwd" />
+                        <input type="text" placeholder="请输入登录密码" class="input" placeholder-class="placeholderClass"
+                            v-model="form.regPwd" />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUnShowPassword.png" alt="" />
                         </view>
@@ -43,7 +45,9 @@
 
                     <view class="rememberAndForgetPassword">
                         <view class="rememberPassword" @tap="handleToggleIsRememberPassword">
-                            <view :class="['rememberPasswordBox', form.isRememberPassword ? 'iconIsRememberPassword' : 'unRememberPassword']"></view>
+                            <view
+                                :class="['rememberPasswordBox', form.isRememberPassword ? 'iconIsRememberPassword' : 'unRememberPassword']">
+                            </view>
                             <view class="defaultText">记住账号密码</view>
                         </view>
                         <view class="forgetPassword">
@@ -68,12 +72,12 @@
 
             <view class="protocol">
                 <view :class="['agreeBtn', form.isAgree ? 'iconAgree' : 'unAgree']" @tap="handleToggleAgree"></view>
-
                 <text class="defaultText">我同意该协议</text>
                 <text>《隐私协议》</text>
                 <text>《注册协议》</text>
                 <text>《物流协议》</text>
             </view>
+
         </view>
 
         <view class="popupLanguageContainer">
@@ -81,13 +85,46 @@
             <uni-popup ref="popupLanguage" @change="handleChangePopupStatus">
                 <view class="popup-content">
                     <view class="title">选择语言</view>
-                    <view
-                        :class="['languageItem', { active: selectLanguage === item.value }]"
-                        v-for="item in languageList"
-                        :key="item.value"
-                        @click="handleChangeLanguage(item.value)"
-                        >{{ item.text }}</view
-                    >
+                    <!-- <view :class="['languageItem', { active: selectLanguage === item.value }]"
+                        v-for="item in languageList" :key="item.value" @click="handleChangeLanguage(item.value)">{{
+                        item.text }}</view> -->
+                    <uni-list>
+                        <uni-list-item>
+                            <template v-slot:header>
+                                <view class="uniList-content" @tap="onClick($event, 1)">
+                                    <view>
+                                        <i class="ico-language ico-chinese"></i>
+                                    </view>
+                                    <view>
+                                        {{ $t('login.zhCN') }}
+                                    </view>
+                                    <view class="icoTick-content">
+                                        <i class="ico-tick" v-if="language === 'zh'"></i>
+                                        <view v-else></view>
+                                    </view>
+                                </view>
+                            </template>
+                        </uni-list-item>
+                        <uni-list-item>
+                            <template v-slot:header>
+                                <view class="uniList-content" @tap="onClick($event, 2)">
+                                    <view>
+                                        <i class="ico-language ico-english"></i>
+                                    </view>
+                                    <view>
+                                        {{ $t('login.enUS') }}
+                                    </view>
+                                    <view class="icoTick-content">
+                                        <i class="ico-tick" v-if="language === 'en'"></i>
+                                        <view v-else></view>
+                                    </view>
+                                </view>
+                            </template>
+                        </uni-list-item>
+                    </uni-list>
+                </view>
+                <view class="btn-language">
+                    <button class="language-primary" @tap="changeLanguage">确认</button>
                 </view>
             </uni-popup>
         </view>
@@ -99,6 +136,12 @@ import moment from "moment";
 import { reactive, ref } from "vue";
 import { loginByPhone } from "@/api/auth";
 import { useAuthStore } from "@/stores";
+import { useI18n } from 'vue-i18n';
+const i18n = useI18n();
+// const changeLanguage = (lang) => {
+//     uni.setLocale(lang);
+//     i18n.locale.value = lang; // 更新 i18n 的 locale
+// }
 const authStore = useAuthStore();
 
 const ERROR_TOSAT_TEXT = {
@@ -114,6 +157,36 @@ const languageList = ref([
 ]);
 const selectLanguage = ref("zh");
 const isShowPopupContainer = ref(false);
+const language = ref('zh')
+
+// const clickUniListItem = (e) =>{
+//     console.log('@@@',e)
+// }
+
+//切换语言
+const changeLanguage = () => {
+    popupLanguage.value.close();
+    uni.setLocale(language.value);
+    i18n.locale.value = language.value; // 更新 i18n 的 locale
+};
+
+const onClick = (event, index) => {
+    if (index === 1) {
+       language.value = 'zh';
+
+    } else if (index === 2) {
+        language.value = 'en';
+    }
+}
+
+const checkChinese = () => {
+    language.value = 'zh'
+}
+
+const checkEnglish = () => {
+    language.value = 'en'
+    console.log('@@@', language.value)
+}
 
 const handleToggleLanguage = (type) => {
     popupLanguage.value.open(type);
@@ -286,6 +359,7 @@ const handleLogin = async () => {
 
             .desc {
                 color: #ffffff;
+
                 .title {
                     margin-bottom: 28rpx;
                     font-weight: 600;
@@ -363,6 +437,7 @@ const handleLogin = async () => {
 
                 .afterExtra {
                     display: flex;
+
                     image {
                         width: 32rpx;
                         height: 32rpx;
@@ -549,6 +624,73 @@ const handleLogin = async () => {
                 &.active {
                     color: #df3030;
                 }
+            }
+
+            .uni-list {
+                width: 100%;
+                margin-top: 25rpx;
+
+                .uniList-content {
+                    display: flex;
+                    align-items: center;
+
+                    >view {
+                        flex: 1;
+                    }
+
+                    .icoTick-content {
+                        position: absolute;
+                        right: 30rpx;
+                    }
+
+                    .ico-tick {
+                        display: inline-block;
+                        width: 23px;
+                        height: 16px;
+                        background: url("../../static/account/ico-tick.png") no-repeat;
+                        background-size: contain;
+                    }
+
+                    .ico-language {
+                        display: inline-block;
+                        width: 40px;
+                        height: 25px;
+                        margin-right: 20px;
+                        margin-top: 10rpx;
+                    }
+
+                    .ico-chinese {
+                        background: url("../../static/account/ico-chinese.png") no-repeat;
+                        background-size: contain;
+                    }
+
+                    .ico-english {
+                        background: url("../../static/account/ico-english.png") no-repeat;
+                        background-size: contain;
+                    }
+
+                }
+            }
+        }
+
+        .btn-language {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 148rpx;
+            background: #ffffff;
+            box-shadow: 0px -4rpx 8rpx 2rpx rgba(230, 220, 220, 0.3);
+            // border-radius: 40rpx 40rpx 0px 0px;
+
+            .language-primary {
+                width: 600rpx;
+                height: 88rpx;
+                line-height: 88rpx;
+                background: #df3030;
+                border-radius: 50rpx;
+                font-size: 28rpx;
+                color: #ffffff;
             }
         }
     }

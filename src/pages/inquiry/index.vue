@@ -35,7 +35,7 @@
               <view class="collapseItem-title">
                 <view class="ico-logistics-default"></view>
                 <view :class="activeName === '1' ? 'active' : ''"
-                  >专线门到门</view
+                  >{{$t('inquiry.speical')}}</view
                 >
                 <i class="ico-put-away" v-if="activeName === '1'"></i>
                 <i class="ico-open" v-else></i>
@@ -55,7 +55,7 @@
               <view class="collapseItem-title">
                 <view class="ico ico-air"></view>
                 <view :class="activeName === '2' ? 'active' : ''"
-                  >机场到机场</view
+                  >{{$t('inquiry.airportTo')}}</view
                 >
                 <i class="ico-put-away" v-if="activeName === '2'"></i>
                 <i class="ico-open" v-else></i>
@@ -74,7 +74,7 @@
               <view class="collapseItem-title">
                 <view class="ico ico-sea"></view>
                 <view :class="activeName === '3' ? 'active' : ''"
-                  >港口到港口</view
+                  >{{$t('inquiry.portTo')}}</view
                 >
                 <i class="ico-put-away" v-if="activeName === '3'"></i>
                 <i class="ico-open" v-else></i>
@@ -93,7 +93,7 @@
               <view class="collapseItem-title">
                 <view class="ico ico-car"></view>
                 <view :class="activeName === '4' ? 'active' : ''"
-                  >国际快递</view
+                  >{{$t('inquiry.expressTo')}}</view
                 >
                 <i class="ico-put-away" v-if="activeName === '4'"></i>
                 <i class="ico-open" v-else></i>
@@ -112,7 +112,7 @@
               <view class="collapseItem-title">
                 <view class="ico ico-railway"></view>
                 <view :class="activeName === '5' ? 'active' : ''"
-                  >国际铁路</view
+                  >{{$t('inquiry.railTo')}}</view
                 >
                 <i class="ico-put-away" v-if="activeName === '5'"></i>
                 <i class="ico-open" v-else></i>
@@ -129,7 +129,7 @@
     <!-- 底部热门城市 -->
     <view class="hot">
       <view class="hot-title">
-        <view>热门城市</view>
+        <view>{{$t('inquiry.hot')}}</view>
         <view class="line"></view>
       </view>
       <view class="hot-list" v-for="(item, index) in hotToday" :key="index">
