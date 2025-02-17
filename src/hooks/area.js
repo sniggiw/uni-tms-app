@@ -98,7 +98,7 @@ export function useAreaList(params) {
     // 省份列表，根据 countryList 的值来获取对应的省份信息，格式为中文字符串 ['北京','上海','广东省'...]
     const provinceList = computed(() => {
         if (!originAreaList.value.length || !countryList.value.length) return [""];
-        return originAreaList.value.find((item) => item.areaName === selectAreaText?.countryText)?.children.map((pItem) => pItem.areaName) || [""];
+        return originAreaList.value?.find((item) => item.areaName === selectAreaText?.countryText)?.children.map((pItem) => pItem.areaName) || [""];
     });
 
     // 城市列表，根据 provinceList 的值来获取对应的省份信息，格式为中文字符串 ['广州市','深圳市',...]
@@ -106,7 +106,7 @@ export function useAreaList(params) {
         if (!originAreaList.value.length || !countryList.value?.length || !provinceList.value?.length) return [""];
         return (
             originAreaList.value
-                .find((item) => item.areaName === selectAreaText.countryText)
+                ?.find((item) => item.areaName === selectAreaText.countryText)
                 ?.children?.find((pItem) => pItem.areaName === selectAreaText.provinceText)
                 ?.children?.map((cItem) => cItem.areaName) || [""]
         );

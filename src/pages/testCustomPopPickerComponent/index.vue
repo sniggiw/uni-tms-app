@@ -5,23 +5,7 @@
                 <!-- 发货人地址 -->
                 <uni-forms-item label-width="90px" label="发货人地区" name="shipperRegion" @tap="handleShowCustomPopupPicker('shipperRegion')">
                     <view class="regionWrap">
-                        <view
-                            v-if="
-                                mergeStr({
-                                    countryText: formData.shipperRegion.countryText,
-                                    provinceText: formData.shipperRegion.provinceText,
-                                    cityText: formData.shipperRegion.cityText,
-                                })
-                            "
-                            class="region"
-                            >{{
-                                mergeStr({
-                                    countryText: formData.shipperRegion.countryText,
-                                    provinceText: formData.shipperRegion.provinceText,
-                                    cityText: formData.shipperRegion.cityText,
-                                })
-                            }}</view
-                        >
+                        <view v-if="shipperRegionText" class="region">{{ shipperRegionText }}</view>
                         <view v-else class="region_unSelected">请选择发货人地区</view>
                         <uni-icons type="right" size="20" color="#999"></uni-icons>
                     </view>
@@ -34,23 +18,7 @@
                 <!-- 收货人地址 -->
                 <uni-forms-item label-width="90px" label="收货人地区" name="consigneeRegion" @tap="handleShowCustomPopupPicker('consigneeRegion')">
                     <view class="regionWrap">
-                        <view
-                            v-if="
-                                mergeStr({
-                                    countryText: formData.consigneeRegion.countryText,
-                                    provinceText: formData.consigneeRegion.provinceText,
-                                    cityText: formData.consigneeRegion.cityText,
-                                })
-                            "
-                            class="region"
-                            >{{
-                                mergeStr({
-                                    countryText: formData.consigneeRegion.countryText,
-                                    provinceText: formData.consigneeRegion.provinceText,
-                                    cityText: formData.consigneeRegion.cityText,
-                                })
-                            }}</view
-                        >
+                        <view v-if="consigneeRegionText" class="region">{{ consigneeRegionText }}</view>
                         <view v-else class="region_unSelected">请选择收货人地区</view>
                         <uni-icons type="right" size="20" color="#999"></uni-icons>
                     </view>
@@ -100,6 +68,22 @@ const formData = reactive({
         provinceAreaCode: "",
         cityAreaCode: "",
     },
+});
+
+const shipperRegionText = computed(() => {
+    return mergeStr({
+        countryText: formData.shipperRegion.countryText,
+        provinceText: formData.shipperRegion.provinceText,
+        cityText: formData.shipperRegion.cityText,
+    });
+});
+
+const consigneeRegionText = computed(() => {
+    return mergeStr({
+        countryText: formData.consigneeRegion.countryText,
+        provinceText: formData.consigneeRegion.provinceText,
+        cityText: formData.consigneeRegion.cityText,
+    });
 });
 
 // 当存在多个位置需要使用到 CustomPopupPicker 组件时，为了避免多次创建 CustomPopupPicker 组件，可以在采用动态传递参数的方式，通过传递不同的参数来控制显示 CustomPopupPicker 组件该显示什么内容
