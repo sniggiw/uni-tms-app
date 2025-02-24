@@ -30,28 +30,28 @@
       <view class="data-box">
         <view class="box-top">
           <view class="left" @tap="jumpInquiry">
-            <view class="h1">系统询价</view>
-            <view class="text">方便快捷</view>
+            <view class="h1">{{$t('orderList.systemInquiry')}}</view>
+            <view class="text">{{$t('orderList.systemInquiryH2')}}</view>
             <view class="left-icon"></view>
           </view>
           <view class="center" @tap="service">
-            <view class="h1">人工询价</view>
-            <view class="text">全天在线</view>
+            <view class="h1">{{$t('orderList.artificialInquiry')}}</view>
+            <view class="text">{{$t('orderList.artificialInquiryH2')}}</view>
             <view class="center-icon"></view>
           </view>
           <view class="right" @tap="jumpStatistical">
-            <view class="h1">订单汇总</view>
-            <view class="text">订单统计</view>
+            <view class="h1">{{$t('inquiry.collect')}}</view>
+            <view class="text">{{$t('orderList.collectH2')}}</view>
             <view class="right-icon"></view>
           </view>
         </view>
         <view class="box-bottom">
           <view class="left" @tap="jumpPending">
-            <view class="tit">待我处理:</view>
+            <view class="tit">{{$t('orderList.pending')}}:</view>
             <view>{{ pendNum }}</view>
           </view>
           <view class="right" @tap="jumpProcess">
-            <view class="tit">后台处理中:</view>
+            <view class="tit">{{$t('orderList.process')}}:</view>
             <view>{{ processNum }}</view>
           </view>
         </view>
@@ -78,7 +78,7 @@
       <!-- 中东生活服务 -->
       <view class="tool-bottom">
         <view class="tool-title">
-          <view class="title-line"></view>运力商务服务
+          <view class="title-line"></view>{{$t('orderList.services')}}
         </view>
         <view class="item">
           <view v-for="(item, index) in services" :key="index" @tap="jumpServices(item.jumpUrl)">
@@ -92,9 +92,10 @@
       <!-- 中东运力 -->
       <view class="bottom">
         <view class="tool-title">
-          <view class="title-line"></view>中东运力
+          <view class="title-line"></view>{{$t('orderList.capacity')}}
         </view>
-        <swiper class="bottom-swipe" indicator-color="#DD312F">
+        
+        <swiper class="bottom-swipe" indicator-color="#ebedf0" indicator-active-color="rgb(221, 49, 47)" :indicator-dots="true">
           <swiper-item>
             <view class="item-swipe">
               <view class="item-swiper" v-for="(item, index) in transportFirst" :key="index"
@@ -131,7 +132,7 @@
       <!-- 运力工具 -->
       <view class="top">
         <view class="tool-title">
-          <view class="title-line"></view>运力工具
+          <view class="title-line"></view>{{$t('orderList.tools')}}
         </view>
         <view class="item">
           <view v-for="(item, index) in tools" :key="index" @tap="jumpTools(item.jumpUrl)">
@@ -167,9 +168,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-// import Api from "@/api/index.js";
 import { getNewIndex, orderIndex, orderPendingIndex, orderProcessing, getCustomerInfoData } from "@/api/common"
-import scrollText from "../../components/scroll/scrollText.vue";
 
 // Props
 const props = defineProps({
@@ -237,14 +236,7 @@ const searchForMebanner = ref([]);
 const buyForMebanner = ref([]);
 const member = ref("");
 
-// const noticeList = ref([
-//   "第一条通知信息",
-//   "第二条通知信息，文字较多时会自动滚动显示。",
-//   "第三条通知信息",
-// ]);
-
 const currentNotice = ref("");
-// const currentIndex = ref(0);
 const noticeList = ref([]);
 const translateY = ref(0); // 控制垂直滚动的偏移量
 const itemHeight = ref(0); // 每条公告的高度
@@ -279,7 +271,7 @@ onMounted(() => {
   orderIndexData();
   getCustomerInfo();
   // confirmButtonText.value = $t("common.determine");
-  // lang.value = localStorage.getItem("lang");
+  lang.value = uni.getStorageSync("lang");
   orderPendingIndexData();
   orderProcess();
   showNextNotice();
@@ -1225,7 +1217,7 @@ const getToast = () => {
     }
   }
 
-  .bottom-swipe .van-swipe-item {
+  .bottom-swipe {
     width: 690rpx;
     height: 220rpx;
     margin: 0 auto;
@@ -1275,7 +1267,9 @@ const getToast = () => {
         }
       }
     }
-
+    :deep(.uni-swiper-dots-horizontal){
+      bottom: -80rpx;
+    }
   }
 }
 

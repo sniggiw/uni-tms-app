@@ -103,7 +103,7 @@ onMounted(() => {
 
 // 待我处理汇总
 const orderPendingIndexData = () => {
-  uni.showLoading({ title: "加载中..." });
+  uni.showLoading();
   orderPendingIndex().then((res) => {
     uni.hideLoading();
     if (res.code === 200) {
@@ -129,7 +129,7 @@ const showFirstList = (item) => {
 
 // 待我处理列表
 const orderPendingListData = (pendingState, orderIds) => {
-  uni.showLoading({ title: "加载中..." });
+  uni.showLoading();
   orderPendingList({
     pendingState: pendingState,
     orderIds: orderIds.toString()
@@ -148,7 +148,7 @@ const orderPendingListData = (pendingState, orderIds) => {
 }
 
 const completionOrderProcess = () => {
-  uni.showLoading({ title: "加载中..." });
+  uni.showLoading();
   orderProcessing({
     flowCode: 'PROCESSING',
     orderCode: orderCode.value
