@@ -4,8 +4,8 @@
       <view class="left" @tap="toJump(1)">
         <view class="left">{{
           inquirySearch[flow]
-            ? inquirySearch[flow].srcTitle || "请选择"
-            : "请选择"
+            ? inquirySearch[flow].srcTitle || $t('inquiry.pleaseCheck')
+            : $t('inquiry.pleaseCheck')
         }}</view>
         <view class="foreign">{{
           inquirySearch[flow]
@@ -23,8 +23,8 @@
       <view class="right" @tap="toJump(2)">
         <view>{{
           inquirySearch[flow]
-            ? inquirySearch[flow].descTitle || "目的港"
-            : "目的港"
+            ? inquirySearch[flow].descTitle || $t('inquiry.pleaseCheckTo')
+            : $t('inquiry.pleaseCheckTo')
         }}</view>
         <view class="foreign">{{
           inquirySearch[flow]
@@ -35,9 +35,9 @@
     </view>
     <view class="check-box">
       <button type="default" class="shortcut-price" @tap="toQuickOrder" v-if="flow == 1">
-        快速下单
+        {{$t('inquiry.quickBtn')}}
       </button>
-      <button class="check-price" @tap="toSearchInquiry">查价</button>
+      <button class="check-price" @tap="toSearchInquiry">{{$t('inquiry.traditionalOrder')}}</button>
     </view>
 
     <!-- 历史询价 -->
@@ -45,7 +45,7 @@
       v-if="historyList[flow] && historyList[flow].length > 0"
       class="inquiry-history"
     >
-      <view class="title">您查询过的路线</view>
+      <view class="title">{{$t('inquiry.historicalRoute')}}</view>
       <view class="history-list">
         <view
           v-for="(item, index) in historyList[flow]"
@@ -75,6 +75,7 @@
 import { ref, reactive, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { inquiryHistory } from "@/api/inquiry";
+import { onLaunch, onShow } from '@dcloudio/uni-app'
 // 获取当前路由实例
 const route = useRoute();
 const props = defineProps({
@@ -295,15 +296,18 @@ const toJumpDetail = (item) => {
 };
 
 const inquiryHistoryData = () => {
+  uni.showLoading();
   inquiryHistory({ flow: props.flow }).then((res) => {
     if (res.code === 200) {
       historyList[props.flow] = res.data;
+      uni.hideLoading();
     } else {
       uni.showToast({
         title: res.msg,
         icon: "none",
         mask: true,
       });
+      uni.hideLoading();
     }
   });
 };
@@ -327,6 +331,7 @@ defineExpose({
   toSearchInquiry,
   toJump,
   toJumpDetail,
+  inquiryHistoryData
 });
 </script>
 

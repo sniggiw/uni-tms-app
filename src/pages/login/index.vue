@@ -3,7 +3,10 @@
         <view class="header">
             <view class="top">
                 <view class="switchLanaguageBtn" @click="handleToggleLanguage('bottom')">
-                    <text>{{ languageList.find((item) => item.value === language).text }}</text>
+                    <!-- <text>{{ languageList.find((item) => item.value === language).text }}</text>
+                    <text :class="['triangle', { active: isShowPopupContainer }]"></text> -->
+                    <text v-if="language === 'zh_CN'">中文</text>
+                    <text v-if="language === 'en_US'">English</text>
                     <text :class="['triangle', { active: isShowPopupContainer }]"></text>
                 </view>
                 <view class="onlineServiceBtn"></view>
@@ -85,43 +88,32 @@
             <uni-popup ref="popupLanguage" @change="handleChangePopupStatus">
                 <view class="popup-content">
                     <view class="title">选择语言</view>
-                    <!-- <view :class="['languageItem', { active: selectLanguage === item.value }]"
-                        v-for="item in languageList" :key="item.value" @click="handleChangeLanguage(item.value)">{{
-                        item.text }}</view> -->
-                    <uni-list>
-                        <uni-list-item>
-                            <template v-slot:header>
-                                <view class="uniList-content" @tap="onClick($event, 1)">
-                                    <view>
-                                        <i class="ico-language ico-chinese"></i>
-                                    </view>
-                                    <view>
-                                        {{ $t('login.zhCN') }}
-                                    </view>
-                                    <view class="icoTick-content">
-                                        <i class="ico-tick" v-if="language === 'zh'"></i>
-                                        <view v-else></view>
-                                    </view>
-                                </view>
-                            </template>
-                        </uni-list-item>
-                        <uni-list-item>
-                            <template v-slot:header>
-                                <view class="uniList-content" @tap="onClick($event, 2)">
-                                    <view>
-                                        <i class="ico-language ico-english"></i>
-                                    </view>
-                                    <view>
-                                        {{ $t('login.enUS') }}
-                                    </view>
-                                    <view class="icoTick-content">
-                                        <i class="ico-tick" v-if="language === 'en'"></i>
-                                        <view v-else></view>
-                                    </view>
-                                </view>
-                            </template>
-                        </uni-list-item>
-                    </uni-list>
+                    <view class="uniList-box">
+                        <view class="uniList-content" @tap="onClick($event, 1)">
+                            <view>
+                                <i class="ico-language ico-chinese"></i>
+                            </view>
+                            <view>
+                                {{ $t('login.zhCN') }}
+                            </view>
+                            <view class="icoTick-content">
+                                <i class="ico-tick" v-if="language === 'zh_CN'"></i>
+                                <view v-else></view>
+                            </view>
+                        </view>
+                        <view class="uniList-content" @tap="onClick($event, 2)">
+                            <view>
+                                <i class="ico-language ico-english"></i>
+                            </view>
+                            <view>
+                                {{ $t('login.enUS') }}
+                            </view>
+                            <view class="icoTick-content">
+                                <i class="ico-tick" @tap="onClick($event, 2)" v-if="language === 'en_US'"></i>
+                                <view @tap="onClick($event, 2)" v-else></view>
+                            </view>
+                        </view>
+                    </view>
                 </view>
                 <view class="btn-language">
                     <button class="language-primary" @tap="changeLanguage">确认</button>
@@ -133,7 +125,7 @@
 
 <script setup>
 import moment from "moment";
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { loginByPhone } from "@/api/auth";
 import { useAuthStore } from "@/stores";
 import { useI18n } from 'vue-i18n';
@@ -151,41 +143,36 @@ const ERROR_TOSAT_TEXT = {
 };
 
 const popupLanguage = ref(null);
-const languageList = ref([
-    { text: "中文", value: "zh" },
-    { text: "English", value: "en" },
-]);
-const selectLanguage = ref("zh");
+const selectLanguage = ref("zh_CN");
 const isShowPopupContainer = ref(false);
-const language = ref('zh')
+const language = ref('zh_CN');
+const storedLanguage = uni.getStorageSync('lang');
 
-// const clickUniListItem = (e) =>{
-//     console.log('@@@',e)
-// }
+onMounted(() => {
+    if (storedLanguage === 'zh_CN') {
+        language.value = 'zh_CN'; // 如果是 'zh_CN'，直接赋值 'zh_CN'
+    } else if (storedLanguage === 'en_US') {
+        language.value = 'en_US'; // 如果是 'en_US'，赋值 'en_US'
+    } else {
+        language.value = 'zh_CN'; // 如果存储的值不是 'zh_CN' 或 'en_US'，默认赋值 'en_US'
+    }
+})
 
 //切换语言
 const changeLanguage = () => {
     popupLanguage.value.close();
     uni.setLocale(language.value);
     i18n.locale.value = language.value; // 更新 i18n 的 locale
+    uni.setStorageSync('lang', language.value); //存储lang
 };
 
 const onClick = (event, index) => {
     if (index === 1) {
-       language.value = 'zh';
+        language.value = 'zh_CN';
 
     } else if (index === 2) {
-        language.value = 'en';
+        language.value = 'en_US';
     }
-}
-
-const checkChinese = () => {
-    language.value = 'zh'
-}
-
-const checkEnglish = () => {
-    language.value = 'en'
-    console.log('@@@', language.value)
 }
 
 const handleToggleLanguage = (type) => {
@@ -626,17 +613,17 @@ const handleLogin = async () => {
                 }
             }
 
-            .uni-list {
+            .uniList-box {
+                display: flex;
+                background-color: #ffffff;
+                position: relative;
+                flex-direction: column;
                 width: 100%;
-                margin-top: 25rpx;
 
                 .uniList-content {
                     display: flex;
                     align-items: center;
-
-                    >view {
-                        flex: 1;
-                    }
+                    margin-top: 20rpx;
 
                     .icoTick-content {
                         position: absolute;
@@ -657,6 +644,7 @@ const handleLogin = async () => {
                         height: 25px;
                         margin-right: 20px;
                         margin-top: 10rpx;
+                        margin-left: 30rpx;
                     }
 
                     .ico-chinese {
@@ -671,6 +659,52 @@ const handleLogin = async () => {
 
                 }
             }
+
+            // .uni-list {
+            //     width: 100%;
+            //     margin-top: 25rpx;
+
+            //     .uniList-content {
+            //         display: flex;
+            //         align-items: center;
+
+            //         >view {
+            //             flex: 1;
+            //         }
+
+            //         .icoTick-content {
+            //             position: absolute;
+            //             right: 30rpx;
+            //         }
+
+            //         .ico-tick {
+            //             display: inline-block;
+            //             width: 23px;
+            //             height: 16px;
+            //             background: url("../../static/account/ico-tick.png") no-repeat;
+            //             background-size: contain;
+            //         }
+
+            //         .ico-language {
+            //             display: inline-block;
+            //             width: 40px;
+            //             height: 25px;
+            //             margin-right: 20px;
+            //             margin-top: 10rpx;
+            //         }
+
+            //         .ico-chinese {
+            //             background: url("../../static/account/ico-chinese.png") no-repeat;
+            //             background-size: contain;
+            //         }
+
+            //         .ico-english {
+            //             background: url("../../static/account/ico-english.png") no-repeat;
+            //             background-size: contain;
+            //         }
+
+            //     }
+            // }
         }
 
         .btn-language {

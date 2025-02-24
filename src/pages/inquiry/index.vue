@@ -1,52 +1,26 @@
 <template>
   <view class="inquiryHome-page">
-    <swiper
-      class="swiper"
-      :indicator-dots="true"
-      :autoplay="true"
-      :interval="3000"
-      :duration="500"
-      :circular="true"
-    >
+    <swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" :circular="true">
       <swiper-item v-for="(item, index) in bannerData" :key="index">
-        <image
-          :src="item.imgFilePath"
-          class="banner-image"
-          mode="widthFix"
-        ></image>
+        <image :src="item.imgFilePath" class="banner-image" mode="widthFix"></image>
       </swiper-item>
     </swiper>
     <!-- 折叠面板 -->
     <view class="container">
-      <uni-collapse
-        accordion
-        v-model="activeName"
-        ref="collapseItemRef"
-        @change="collapseChange"
-      >
-        <uni-collapse-item
-          name="1"
-          :open="true"
-          title-border="none"
-          :show-arrow="false"
-        >
+      <uni-collapse accordion v-model="activeName" ref="collapseItemRef" @change="collapseChange">
+        <uni-collapse-item name="1" :open="true" title-border="none" :show-arrow="false">
           <template v-slot:title>
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico-logistics-default"></view>
-                <view :class="activeName === '1' ? 'active' : ''"
-                  >{{$t('inquiry.speical')}}</view
-                >
+                <view :class="activeName === '1' ? 'active' : ''">{{ $t('inquiry.speical') }}</view>
                 <i class="ico-put-away" v-if="activeName === '1'"></i>
                 <i class="ico-open" v-else></i>
               </view>
             </view>
           </template>
-          <HomeCollapseItem
-            :flow="activeName"
-            :initialData="parentData"
-            @searchInquiryCallback="searchInquiryCallback"
-          ></HomeCollapseItem>
+          <HomeCollapseItem :flow="activeName" :initialData="parentData" @searchInquiryCallback="searchInquiryCallback"
+            ref="childRef"></HomeCollapseItem>
         </uni-collapse-item>
         <!-- 机场到机场 -->
         <uni-collapse-item name="2" title-border="none" :show-arrow="false">
@@ -54,18 +28,14 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-air"></view>
-                <view :class="activeName === '2' ? 'active' : ''"
-                  >{{$t('inquiry.airportTo')}}</view
-                >
+                <view :class="activeName === '2' ? 'active' : ''">{{ $t('inquiry.airportTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '2'"></i>
                 <i class="ico-open" v-else></i>
               </view>
             </view>
           </template>
-          <HomeCollapseItem
-            :flow="activeName"
-            @searchInquiryCallback="searchInquiryCallback"
-          ></HomeCollapseItem>
+          <HomeCollapseItem :flow="activeName" @searchInquiryCallback="searchInquiryCallback" ref="childRef">
+          </HomeCollapseItem>
         </uni-collapse-item>
         <!-- 港口 -->
         <uni-collapse-item name="3" title-border="none" :show-arrow="false">
@@ -73,18 +43,14 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-sea"></view>
-                <view :class="activeName === '3' ? 'active' : ''"
-                  >{{$t('inquiry.portTo')}}</view
-                >
+                <view :class="activeName === '3' ? 'active' : ''">{{ $t('inquiry.portTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '3'"></i>
                 <i class="ico-open" v-else></i>
               </view>
             </view>
           </template>
-          <HomeCollapseItem
-            :flow="activeName"
-            @searchInquiryCallback="searchInquiryCallback"
-          ></HomeCollapseItem>
+          <HomeCollapseItem :flow="activeName" @searchInquiryCallback="searchInquiryCallback" ref="childRef">
+          </HomeCollapseItem>
         </uni-collapse-item>
         <!-- 快递 -->
         <uni-collapse-item name="4" title-border="none" :show-arrow="false">
@@ -92,18 +58,14 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-car"></view>
-                <view :class="activeName === '4' ? 'active' : ''"
-                  >{{$t('inquiry.expressTo')}}</view
-                >
+                <view :class="activeName === '4' ? 'active' : ''">{{ $t('inquiry.expressTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '4'"></i>
                 <i class="ico-open" v-else></i>
               </view>
             </view>
           </template>
-          <HomeCollapseItem
-            :flow="activeName"
-            @searchInquiryCallback="searchInquiryCallback"
-          ></HomeCollapseItem>
+          <HomeCollapseItem :flow="activeName" @searchInquiryCallback="searchInquiryCallback" ref="childRef">
+          </HomeCollapseItem>
         </uni-collapse-item>
         <!-- 铁路 -->
         <uni-collapse-item name="5" title-border="none" :show-arrow="false">
@@ -111,25 +73,21 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-railway"></view>
-                <view :class="activeName === '5' ? 'active' : ''"
-                  >{{$t('inquiry.railTo')}}</view
-                >
+                <view :class="activeName === '5' ? 'active' : ''">{{ $t('inquiry.railTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '5'"></i>
                 <i class="ico-open" v-else></i>
               </view>
             </view>
           </template>
-          <HomeCollapseItem
-            :flow="activeName"
-            @searchInquiryCallback="searchInquiryCallback"
-          ></HomeCollapseItem>
+          <HomeCollapseItem :flow="activeName" @searchInquiryCallback="searchInquiryCallback" ref="childRef">
+          </HomeCollapseItem>
         </uni-collapse-item>
       </uni-collapse>
     </view>
     <!-- 底部热门城市 -->
-    <view class="hot">
+    <view class="hot" v-if="hotToday.length > 0">
       <view class="hot-title">
-        <view>{{$t('inquiry.hot')}}</view>
+        <view>{{ $t('inquiry.hot') }}</view>
         <view class="line"></view>
       </view>
       <view class="hot-list" v-for="(item, index) in hotToday" :key="index">
@@ -138,12 +96,8 @@
           {{ item.flowTemplateTitle }}
         </view>
         <view class="hot-list-content">
-          <view
-            class="custom-card list-item"
-            v-for="(channel, channelIndex) in item.channels"
-            :key="channelIndex"
-            @click="toJumpList(channel, item.flowTemplateId)"
-          >
+          <view class="custom-card list-item" v-for="(channel, channelIndex) in item.channels" :key="channelIndex"
+            @click="toJumpList(channel, item.flowTemplateId)">
             <template v-if="channel.mark === 'HOT'">
               <view class="ico-hot"></view>
             </template>
@@ -182,15 +136,13 @@
               <view class="line"></view>
               <view class="round right-round"></view>
             </view>
-            <template
-              v-if="
-                (item.flowTemplateId == 1 ||
-                  item.flowTemplateId == 2 ||
-                  item.flowTemplateId == 4 ||
-                  item.flowTemplateId == 5) &&
-                lang == 'en_US'
-              "
-            >
+            <template v-if="
+              (item.flowTemplateId == 1 ||
+                item.flowTemplateId == 2 ||
+                item.flowTemplateId == 4 ||
+                item.flowTemplateId == 5) &&
+              lang == 'en_US'
+            ">
               <view class="item-last"> ${{ channel.price }} </view>
             </template>
             <!-- 港口流程不展示单价 -->
@@ -202,11 +154,7 @@
       </view>
     </view>
     <!-- 货物信息弹窗组件 -->
-    <CargoInfoDialog
-      ref="show"
-      :searchData="searchData"
-      :flow="activeName"
-    ></CargoInfoDialog>
+    <CargoInfoDialog ref="show" :searchData="searchData" :flow="activeName"></CargoInfoDialog>
   </view>
 </template>
 
@@ -215,6 +163,7 @@ import { ref, onMounted, reactive, toRefs } from "vue";
 import { getBannerData, inquiryHotToday } from "@/api/inquiry";
 import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
 import CargoInfoDialog from "../inquiry/components/cargoInfoDialog/index.vue";
+import { onLaunch, onShow } from '@dcloudio/uni-app'
 const collapseItemRef = ref(null);
 const activeName = ref("1");
 const searchData = ref({});
@@ -228,15 +177,32 @@ const bannerParams = reactive({
   pageSize: 20, // 分页大小
 });
 const bannerData = ref([]);
+const childRef = ref(null)
 
-onMounted(() => {
+onShow(() => {
+  // 每次回到当前页面都重新加载最新的数据
+  activeName.value = '1'
+  setTimeout(() => {
+    if (childRef.value) {
+      childRef.value.inquiryHistoryData(); // 调用子组件方法
+    }
+  }, 500);
   bannerList();
   inquiryHotTodayData();
   lang.value = uni.getStorageSync("lang");
   setTimeout(() => {
     collapseItemRef.value.resize();
   }, 1500);
-});
+})
+
+// onMounted(() => {
+//   bannerList();
+//   inquiryHotTodayData();
+//   lang.value = uni.getStorageSync("lang");
+//   setTimeout(() => {
+//     collapseItemRef.value.resize();
+//   }, 1500);
+// });
 
 function bannerList() {
   getBannerData(bannerParams).then((response) => {
@@ -325,9 +291,12 @@ const toJumpList = (channel, flowTemplateId) => {
 <style lang="scss" scoped>
 .inquiryHome-page {
   background: #f9f9fa;
+  margin-bottom: -60rpx;
+
   .swiper {
     width: 100%;
-    height: 450rpx; /* 根据需要调整高度 */
+    height: 450rpx;
+    /* 根据需要调整高度 */
   }
 
   .swiper-item {
@@ -339,13 +308,16 @@ const toJumpList = (channel, flowTemplateId) => {
     width: 100%;
     height: 100%;
   }
+
   .container {
     border-radius: 40rpx 40rpx 0px 0px;
     margin: 50rpx 30rpx;
+
     .uni-collapse {
       font-size: 32rpx;
       color: #333333;
       background: #f9f9fa;
+
       // :deep(.uni-collapse-item__wrap.is--transition){
       //   height: auto !important;
       // }
@@ -355,12 +327,15 @@ const toJumpList = (channel, flowTemplateId) => {
         border-radius: 10rpx;
         margin-bottom: 20rpx;
         background-color: #fff;
+
         .collapseItem {
           position: relative;
           padding: 40rpx 40rpx 20rpx;
+
           .uni-collapse-item__wrap {
             padding-bottom: 30rpx;
           }
+
           .collapseItem-title {
             display: flex;
             align-items: center;
@@ -369,6 +344,7 @@ const toJumpList = (channel, flowTemplateId) => {
           .active {
             color: #df3030;
           }
+
           .ico-open {
             display: inline-block;
             width: 44rpx;
@@ -388,17 +364,19 @@ const toJumpList = (channel, flowTemplateId) => {
             position: absolute;
             right: 20rpx;
           }
+
           .ico {
             display: inline-block;
           }
+
           .ico-logistics-default {
             margin-right: 32rpx;
             width: 60rpx;
             height: 60rpx;
-            background: url("../../static/common/ico-logistics-default.png")
-              no-repeat;
+            background: url("../../static/common/ico-logistics-default.png") no-repeat;
             background-size: contain;
           }
+
           .ico-air {
             margin-right: 36rpx;
             width: 60rpx;
@@ -434,8 +412,10 @@ const toJumpList = (channel, flowTemplateId) => {
       }
     }
   }
+
   .hot {
     margin-top: 60rpx;
+    margin-bottom: 30rpx;
 
     .hot-title {
       text-align: center;
@@ -454,6 +434,7 @@ const toJumpList = (channel, flowTemplateId) => {
 
     .hot-list {
       padding: 30rpx;
+
       .title {
         display: flex;
         align-items: center;

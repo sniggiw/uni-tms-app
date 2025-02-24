@@ -62,13 +62,13 @@
             <template v-if="lang === 'zh_CN'">
               <image
                 class="imgage"
-                :src="require('@/static/inquiry/ico-nothan.png')"
+                src="/static/inquiry/ico-nothan.png"
                 fit="contain"
                 v-if="item.taxIncluded == true"
               />
               <image
                 class="imgage"
-                :src="require('@/static/inquiry/ico-nohan.png')"
+                src="/static/inquiry/ico-nohan.png"
                 fit="contain"
                 v-if="item.taxIncluded == false"
               />
@@ -76,13 +76,13 @@
             <template v-if="lang === 'en_US'">
               <image
                 class="dutyImgage-En"
-                :src="require('@/static/inquiry/ico-en-nothan.png')"
+                src="/static/inquiry/ico-en-nothan.png"
                 fit="contain"
                 v-if="item.taxIncluded == true"
               />
               <image
                 class="imgage-En"
-                :src="require('@/static/inquiry/ico-en-nohan.png')"
+                src="/static/inquiry/ico-en-nohan.png"
                 fit="contain"
                 v-if="item.taxIncluded == false"
               />
@@ -256,7 +256,6 @@ const lang = ref(""); // 登录时选择的语言
 
 const transKind = ref([]); // 运输方式筛选数据来源
 const inquiryList = ref([]); // 请求专线列表
-const paramsData = ref({});
 const searchParams = reactive({
   // 首页接收数据传参
   pageNum: 1, // 当前页数
@@ -279,7 +278,6 @@ const searchParams = reactive({
   maxLong: props.searchData.maxLong, // 最大长度
   maxWidth: props.searchData.maxWidth, // 最大宽度
 });
-const closeAddressList = ref(false);
 const receiverCity = ref([]);
 const homeTop = ref(0);
 const sort = ref([
@@ -589,7 +587,6 @@ const service = () => {
       display: flex;
       justify-content: flex-end;
       font-size: 28rpx;
-      margin: 0rpx 0px;
     }
 
     .center {
@@ -598,14 +595,12 @@ const service = () => {
       box-shadow: 0px 12rpx 20rpx #e8e1e157;
       border-radius: 30rpx;
       margin: 30rpx 30rpx 40rpx 30rpx;
-
+      
       .title {
         .imgage {
           width: 114rpx;
           height: 54rpx;
-          position: absolute;
-          right: -2rpx;
-          top: 0;
+          float: right;
           pointer-events: none;
         }
         //英文版含税图片
@@ -648,7 +643,7 @@ const service = () => {
         display: flex;
         justify-content: center; /* 垂直居中 */
         align-items: flex-end; /* 底部居中 */
-
+        
         .leftBox {
           margin: 2rpx 40rpx;
           width: 400rpx;

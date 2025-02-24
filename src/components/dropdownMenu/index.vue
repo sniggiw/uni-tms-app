@@ -49,7 +49,7 @@ provide("currentDropItem", currentDropItem);
   box-sizing: border-box;
 
   &::after {
-    display: block;
+    display: none;
     content: "";
     position: absolute;
     bottom: 0;

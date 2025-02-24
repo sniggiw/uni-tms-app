@@ -461,7 +461,7 @@ const totalPrice = computed(() => {
 
 const getInquiryZxDetailData = () => {
   getInquiryZxDetail(searchA).then((res) => {
-    uni.showLoading({ title: "加载中..." });
+    uni.showLoading();
     if (res.code === 200) {
       uni.hideLoading();
       inquiryDetail.value = res.data;
