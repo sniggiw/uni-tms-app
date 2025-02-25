@@ -2,7 +2,7 @@
   <view class="inquiryHome-page">
     <swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" :circular="true">
       <swiper-item v-for="(item, index) in bannerData" :key="index">
-        <image :src="item.imgFilePath" class="banner-image" mode="widthFix"></image>
+        <image src="https://www.gosun2.com/tms-app/profile\\\\\\20221022\\55ca068bda4246838f2ab211707c7b42.png" class="banner-image" mode="widthFix"></image>
       </swiper-item>
     </swiper>
     <!-- 折叠面板 -->

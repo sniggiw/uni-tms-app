@@ -60,13 +60,13 @@
         <view class="center" v-for="(item, index) in inquiryList" :key="index">
           <view class="title">
             <template v-if="lang === 'zh_CN'">
-              <image
+              <img
                 class="imgage"
                 src="/static/inquiry/ico-nothan.png"
                 fit="contain"
                 v-if="item.taxIncluded == true"
               />
-              <image
+              <img
                 class="imgage"
                 src="/static/inquiry/ico-nohan.png"
                 fit="contain"
@@ -74,13 +74,13 @@
               />
             </template>
             <template v-if="lang === 'en_US'">
-              <image
+              <img
                 class="dutyImgage-En"
                 src="/static/inquiry/ico-en-nothan.png"
                 fit="contain"
                 v-if="item.taxIncluded == true"
               />
-              <image
+              <img
                 class="imgage-En"
                 src="/static/inquiry/ico-en-nohan.png"
                 fit="contain"
@@ -126,7 +126,7 @@
                 <text></text>
                 <text>{{ item.needTimesDesc }}</text>
               </view>
-              <!-- <view>
+              <view>
                 <template v-if="item.pricingType == '按重量'">
                   {{ $t('inquiry.specBegin') }}:
                 </template>
@@ -140,7 +140,7 @@
                   {{ $t('inquiry.specBegin') }}:
                 </template>
                 <text>{{ item.statSpec }}</text>
-              </view> -->
+              </view>
               <view>
                 派送城市:
                 <text>{{ item.destCity }}</text>
@@ -179,7 +179,7 @@
                   {{ item.currencySymbol }}{{ item.continuePrice }}/0.5KG
                   {{ item.currencySymbol }}{{ item.price }}/0.5KG
                 </view>
-                <button
+                <view
                   class="jumpDetail"
                   @tap="
                     placeOrder(
@@ -194,7 +194,7 @@
                   "
                 >
                   点击查价
-                </button>
+              </view>
               </template>
               <template v-if="item.price < 1">
                 <button class="jumpDetail" @click.stop="service()">
@@ -699,6 +699,8 @@ const service = () => {
             width: 220rpx;
             line-height: 70rpx;
             font-size: 30rpx;
+            text-align: center;
+            // position: unset;
           }
         }
       }

@@ -1,6 +1,6 @@
 <template>
   <view class="empty-container">
-    <image src="/static/common/notData.png" class="empty-image" />
+    <img src="/static/common/notData.png" class="empty-image" />
     <text class="empty-text">NO data</text>
   </view>
 </template>
