@@ -151,13 +151,18 @@ export function useAreaList(params) {
         if (!originAreaList.value.length) return { countryAreaCode: "", provinceAreaCode: "", cityAreaCode: "" };
 
         const countryAreaCode = originAreaList.value.find((item) => item.areaName === selectAreaText.countryText).areaCode;
-        const provinceAreaCode = originAreaList.value
-            .find((item) => item.areaName === selectAreaText.countryText)
-            .children.find((pItem) => pItem.areaName === selectAreaText.provinceText).areaCode;
-        const cityAreaCode = originAreaList.value
-            .find((item) => item.areaName === selectAreaText.countryText)
-            .children?.find((pItem) => pItem.areaName === selectAreaText.provinceText)
-            ?.children?.find((cItem) => cItem.areaName === selectAreaText.cityText).areaCode;
+        const provinceAreaCode =
+            params.columnsLength != 3
+                ? ""
+                : originAreaList.value.find((item) => item.areaName === selectAreaText.countryText).children.find((pItem) => pItem.areaName === selectAreaText.provinceText)
+                      .areaCode;
+        const cityAreaCode =
+            params.columnsLength != 3
+                ? ""
+                : originAreaList.value
+                      .find((item) => item.areaName === selectAreaText.countryText)
+                      .children?.find((pItem) => pItem.areaName === selectAreaText.provinceText)
+                      ?.children?.find((cItem) => cItem.areaName === selectAreaText.cityText).areaCode;
 
         return { countryAreaCode, provinceAreaCode, cityAreaCode };
     });

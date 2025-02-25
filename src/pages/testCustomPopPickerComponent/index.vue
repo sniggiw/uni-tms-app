@@ -16,10 +16,10 @@
                 </uni-forms-item>
 
                 <!-- 收货人地址 -->
-                <uni-forms-item label-width="90px" label="收货人地区" name="consigneeRegion" @tap="handleShowCustomPopupPicker('consigneeRegion')">
+                <uni-forms-item label-width="90px" label="收货人国家" name="consigneeRegion" @tap="handleShowCustomPopupPicker('consigneeRegion')">
                     <view class="regionWrap">
                         <view v-if="consigneeRegionText" class="region">{{ consigneeRegionText }}</view>
-                        <view v-else class="region_unSelected">请选择收货人地区</view>
+                        <view v-else class="region_unSelected">请选择收货人国家</view>
                         <uni-icons type="right" size="20" color="#999"></uni-icons>
                     </view>
                 </uni-forms-item>
