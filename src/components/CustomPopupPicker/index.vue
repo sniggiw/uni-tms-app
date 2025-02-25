@@ -18,7 +18,7 @@
 
             <!-- 列表，默认为一列，可多列 -->
             <picker-view class="popup-picker-view" :value="pickerValue" @change="onPickerChange">
-                <picker-view-column v-for="(column, index) in columns" :key="index">
+                <picker-view-column v-for="(column, index) in props.currentRegionType == 'consigneeRegion' ? columns.slice(0, 1) : columns" :key="index">
                     <view class="item" v-for="(item, i) in columns[index]" :key="i">{{ item }}</view>
                 </picker-view-column>
             </picker-view>
@@ -40,12 +40,16 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    currentRegionType: {
+        type: String,
+    },
 });
 
 const emit = defineEmits(["headerBtnStart", "headerBtnEnd", "destroyCustomPopupPicker", "update:modelValue"]);
 
 const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, defaultSelectAreaIndexArr, changeSelectAreaText, changeOriginAreaList } = useAreaList({
     areaList: props.currentAreaList,
+    columnsLength: props.currentRegionType == "consigneeRegion" ? 1 : 3,
     selectAreaText: { countryText: props.modelValue.countryText, provinceText: props.modelValue.provinceText, cityText: props.modelValue.cityText },
 });
 

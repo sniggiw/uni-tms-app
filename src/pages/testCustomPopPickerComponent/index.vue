@@ -35,6 +35,7 @@
             ref="customPopupPickerRef"
             v-model="formData[currentRegionType == 'shipperRegion' ? 'shipperRegion' : 'consigneeRegion']"
             v-model:currentAreaList="currentAreaList"
+            v-model:currentRegionType="currentRegionType"
             @headerBtnStart="handleStart"
             @headerBtnEnd="handleEnd"
             @destroyCustomPopupPicker="handleDestroyCustomPopupPicker"
@@ -112,6 +113,8 @@ const handleDestroyCustomPopupPicker = (status) => {
 const handleShowCustomPopupPicker = async (val) => {
     currentRegionType.value = val;
 
+    currentAreaList.value = val == "consigneeRegion" ? areaStore.area.enCountryAreaList : areaStore.area.cnAreaList;
+
     isShowCustomPopupPicker.value = true;
     nextTick(() => {
         customPopupPickerRef.value.show();
@@ -132,8 +135,6 @@ const handleSubmit = () => {
 };
 
 onMounted(() => {
-    currentAreaList.value = currentRegionType.value == "aaa" ? areaStore.area.enCountryList : areaStore.area.cnAreaList;
-
     formData.shipperRegion.countryText = "中国";
     formData.shipperRegion.provinceText = "江苏省";
     formData.shipperRegion.cityText = "南京市";
