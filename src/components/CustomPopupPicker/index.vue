@@ -36,7 +36,7 @@ const props = defineProps({
         type: Object,
         default: () => {},
     },
-    currentCnAreaList: {
+    currentAreaList: {
         type: Array,
         default: () => [],
     },
@@ -45,7 +45,7 @@ const props = defineProps({
 const emit = defineEmits(["headerBtnStart", "headerBtnEnd", "destroyCustomPopupPicker", "update:modelValue"]);
 
 const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, defaultSelectAreaIndexArr, changeSelectAreaText, changeOriginAreaList } = useAreaList({
-    areaList: props.currentCnAreaList,
+    areaList: props.currentAreaList,
     selectAreaText: { countryText: props.modelValue.countryText, provinceText: props.modelValue.provinceText, cityText: props.modelValue.cityText },
 });
 

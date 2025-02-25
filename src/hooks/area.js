@@ -1,6 +1,25 @@
 import { ref, computed, reactive } from "vue";
-import { areaList, createAreaListMap } from "@/db";
 
+export const createAreaListMap = (areaList) => {
+    const areaListMap = [];
+
+    function traverseAreaList(areaList, prefixAreaCode = "", prefixAreaName = "") {
+        areaList.forEach((area) => {
+            const areaCode = prefixAreaCode ? `${prefixAreaCode}-${area.areaCode}` : area.areaCode;
+            const areaName = prefixAreaName ? `${prefixAreaName}-${area.areaName}` : area.areaName;
+
+            if (area.children) {
+                traverseAreaList(area.children, areaCode, areaName);
+            } else {
+                areaListMap.push({ areaCode, areaName });
+            }
+        });
+    }
+
+    traverseAreaList(areaList);
+
+    return areaListMap;
+};
 // 转换 areaListMap 的方法
 const transformAreaListMapToAreaList = (data) => {
     const result = [];

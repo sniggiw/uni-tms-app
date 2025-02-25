@@ -34,7 +34,7 @@
             v-if="isShowCustomPopupPicker"
             ref="customPopupPickerRef"
             v-model="formData[currentRegionType == 'shipperRegion' ? 'shipperRegion' : 'consigneeRegion']"
-            v-model:currentCnAreaList="currentCnAreaList"
+            v-model:currentAreaList="currentAreaList"
             @headerBtnStart="handleStart"
             @headerBtnEnd="handleEnd"
             @destroyCustomPopupPicker="handleDestroyCustomPopupPicker"
@@ -49,7 +49,6 @@ import { useAreaList } from "@/hooks/area";
 import CustomPopupPicker from "@/components/CustomPopupPicker/index.vue";
 
 const areaStore = useAreaStore();
-console.log("areaStore", areaStore);
 
 const formData = reactive({
     // 发货人地址
@@ -95,7 +94,7 @@ const consigneeRegionText = computed(() => {
 // 现在的 demo 是有两个情况，一是发货人地区，用 shipperRegion 来表示，二是收货人地区，用 consigneeRegion 来表示
 const currentRegionType = ref("");
 
-const currentCnAreaList = ref([]);
+const currentAreaList = ref([]);
 
 const mergeStr = (obj) => {
     return Object.values(obj).filter(Boolean).join("-");
@@ -133,7 +132,7 @@ const handleSubmit = () => {
 };
 
 onMounted(() => {
-    currentCnAreaList.value = areaStore.area.cnAreaList;
+    currentAreaList.value = currentRegionType.value == "aaa" ? areaStore.area.enCountryList : areaStore.area.cnAreaList;
 
     formData.shipperRegion.countryText = "中国";
     formData.shipperRegion.provinceText = "江苏省";
