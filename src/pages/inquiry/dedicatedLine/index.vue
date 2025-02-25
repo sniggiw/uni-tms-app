@@ -40,14 +40,14 @@
       <view class="choice">
         <dropdown-menu activeColor="#ee0a24" sticky>
           <dropdown-item
-            title="全部"
+           :title="$t('inquiry.zxtransKind')"
             :options="sort"
             v-model="searchParams.sort"
             @change="getInquiryZx"
           >
           </dropdown-item>
           <dropdown-item
-            title="运输方式"
+            :title="$t('inquiry.zxtransKind')"
             :options="transKind"
             v-model="searchParams.transKind"
             @change="getInquiryZx"
@@ -106,24 +106,23 @@
           <view class="parameter">
             <view class="leftBox">
               <view>
-                运输方式:
+                {{$t('inquiry.zxtransKind')}}:
                 <text>{{ item.transKind }}</text>
               </view>
               <view>
-                渠道编码:
+                {{$t('orderDetail.channelCode')}}:
                 <text>{{ item.channelCode }}</text>
               </view>
               <view>
-                目的地:
+                {{$t('queryChannel.destCountry')}}:
                 <text>{{ item.destCountry }}</text>
               </view>
               <view>
-                价格标题:
+                {{$t('inquiry.priceTitle')}}:
                 <text>{{ item.priceTitle }}</text>
               </view>
               <view>
-                时效说明
-                <text></text>
+                {{$t('channelDetail.shipTimeTitle')}}
                 <text>{{ item.needTimesDesc }}</text>
               </view>
               <view>
@@ -142,18 +141,18 @@
                 <text>{{ item.statSpec }}</text>
               </view>
               <view>
-                派送城市:
+                {{$t('inquiry.destCity')}}:
                 <text>{{ item.destCity }}</text>
               </view>
               <view>
-                派送费:
+                {{$t('inquiry.deliveryFee')}}:
                 <template
                   v-if="
                     item.deliveryFeeDisplay == '面谈' ||
                     item.deliveryFeeDisplay == 'interview'
                   "
                 >
-                  <text>面谈</text>
+                  <text>{{$t('inquiry.inquiryInterview')}}</text>
                 </template>
                 <template v-else>
                   <text>{{ item.deliveryFeeDisplay }}</text>
@@ -193,12 +192,12 @@
                     )
                   "
                 >
-                  点击查价
+                {{$t('inquiry.clickPrice')}}
               </view>
               </template>
               <template v-if="item.price < 1">
                 <button class="jumpDetail" @click.stop="service()">
-                  联系客服
+                  {{$t('inquiry.inquiryInterview')}}
                 </button>
               </template>
             </view>
@@ -240,6 +239,8 @@ import EmptyComponent from "../../../components/EmptyComponent/index.vue";
 import CargoInfoByDetail from "../components/cargoInfoByDetail/index.vue";
 import dropdownMenu from "../../../components/dropdownMenu/index.vue";
 import dropdownItem from "../../../components/dropdownMenu/item.vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n()
 // 定义 props
 const props = defineProps({
   show: {
@@ -253,7 +254,6 @@ const props = defineProps({
 });
 // 定义响应式变量
 const lang = ref(""); // 登录时选择的语言
-
 const transKind = ref([]); // 运输方式筛选数据来源
 const inquiryList = ref([]); // 请求专线列表
 const searchParams = reactive({
@@ -282,11 +282,11 @@ const receiverCity = ref([]);
 const homeTop = ref(0);
 const sort = ref([
   {
-    name: "价格",
+    name: t('inquiry.priceScreening'),
     value: "1",
   },
   {
-    name: "时效",
+    name: t('inquiry.agingScreening'),
     value: "2",
   },
 ]);
@@ -320,10 +320,7 @@ onBeforeUnmount(() => {
 });
 
 const getInquiryZx = () => {
-  uni.showLoading({
-    title: "加载中...",
-    mask: true,
-  });
+  uni.showLoading();
   let params = JSON.parse(JSON.stringify(searchParams));
   if (params.products && params.products.length > 0) {
     params.products = params.products.toString();
@@ -605,18 +602,14 @@ const service = () => {
         }
         //英文版含税图片
         .dutyImgage-En {
-          position: absolute;
-          right: -4rpx;
-          top: 0;
+          float: right;
           width: 210rpx;
           height: 58rpx;
           pointer-events: none;
         }
         //英文版不含税图片
         .imgage-En {
-          position: absolute;
-          right: 0px;
-          top: 0;
+          float: right;
           width: 130rpx;
           height: 54rpx;
           pointer-events: none;

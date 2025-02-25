@@ -8,7 +8,7 @@
         >
         <view>
           <image src="@/static/inquiry/UPS.png" alt="" />
-          <text class="text">专线</text>
+          <text class="text">{{$t('inquiry.specialDetails')}}</text>
         </view>
         <view
           >{{ destCountry }}<text>{{ destCountryEn }}</text></view
@@ -22,12 +22,12 @@
         <view class="tolo">{{ inquiryDetail.title }}</view>
         <view class="fontSize">
           <view
-            >时效说明:<text>{{ inquiryDetail.needTimesDesc }}</text></view
+            >{{$t('inquiry.needTimesDesc')}}:<text>{{ inquiryDetail.needTimesDesc }}</text></view
           >
           <view
-            >运输方式:<text>{{ inquiryDetail.transDeviceType }}</text></view
+            >{{$t('channelDetail.transDeviceType')}}:<text>{{ inquiryDetail.transDeviceType }}</text></view
           >
-          <!-- <view>
+          <view>
             <template v-if="inquiryDetail.pricingType === '按重量'">
               {{ $t('inquiry.specBegin') }}:
             </template>
@@ -41,11 +41,11 @@
               {{ $t('inquiry.specBegin') }}:
             </template>
             <text>{{ inquiryDetail.statSpec }}</text>
-          </view> -->
+          </view>
           <!-- 底部预估价格＝ 基础价格 + 选取的服务费用  当列表页price<0的时，则为面谈-->
           <template v-if="price > 0">
             <view class="price">
-              总价:
+              {{$t('inquiry.zxDetailTotal')}}:
               <view class="totalPrice"
                 >{{ inquiryDetail.currencySymbol
                 }}{{ inquiryDetail.totalPrice }}</view
@@ -54,25 +54,25 @@
           </template>
           <template v-if="price < 1">
             <view class="price" @tap.stop="service()">
-              总价:
-              <view class="totalPrice">咨询在线客服</view>
+              {{$t('inquiry.zxDetailTotal')}}:
+              <view class="totalPrice">{{$t('inquiry.clickService')}}</view>
             </view>
           </template>
           <view class="ion" @tap="search">
-            明细
+            {{$t('inquiry.particulars')}}
             <view type="down" size="15" :class="[state ? 'g' : 'a']"></view>
           </view>
         </view>
         <template v-if="inquiryDetail.pricingType !== '按首续重'">
           <view class="price-list" v-if="priceA">
             <view class="price-title">
-              <view>费用项</view>
-              <view>单价</view>
-              <view>总价</view>
+              <view>{{$t('inquiry.costItem')}}</view>
+              <view>{{$t('inquiry.unitPrice')}}</view>
+              <view>{{$t('inquiry.subtotal')}}</view>
             </view>
             <template v-if="price > 0">
               <view class="price-item">
-                <view>运费</view>
+                <view>{{$t('inquiry.freight')}}</view>
                 <view v-if="inquiryDetail.pricingType === '按重量'"
                   >{{ inquiryDetail.currencySymbol }}{{ price }}/kg</view
                 >
@@ -91,9 +91,9 @@
 
             <template v-if="price < 1">
               <view class="price-item">
-                <view>运费</view>
-                <view>咨询在线客服</view>
-                <view class="price">咨询在线客服</view>
+                <view>{{$t('inquiry.freight')}}</view>
+                <view>{{$t('inquiry.clickService')}}</view>
+                <view class="price">{{$t('inquiry.clickService')}}</view>
               </view>
             </template>
           </view>
@@ -102,13 +102,13 @@
         <template v-else>
           <view class="price-list" v-if="priceA">
             <view class="price-title">
-              <view>费用项</view>
-              <view>首重0.5KG</view>
-              <view>续重(0.5KG)</view>
+              <view>{{$t('inquiry.costItem')}}</view>
+              <view>{{$t('inquiry.firstWeight')}}</view>
+              <view>{{$t('inquiry.continuationWeight')}}</view>
             </view>
             <template v-if="price > 0">
               <view class="price-item">
-                <view>运费</view>
+                <view>{{$t('inquiry.freight')}}</view>
                 <view>{{ inquiryDetail.currencySymbol }}{{ price }}</view>
                 <view class="price"
                   >{{ inquiryDetail.currencySymbol
@@ -116,7 +116,7 @@
                 >
               </view>
               <view class="price-item">
-                <view>总价</view>
+                <view>{{$t('inquiry.subtotal')}}</view>
                 <view></view>
                 <view
                   >{{ inquiryDetail.currencySymbol
@@ -124,12 +124,12 @@
                 >
               </view>
             </template>
-
+            <!-- 面谈情况 -->
             <template v-if="price < 1">
               <view class="price-item">
-                <view>运费</view>
-                <view>咨询在线客服</view>
-                <view class="price">咨询在线客服</view>
+                <view>{{$t('inquiry.freight')}}</view>
+                <view>{{$t('inquiry.clickService')}}</view>
+                <view class="price">{{$t('inquiry.clickService')}}</view>
               </view>
             </template>
           </view>
@@ -148,13 +148,13 @@
       <template v-if="serviceBillsDetailVos.length > 0">
         <view class="custom-card list">
           <view>
-            <view class="title">如果您的货物满足以下费用请勾选</view>
+            <view class="title">{{$t('inquiry.checkService')}}</view>
             <CheckboxGroup v-model="serviceBillsDetailVosCheckState">
               <view v-for="(item, index) in serviceBillsDetailVos" :key="index">
                 <view class="absence-price" v-if="item.isTotalItem === 0">
                   {{ item.costItem }}
                   <text
-                    >总价{{ inquiryDetail.currencySymbol
+                    >{{$t('inquiry.totalPrice')}}{{ inquiryDetail.currencySymbol
                     }}{{ item.costPrice }}</text
                   >
                 </view>
@@ -163,7 +163,7 @@
                     {{ item.costItem }}
                   </Checkbox>
                   <view class="total"
-                    >总价{{ inquiryDetail.currencySymbol
+                    >{{$t('inquiry.totalPrice')}}{{ inquiryDetail.currencySymbol
                     }}{{ getPrice(item.costPrice * item.num) }}</view
                   >
                   <!-- 步进器 -->
@@ -181,7 +181,7 @@
                         :min="1"
                       />
                       <view
-                        >单价{{ inquiryDetail.currencySymbol
+                        >{{$t('inquiry.unitPrice')}}{{ inquiryDetail.currencySymbol
                         }}{{ getPrice(item.costPrice) }}/{{ item.unit }}</view
                       >
                     </view>
@@ -195,13 +195,13 @@
       </template>
       <template v-if="feeBillsDetailVos.length > 0">
         <view class="custom-card list">
-          <view class="title">如果您的货物满足以下费用请勾选</view>
+          <view class="title">{{$t('inquiry.checkService')}}</view>
           <CheckboxGroup v-model="feeBillsDetailVosCheckState">
             <view v-for="(item, index) in feeBillsDetailVos" :key="index">
               <view class="absence-price" v-if="item.isTotalItem === 0">
                 {{ item.costItem }}{{ $t("inquiry.notTotalPrice") }}
                 <text
-                  >总价{{ inquiryDetail.currencySymbol
+                  >{{$t('inquiry.totalPrice')}}{{ inquiryDetail.currencySymbol
                   }}{{ item.costPrice }}</text
                 >
               </view>
@@ -210,7 +210,7 @@
                   {{ item.costItem }}
                 </Checkbox>
                 <view class="total"
-                  >总价{{ inquiryDetail.currencySymbol
+                  >{{$t('inquiry.totalPrice')}}{{ inquiryDetail.currencySymbol
                   }}{{ getPrice(item.costPrice * item.num) }}</view
                 >
                 <!-- 步进器 -->
@@ -228,7 +228,7 @@
                       :min="1"
                     />
                     <view
-                      >单价{{ inquiryDetail.currencySymbol
+                      >{{$t('inquiry.unitPrice')}}{{ inquiryDetail.currencySymbol
                       }}{{ getPrice(item.costPrice) }}/{{ item.unit }}</view
                     >
                   </view>
@@ -241,12 +241,12 @@
       </template>
       <!-- 产品介绍 -->
       <view class="custom-card foot">
-        <view class="title">可运产品</view>
+        <view class="title">{{$t('inquiry.productIntroduction')}}</view>
         <view class="hx"></view>
         <!-- 寄运规则 -->
         <view class="rule">
           <view class="bg"></view>
-          <view class="tit">运输规则</view>
+          <view class="tit">{{$t('inquiry.shippingRules')}}</view>
           <view class="matter" ref="sidebarBox">
             <view ref="p2" class="rule-text">
               <view v-html="inquiryDetail.shippingRules"></view>
@@ -259,7 +259,7 @@
         <!-- 注意事项 -->
         <view class="rule">
           <view class="bg"></view>
-          <view class="tit">可运产品</view>
+          <view class="tit">{{$t('inquiry.noteDetail')}}</view>
           <view class="matter" ref="matterBox">
             <view ref="p2" class="rule-text">
               <view v-html="inquiryDetail.noteDetail"></view>
@@ -272,7 +272,7 @@
         <!-- 赔偿标准 -->
         <view class="rule">
           <view class="bg"></view>
-          <view class="tit">可运产品</view>
+          <view class="tit">{{$t('inquiry.compensationStandard')}}</view>
           <view class="matter" ref="measureBox">
             <view ref="p2" class="rule-text">
               <view v-html="inquiryDetail.compensationStandard"></view>
@@ -288,20 +288,20 @@
     <view class="detailLast">
       <view class="detailContent">
         <view class="title">
-          <view>预估费用</view>
+          <view>{{$t('inquiry.forecastCost')}}</view>
           <view class="price">{{ getPrice(totalPrice) }}</view>
         </view>
         <view class="detail" @tap="searchPrice">
-          明细
+          {{$t('inquiry.particulars')}}
           <view type="down" size="15" :class="[detal ? 'g' : 'a']"></view>
         </view>
         <view class="placeOrderButton">
-          <button type="default cust-btn" @tap="placeOrder()">立即下单</button>
+          <button type="default cust-btn" @tap="placeOrder()">{{$t('inquiry.placeOrder')}}</button>
         </view>
       </view>
       <view class="detailText" v-if="contentDetail">
         <view
-          >运费总价：{{ inquiryDetail.currencySymbol
+          >{{$t('inquiry.zxDetailTotal')}}:{{ inquiryDetail.currencySymbol
           }}{{ inquiryDetail.totalPrice }}</view
         >
         <view
@@ -311,7 +311,7 @@
           )"
           :key="index"
         >
-          <view>附加费：{{ item.name }}{{ item.costItem }}</view>
+          <view>{{$t('inquiry.feeAtt')}}:{{ item.name }}{{ item.costItem }}</view>
           <view
             >{{ inquiryDetail.currencySymbol
             }}{{ getPrice(item.costPrice * item.num) }}</view
