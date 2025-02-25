@@ -66,7 +66,7 @@ export function useAreaList(params) {
     );
 
     // 原始的地区信息（根据接口返回的数据）
-    const originAreaList = ref(areaList);
+    const originAreaList = ref(params.areaList);
 
     /**
      * 在非搜索条件下和搜索条件下，originAreaList 的数据是不一样的
@@ -75,14 +75,14 @@ export function useAreaList(params) {
      */
     const changeOriginAreaList = (isSearch = false, val = "") => {
         if (isSearch && val) {
-            const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(areaList).filter((item) => item.areaName.includes(val)));
+            const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(params.areaList).filter((item) => item.areaName.includes(val)));
             originAreaList.value = _originAreaList;
             selectAreaText.countryText = _originAreaList[0] ? _originAreaList[0]?.areaName : "";
             selectAreaText.provinceText = _originAreaList[0] && _originAreaList[0]?.children ? _originAreaList[0]?.children[0]?.areaName : "";
             selectAreaText.cityText =
                 _originAreaList[0] && _originAreaList[0]?.children && _originAreaList[0]?.children[0]?.children ? _originAreaList[0]?.children[0]?.children[0]?.areaName : "";
         } else {
-            originAreaList.value = areaList;
+            originAreaList.value = params.areaList;
             selectAreaText.countryText = "中国";
             selectAreaText.provinceText = "北京市";
             selectAreaText.cityText = "";
