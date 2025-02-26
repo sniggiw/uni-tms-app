@@ -94,7 +94,7 @@ export function useAreaList(params) {
      */
     const changeOriginAreaList = (isSearch = false, val = "") => {
         if (isSearch && val) {
-            const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(params.areaList).filter((item) => item.areaName.includes(val)));
+            const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(params.areaList).filter((item) => item.areaName.toLowerCase().includes(val.toLowerCase())));
             originAreaList.value = _originAreaList;
             selectAreaText.countryText = _originAreaList[0] ? _originAreaList[0]?.areaName : "";
             selectAreaText.provinceText = _originAreaList[0] && _originAreaList[0]?.children ? _originAreaList[0]?.children[0]?.areaName : "";
