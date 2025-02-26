@@ -3,29 +3,32 @@
     <uni-forms @submit="onSubmit" :model="form" ref="formRef">
       <view class="top">
         <uni-forms-item
-          label="重量(KG)"
+          :label="$t('inquiry.weight')"
           required
           :name="['weight']"
-          :rules="[{ required: true, errorMessage: '请填写重量' }]"
+          :rules="[{ required: true, errorMessage: $t('inquiry.tips') }]"
         >
           <uni-easyinput
             type="number"
             v-model="form.weight"
             :inputBorder="false"
+            :placeholder="$t('inquiry.weightPlaceholder')"
           />
         </uni-forms-item>
-        <uni-forms-item label="方数" required>
+        <uni-forms-item :label="$t('inquiry.squares')" required>
           <uni-easyinput
             type="number"
+            :placeholder="$t('goods.squaresPlaceholder')"
             v-model="form.squares"
             :inputBorder="false"
           />
         </uni-forms-item>
-        <uni-forms-item label="件数" required>
+        <uni-forms-item :label="$t('inquiry.amount')" required>
           <uni-easyinput
             type="number"
             v-model="form.transCount"
             :inputBorder="false"
+            :placeholder="$t('inquiry.amountPlaceholder')"
           />
           <uni-data-select
             v-model="form.transUnit"
@@ -35,21 +38,22 @@
         </uni-forms-item>
       </view>
       <view class="top" v-if="flow == 1">
-        <uni-forms-item label="派送城市">
+        <uni-forms-item :label="$t('inquiry.destCity')" >
           <uni-data-select
             v-model="form.destCity"
             class="destCity-select"
             :localdata="receiverCityData"
+            :placeholder="$t('inquiry.destCityPlaceholder')"
           />
         </uni-forms-item>
-        <uni-forms-item label="最大长度">
-          <uni-easyinput type="number" v-model="form.maxLong" :border="false" />
+        <uni-forms-item :label="$t('inquiry.maxLong')">
+          <uni-easyinput type="number" v-model="form.maxLong" :border="false"  :placeholder="$t('inquiry.maxLongPlaceholder')"/>
         </uni-forms-item>
-        <uni-forms-item label="最大宽度">
-          <uni-easyinput type="number" v-model="form.maxWidth" />
+        <uni-forms-item :label="$t('inquiry.maxWidth')">
+          <uni-easyinput type="number" v-model="form.maxWidth" :placeholder="$t('inquiry.maxWidthPlaceholder')"/>
         </uni-forms-item>
-        <uni-forms-item label="最大高度">
-          <uni-easyinput type="number" v-model="form.maxHeight" />
+        <uni-forms-item  :label="$t('inquiry.maxHeight')">
+          <uni-easyinput type="number" v-model="form.maxHeight"  :placeholder="$t('inquiry.maxHeightPlaceholder')"/>
         </uni-forms-item>
       </view>
       <!-- 货物品名选择 -->
@@ -80,8 +84,8 @@
           </view>
         </view>
         <view class="footer-detail-btn">
-          <button class="close" @click="close">关闭</button>
-          <button class="confirm" @click="onSubmit">获取价格</button>
+          <button class="close" @click="close">{{$t('inquiry.shutdownButton')}}</button>
+          <button class="confirm" @click="onSubmit">{{$t('inquiry.priceButton')}}</button>
         </view>
       </view>
     </uni-forms>
@@ -91,7 +95,8 @@
 import { ref, computed, watch, onMounted, reactive } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import { getDictTypes } from "@/api/common";
-
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const props = defineProps({
   searchData: {
     type: Object,
@@ -198,7 +203,7 @@ const onSubmit = () => {
         emit("cargoInfoCallback", form);
       } else {
         uni.showToast({
-          title: "请选择货物品名",
+          title: t('inquiry.productsAttrPlaceholder'),
           duration: 2000,
           icon: "none",
         });
@@ -206,7 +211,7 @@ const onSubmit = () => {
     })
     .catch((err) => {
       uni.showToast({
-        title: "请填写完必填选项",
+        title: t('common.onSubmitError'),
         duration: 2000,
         icon: "none",
       });

@@ -112,23 +112,31 @@ export default {
 }
 
 .group {
-  padding: 20rpx 0;
+  padding: 20rpx 30rpx;
 }
 
 .group-title {
   font-size: 32rpx;
   font-weight: bold;
   padding: 20rpx;
-  background-color: #f5f5f5;
+  
 }
 
 .group-items {
   padding: 20rpx;
+  box-shadow: 0px 6rpx 10rpx 2rpx rgba(232,225,225,0.34);
+  border-radius: 30rpx;
+  overflow: hidden;
 }
 
 .group-item {
-  padding: 10rpx 0;
+  padding: 20rpx 0;
   cursor: pointer;
+  border-bottom: 1rpx solid #ebedf0;
+}
+
+.group-item:last-child {
+  border-bottom: none;
 }
 
 .index-bar {
@@ -150,7 +158,8 @@ export default {
 }
 
 .index-item.active {
-  color: #007aff;
+  /* color: #007aff; */
+  color: #DF3030;
   font-weight: bold;
 }
 </style>

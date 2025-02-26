@@ -6,10 +6,11 @@
         @confirm="inquiryAddrData"
         cancelButton="none"
         radius="50"
+        :placeholder="$t('inquiry.enterCity')"
       ></uni-search-bar>
-      <button type="default" @tap="inquiryAddrData">搜索</button>
+      <view type="text" @tap="inquiryAddrData" class="search-btn">{{$t('common.search')}}</view>
     </view>
-    <MyIndexBar :data="addrList" @item-click="handleItemClick"></MyIndexBar>
+    <MyIndexBar :data="addrList" @item-click="handleItemClick" class="my-indexBar"></MyIndexBar>
   </view>
 </template>
 
@@ -146,14 +147,19 @@ const handleItemClick = (item) => {
 
 <style lang="scss" scoped>
 .addressList-page {
+  background: #f9f9fa;
   .top-search {
     display: flex;
     align-items: center;
+    background: #DF3030;
     .uni-searchbar {
-      width: 80%;
+      width: 85%;
     }
     .uni-button:after {
       border: 0 !important;
+    }
+    .search-btn{
+      color: #fff;
     }
   }
 }

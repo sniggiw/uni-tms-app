@@ -196,9 +196,9 @@
               </view>
               </template>
               <template v-if="item.price < 1">
-                <button class="jumpDetail" @click.stop="service()">
+                <view class="jumpDetail" @click.stop="service()">
                   {{$t('inquiry.inquiryInterview')}}
-                </button>
+                </view>
               </template>
             </view>
           </view>
@@ -240,7 +240,7 @@ import CargoInfoByDetail from "../components/cargoInfoByDetail/index.vue";
 import dropdownMenu from "../../../components/dropdownMenu/index.vue";
 import dropdownItem from "../../../components/dropdownMenu/item.vue";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n()
+const { t } = useI18n();
 // 定义 props
 const props = defineProps({
   show: {

@@ -177,6 +177,7 @@ const locale = {
     "customerService":"Contact us",
     "unit":"single",
     "copyText":"copy",
+    "onSubmitError":"Please fill in the required fields",
 	},
   "confirmTips": {
     "confirmShipment": 'Do you confirm delivery?',
