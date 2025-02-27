@@ -19,6 +19,7 @@ import { inquiryAddr } from "@/api/inquiry";
 import { ref, onMounted, reactive, toRefs, computed } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
 import MyIndexBar from "../../../components/indexBar/index.vue";
+
 const addrList = ref([]);
 const search = reactive({
   flow: "", // 业务流程ID：1-专线流程，2-国际机场流程，3-国际港口流程，4-国际快递流程，5-国际铁路流程,可用值:AIRPORT,EXPRESS,PORT,TRAIN,ZX	query	false

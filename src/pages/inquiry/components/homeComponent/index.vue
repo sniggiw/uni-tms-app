@@ -35,24 +35,16 @@
     </view>
     <view class="check-box">
       <button type="default" class="shortcut-price" @tap="toQuickOrder" v-if="flow == 1">
-        {{$t('inquiry.quickBtn')}}
+        {{ $t('inquiry.quickBtn') }}
       </button>
-      <button class="check-price" @tap="toSearchInquiry">{{$t('inquiry.traditionalOrder')}}</button>
+      <button class="check-price" @tap="toSearchInquiry">{{ $t('inquiry.traditionalOrder') }}</button>
     </view>
 
     <!-- 历史询价 -->
-    <view
-      v-if="historyList[flow] && historyList[flow].length > 0"
-      class="inquiry-history"
-    >
-      <view class="title">{{$t('inquiry.historicalRoute')}}</view>
+    <view v-if="historyList[flow] && historyList[flow].length > 0" class="inquiry-history">
+      <view class="title">{{ $t('inquiry.historicalRoute') }}</view>
       <view class="history-list">
-        <view
-          v-for="(item, index) in historyList[flow]"
-          :key="index"
-          class="item"
-          @tap="toJumpDetail(item)"
-        >
+        <view v-for="(item, index) in historyList[flow]" :key="index" class="item" @tap="toJumpDetail(item)">
           <view class="left">
             <view class="city">{{ item.startPos.title }}</view>
             <view>{{ item.weight }}kg</view>
@@ -75,7 +67,7 @@
 import { ref, reactive, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { inquiryHistory } from "@/api/inquiry";
-import { onLaunch, onShow } from '@dcloudio/uni-app'
+import { onLaunch, onShow, onUnload } from '@dcloudio/uni-app'
 // 获取当前路由实例
 const route = useRoute();
 const props = defineProps({
@@ -134,10 +126,10 @@ const inquirySearch = reactive({
 
 // Lifecycle
 onMounted(() => {
-  // lang.value = uni.getStorageSync("lang");
-  // 清除 localStorage 中的数据
-  uni.removeStorageSync("departure");
-  uni.removeStorageSync("destination");
+
+});
+
+onShow(() => {
   Object.keys(inquirySearch).forEach((key) => {
     inquirySearch[key] = {
       srcTitle: "",
@@ -148,7 +140,7 @@ onMounted(() => {
       destScode: "",
     };
   });
-});
+})
 
 watch(
   () => route.fullPath,
@@ -178,7 +170,7 @@ watch(
 );
 
 // 快速下单
-const toQuickOrder = () =>{
+const toQuickOrder = () => {
   const inquirySearchData = inquirySearch[props.flow];
   if (!inquirySearchData.srcTitle) {
     uni.showToast({
@@ -241,7 +233,7 @@ const toJumpDetail = (item) => {
     destScode: item.endPos.scode,
     descTitleEn: item.endPos.titleEn,
     transCount: item.transCount,
-    transUnit:item.transUnit,
+    transUnit: item.transUnit,
     flow: item.flowId,
     squares: item.squares,
     weight: item.weight,
@@ -322,6 +314,19 @@ watch(
   { immediate: true }
 );
 
+// onUnload(() => {
+//   Object.keys(inquirySearch).forEach((key) => {
+//     inquirySearch[key] = {
+//       srcTitle: "",
+//       srcTitleEn: "",
+//       descTitle: "",
+//       descTitleEn: "",
+//       srcScode: "",
+//       destScode: "",
+//     };
+//   });
+// });
+
 // Expose state and methods
 defineExpose({
   lang,
@@ -341,6 +346,7 @@ defineExpose({
   margin: 24rpx auto;
   margin-bottom: 60rpx;
 }
+
 .open-content {
   display: flex;
   align-items: center;
@@ -353,6 +359,7 @@ defineExpose({
   .right {
     flex: 1;
     text-overflow: ellipsis;
+
     .foreign {
       margin-top: 10rpx;
       font-size: 26rpx;
@@ -402,6 +409,7 @@ defineExpose({
 .check-box {
   display: flex;
   align-items: center;
+
   .shortcut-price {
     display: flex;
     align-items: center;
@@ -416,6 +424,7 @@ defineExpose({
     color: #df3030;
     margin-right: 30rpx;
   }
+
   .check-price {
     display: flex;
     align-items: center;
@@ -433,6 +442,7 @@ defineExpose({
 .inquiry-history {
   margin-top: 30rpx;
   margin-left: 20rpx;
+
   .title {
     margin-bottom: 20rpx;
     font-size: 24rpx;
@@ -451,6 +461,7 @@ defineExpose({
     border-radius: 16rpx;
     margin-right: 30rpx;
     margin-left: -20rpx;
+
     &:nth-of-type(even) {
       margin-right: 40rpx; //历史询价记录只展示两个
     }
@@ -468,6 +479,7 @@ defineExpose({
         font-size: 26rpx;
         color: #333;
       }
+
       .squares {
         width: 150rpx;
       }
@@ -483,10 +495,12 @@ defineExpose({
         background-size: contain;
       }
     }
+
     .left {
       min-width: 138rpx;
       margin-right: 10rpx;
     }
+
     .right {
       text-align: right;
     }

@@ -371,6 +371,8 @@ const logoutNow = () => {
     content: "确定要退出登录吗？",
     success: (res) => {
       if (res.confirm) {
+        uni.removeStorageSync("departure");
+        uni.removeStorageSync("destination");
         authStore.clearAuthInfo();
         getCustomerInfoData();
       } else if (res.cancel) {

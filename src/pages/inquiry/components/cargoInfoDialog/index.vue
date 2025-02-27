@@ -269,6 +269,7 @@ import CategoryDialog from "../../components/categoryDialog/index.vue";
 import { ref, reactive, onMounted, watch, defineEmits, defineProps } from "vue";
 import { getDictTypes } from "@/api/common";
 import { listReceiverCity } from "@/api/inquiry";
+import { onLaunch, onShow, onUnload } from '@dcloudio/uni-app'
 const show = ref(null);
 const form = reactive({
   transKind: "",
@@ -323,7 +324,7 @@ watch(
   { immediate: true }
 );
 
-onMounted(() => {
+onShow(() => {
   let dicTitles =
     "专线设置.运输类别,专线设置.件数单位,快递设置.包裹类型,港口设置.装箱类型";
   getDictTypes({ dicTitles }).then((response) => {

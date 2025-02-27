@@ -8,7 +8,7 @@
     <!-- 折叠面板 -->
     <view class="container">
       <uni-collapse accordion v-model="activeName" ref="collapseItemRef" @change="collapseChange">
-        <uni-collapse-item name="1" :open="true" title-border="none" :show-arrow="false">
+        <uni-collapse-item name="1" title-border="none" :show-arrow="false">
           <template v-slot:title>
             <view class="collapseItem">
               <view class="collapseItem-title">
@@ -192,10 +192,11 @@ onShow(() => {
   lang.value = uni.getStorageSync("lang");
   setTimeout(() => {
     collapseItemRef.value.resize();
-  }, 1500);
+  }, 900);
 })
 
 // onMounted(() => {
+//   activeName.value = '1'
 //   bannerList();
 //   inquiryHotTodayData();
 //   lang.value = uni.getStorageSync("lang");
