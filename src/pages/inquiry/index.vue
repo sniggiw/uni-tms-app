@@ -163,7 +163,7 @@ import { ref, onMounted, reactive, toRefs } from "vue";
 import { getBannerData, inquiryHotToday } from "@/api/inquiry";
 import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
 import CargoInfoDialog from "../inquiry/components/cargoInfoDialog/index.vue";
-import { onLaunch, onShow } from '@dcloudio/uni-app'
+import { onShow } from '@dcloudio/uni-app';
 const collapseItemRef = ref(null);
 const activeName = ref("1");
 const searchData = ref({});

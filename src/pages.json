@@ -92,6 +92,12 @@
 			"style": {
 				"navigationBarTitleText": "编辑地址"
 			}
+		},
+		{
+			"path": "pages/order/billConfirm/index/index",
+			"style": {
+				"navigationBarTitleText": "确认账单"
+			}
 		}
 	],
 	"globalStyle": {

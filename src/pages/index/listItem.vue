@@ -136,7 +136,7 @@ const goJump = (item, pendingState) => {
       });
     } else if (pendingState === 'CONFIRM_BILL') {
       uni.navigateTo({
-        url: `/order/billConfirm?id=${item.id}&pendingState=${props.pendingState}&flowTemplateId=${item.flowTemplateId}&orderCode=${item.orderCode}`
+        url: `/pages/order/billConfirm/index/index?id=${item.id}&pendingState=${props.pendingState}&flowTemplateId=${item.flowTemplateId}&orderCode=${item.orderCode}`
       });
     } else if (pendingState === 'PAID') {
       uni.navigateTo({

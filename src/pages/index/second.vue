@@ -11,7 +11,7 @@
       <!-- 待我处理 -->
       <view v-show="current === 1">
         <uni-list v-if="showFirstListPage && pendingList.length > 0">
-          <listItem :orderList="pendingList" :flowCode="flowCode" :pendingState="pendingState"/>
+          <listItem :orderList="pendingList" :flowCode="flowCode" :pendingState="pendingState" />
         </uni-list>
         <view class="hand-container" v-if="!showFirstListPage && orderPending.length > 0">
           <view class="list-box" v-for="(item, index) in orderPending" :key="index" @tap="showFirstList(item)">
@@ -40,8 +40,8 @@
             <view class="num">{{ item.orderCount }}</view>
           </view>
         </view>
-        <EmptyComponent v-if="showFirstListPage && pendingList.length <= 0"/>
-        <EmptyComponent v-if="!showFirstListPage && orderPending.length <= 0"/>
+        <EmptyComponent v-if="showFirstListPage && pendingList.length <= 0" />
+        <EmptyComponent v-if="!showFirstListPage && orderPending.length <= 0" />
       </view>
       <!-- 后台处理中 -->
       <view v-show="current === 2">
@@ -71,6 +71,7 @@ import home from "./home.vue";
 import listItem from "./listItem.vue";
 import { orderProcessing, orderPendingIndex, orderPendingList } from "@/api/common";
 import EmptyComponent from "../../components/EmptyComponent/index.vue";
+import { onLaunch, onShow } from '@dcloudio/uni-app';
 const current = ref(0);
 const items = ref(["首页", "待我处理", "后台处理中", "已完成", "问题件"]);
 const completOrderList = ref([]); //列表数据
@@ -97,8 +98,8 @@ const onClickItem = (e) => {
   }
 };
 
-onMounted(() => {
-
+onShow(() => {
+  current.value = 0
 })
 
 // 待我处理汇总
@@ -186,6 +187,10 @@ const searchCompletOrderList = () => {
     color: #ffffff;
   }
 
+  :deep(.uni-list--border-bottom) {
+    display: none;
+  }
+
   .segmented-control {
     background: #df3030;
     font-size: 36rpx;
@@ -231,9 +236,7 @@ const searchCompletOrderList = () => {
       color: #333;
       display: flex;
       align-items: center;
-
-
-
+   
       .num {
         display: inline-block;
         padding: 6px 0 6px 15px;
@@ -292,6 +295,9 @@ const searchCompletOrderList = () => {
         background: url('../../static/order/ico-upload.png') no-repeat;
         background-size: contain;
       }
+    }
+    .list-box view:nth-child(2) {
+      width: 420rpx;
     }
   }
 
