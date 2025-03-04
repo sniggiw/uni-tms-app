@@ -40,6 +40,12 @@
 			}
 		},
 		{
+			"path": "pages/inquiry/components/phonePreFix/index",
+			"style": {
+				"navigationBarTitleText": "国家手机区号"
+			}
+		},
+		{
 			"path": "pages/inquiry/dedicatedLine/index",
 			"style": {
 				"navigationBarTitleText": "在线询价"

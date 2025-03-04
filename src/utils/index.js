@@ -20,7 +20,13 @@ function getStore(name) {
   }
 }
 
+function removeStore(name) {
+  if (!name) return
+  window.localStorage.removeItem(name)
+}
+
 export {
   getDictTypesData,
-  getStore
+  getStore,
+  removeStore
 };

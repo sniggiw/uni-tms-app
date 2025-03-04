@@ -1,8 +1,8 @@
 <template>
   <view class="inquiryHome-page">
-    <swiper class="swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" :circular="true">
+    <swiper class="my-swipe" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" :circular="true">
       <swiper-item v-for="(item, index) in bannerData" :key="index">
-        <image src="https://www.gosun2.com/tms-app/profile\\\\\\20221022\\55ca068bda4246838f2ab211707c7b42.png" class="banner-image" mode="widthFix"></image>
+        <img :src="item.imgFilePath" width="100%" height="100%" mode="widthFix"/>
       </swiper-item>
     </swiper>
     <!-- 折叠面板 -->
@@ -294,9 +294,15 @@ const toJumpList = (channel, flowTemplateId) => {
   background: #f9f9fa;
   margin-bottom: -60rpx;
 
+  .my-swipe {
+    border-radius: 50rpx 50rpx 0rpx 0rpx;
+    height: 360rpx;
+  }
+
+
   .swiper {
     width: 100%;
-    height: 450rpx;
+    height: 200rpx;
     /* 根据需要调整高度 */
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <view class="my-cell" @click="onClick">
+  <view class="my-cell">
     <!-- 左侧标题 -->
     <view class="my-cell__title">
       <slot name="title">{{ title }}</slot>
@@ -20,27 +20,31 @@
   </view>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    value: {
-      type: String,
-      default: ''
-    },
-    isLink: {
-      type: Boolean,
-      default: false
-    }
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+
+// 定义 props
+const props = defineProps({
+  title: {
+    type: String,
+    default: ''
   },
-  methods: {
-    onClick() {
-      this.$emit('click');
-    }
+  value: {
+    type: String,
+    default: ''
+  },
+  isLink: {
+    type: Boolean,
+    default: false
   }
+});
+
+// 定义 emits
+const emit = defineEmits(['click']);
+
+// 点击事件处理函数
+const onClick = () => {
+  emit('click');
 };
 </script>
 

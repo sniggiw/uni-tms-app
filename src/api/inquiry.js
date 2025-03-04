@@ -142,4 +142,19 @@ const submitQuick = (params) => {
     });
 };
 
-export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory,listReceiverCity,getChannelCode,submitQuick };
+//国家手机区号
+const getPhonePrefix = (params) => {
+    return new Promise((resolve, reject) => {
+        const queryString = new URLSearchParams(params).toString();
+        const url = `/tms-app/common/list-phone-prefix?${queryString}`;
+        http.get(url)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
+export { getBannerData,inquiryHotToday,inquiryAddr,getInquiryZxData,inquiryHistory,getInquiryZxDetail,postinquiryHistory,listReceiverCity,getChannelCode,submitQuick,getPhonePrefix };
