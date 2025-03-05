@@ -104,6 +104,18 @@
 			"style": {
 				"navigationBarTitleText": "确认账单"
 			}
+		},
+		{
+			"path": "pages/order/queryTrack/index/index",
+			"style": {
+				"navigationBarTitleText": "轨迹查询"
+			}
+		},
+		{
+			"path": "pages/register/index/index",
+			"style": {
+				"navigationBarTitleText": "新用户注册"
+			}
 		}
 	],
 	"globalStyle": {

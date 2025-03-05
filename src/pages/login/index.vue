@@ -57,9 +57,11 @@
                             <text class="defaultText">忘记密码?</text>
                         </view>
                     </view>
-
+                    <view class="registerNow">
+                        您还没有账号吗?<text @tap="jumpRegister">立即注册</text>
+                    </view>
                     <view class="trackAndLoginBtns">
-                        <view class="btn track">轨迹查询</view>
+                        <view class="btn track" @tap="jumpQueryTrack">轨迹查询</view>
                         <view class="btn login" @tap="handleLogin">登录</view>
                     </view>
 
@@ -232,6 +234,14 @@ const validateForm = () => {
     return true;
 };
 
+const jumpQueryTrack = () => {
+    uni.navigateTo({ url: '/pages/order/queryTrack/index/index' })
+};
+
+const jumpRegister = () => {
+    uni.navigateTo({ url: '/pages/register/index/index' })
+};
+
 const handleLogin = async () => {
     if (!validateForm()) return;
 
@@ -278,7 +288,7 @@ const handleLogin = async () => {
 
     .header {
         width: 100%;
-        height: 490rpx;
+        height: 450rpx;
         background: url("@/static/imgs/login/headerBg.png") left top / 100% 100% no-repeat;
         overflow: hidden;
 
@@ -472,8 +482,20 @@ const handleLogin = async () => {
                 }
             }
 
+            .registerNow {
+                font-size: 24rpx !important;
+                font-weight: 500;
+                color: #999999;
+                margin-top: 20rpx;
+                margin-left: 8rpx;
+
+                >text {
+                    color: #1266FB
+                }
+            }
+
             .trackAndLoginBtns {
-                margin-top: 40rpx;
+                margin-top: 30rpx;
                 display: flex;
                 justify-content: space-between;
 
