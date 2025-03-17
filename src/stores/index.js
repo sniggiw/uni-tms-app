@@ -8,4 +8,4 @@ export default pinia;
 
 export * from "./auth.js";
 export * from "./other.js";
-
+export * from "./area.js";

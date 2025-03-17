@@ -1,152 +1,159 @@
 {
-	"easycom": {
-		"autoscan": true,
-		"custom": {
-			// uni-ui 规则如下配置
-			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
-		}
-	},
-	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationStyle": "custom", // 后续需要根据环境判断是否需要自定义导航栏 现在暂时是写 H5 页面，需要先去掉
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/mine/index",
-			"style": {
-				"navigationBarTitleText": "我的"
-			}
-		},
-		{
-			"path": "pages/login/index",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": "登录"
-			}
-		},
-		{
-			"path": "pages/inquiry/index",
-			"style": {
-				"navigationBarTitleText": "询价"
-			}
-		},
-		{
-			"path": "pages/inquiry/components/addressList/index/index",
-			"style": {
-				"navigationBarTitleText": "地址选择"
-			}
-		},
-		{
-			"path": "pages/inquiry/components/phonePreFix/index",
-			"style": {
-				"navigationBarTitleText": "国家手机区号"
-			}
-		},
-		{
-			"path": "pages/inquiry/dedicatedLine/index",
-			"style": {
-				"navigationBarTitleText": "在线询价"
-			}
-		},
-		{
-			"path": "pages/inquiry/dedicatedLine/channelDetail",
-			"style": {
-				"navigationBarTitleText": "专线查价结果详情"
-			}
-		},
-		{
-			"path": "pages/inquiry/dedicatedLine/orders",
-			"style": {
-				"navigationBarTitleText": "在线下单"
-			}
-		},
-		{
-			"path": "pages/inquiry/quickOrder",
-			"style": {
-				"navigationBarTitleText": "快速下单"
-			}
-		},
-		{
-			"path": "pages/account/index",
-			"style": {
-				"navigationBarTitleText": "个人设置"
-			}
-		},
-		{
-			"path": "pages/account/updateInfo",
-			"style": {
-				"navigationBarTitleText": "更新资料"
-			}
-		},
-		{
-			"path": "pages/account/changePassword",
-			"style": {
-				"navigationBarTitleText": "修改密码"
-			}
-		},
-		{
-			"path": "pages/account/address/index/index",
-			"style": {
-				"navigationBarTitleText": "地址列表"
-			}
-		},
-		{
-			"path": "pages/account/address/save/index",
-			"style": {
-				"navigationBarTitleText": "编辑地址"
-			}
-		},
-		{
-			"path": "pages/order/billConfirm/index/index",
-			"style": {
-				"navigationBarTitleText": "确认账单"
-			}
-		},
-		{
-			"path": "pages/order/queryTrack/index/index",
-			"style": {
-				"navigationBarTitleText": "轨迹查询"
-			}
-		},
-		{
-			"path": "pages/register/index/index",
-			"style": {
-				"navigationBarTitleText": "新用户注册"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "#FFFFFF",
-		"navigationBarTitleText": "tms-app",
-		"navigationBarBackgroundColor": "#DD312F",
-		"backgroundColor": "#F8F8F8"
-	},
-	"tabBar": {
-		"borderStyle": "black",
-		"selectedColor": "#EE0A24",
-		"color": "#646566",
-		"list": [
-			{
-				"pagePath": "pages/index/index",
-				"iconPath": "static/common/ico-order-default.png",
-				"selectedIconPath": "static/common/ico-order-checked.png",
-				"text": "首页"
-			},
-			{
-				"pagePath": "pages/inquiry/index",
-				"iconPath": "static/common/ico-search-default.png",
-				"selectedIconPath": "static/common/ico-search-checked.png",
-				"text": "询价"
-			},
-			{
-				"pagePath": "pages/account/index",
-				"iconPath": "static/common/ico-setting-default.png",
-				"selectedIconPath": "static/common/ico-setting-checked.png",
-				"text": "我的"
-			}
-		]
-	}
+    "easycom": {
+        "autoscan": true,
+        "custom": {
+            // uni-ui 规则如下配置
+            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+        }
+    },
+    "pages": [
+        {
+            "path": "pages/index/index",
+            "style": {
+                "navigationStyle": "custom", // 后续需要根据环境判断是否需要自定义导航栏 现在暂时是写 H5 页面，需要先去掉
+                "navigationBarTitleText": "首页"
+            }
+        },
+        {
+            "path": "pages/mine/index",
+            "style": {
+                "navigationBarTitleText": "我的"
+            }
+        },
+        {
+            "path": "pages/login/index",
+            "style": {
+                "navigationStyle": "custom",
+                "navigationBarTitleText": "登录"
+            }
+        },
+        {
+            "path": "pages/inquiry/index",
+            "style": {
+                "navigationBarTitleText": "询价"
+            }
+        },
+        {
+            "path": "pages/inquiry/components/addressList/index/index",
+            "style": {
+                "navigationBarTitleText": "地址选择"
+            }
+        },
+        {
+            "path": "pages/inquiry/components/phonePreFix/index",
+            "style": {
+                "navigationBarTitleText": "国家手机区号"
+            }
+        },
+        {
+            "path": "pages/inquiry/dedicatedLine/index",
+            "style": {
+                "navigationBarTitleText": "在线询价"
+            }
+        },
+        {
+            "path": "pages/inquiry/dedicatedLine/channelDetail",
+            "style": {
+                "navigationBarTitleText": "专线查价结果详情"
+            }
+        },
+        {
+            "path": "pages/inquiry/dedicatedLine/orders",
+            "style": {
+                "navigationBarTitleText": "在线下单"
+            }
+        },
+        {
+            "path": "pages/inquiry/quickOrder",
+            "style": {
+                "navigationBarTitleText": "快速下单"
+            }
+        },
+        {
+            "path": "pages/account/index",
+            "style": {
+                "navigationBarTitleText": "个人设置"
+            }
+        },
+        {
+            "path": "pages/account/updateInfo",
+            "style": {
+                "navigationBarTitleText": "更新资料"
+            }
+        },
+        {
+            "path": "pages/account/changePassword",
+            "style": {
+                "navigationBarTitleText": "修改密码"
+            }
+        },
+        {
+            "path": "pages/account/address/index/index",
+            "style": {
+                "navigationBarTitleText": "地址列表"
+            }
+        },
+        {
+            "path": "pages/account/address/save/index",
+            "style": {
+                "navigationBarTitleText": "编辑地址"
+            }
+        },
+        {
+            "path": "pages/order/billConfirm/index/index",
+            "style": {
+                "navigationBarTitleText": "确认账单"
+            }
+        },
+        {
+            "path": "pages/order/queryTrack/index/index",
+            "style": {
+                "navigationBarTitleText": "轨迹查询"
+            }
+        },
+        {
+            "path": "pages/register/index/index",
+            "style": {
+                "navigationBarTitleText": "新用户注册"
+            }
+        },
+        {
+            "path": "pages/testCustomPopPickerComponent/index",
+            "style": {
+                "navigationStyle": "custom",
+                "navigationBarTitleText": "测试自定义的地区查找组件"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "#FFFFFF",
+        "navigationBarTitleText": "tms-app",
+        "navigationBarBackgroundColor": "#DD312F",
+        "backgroundColor": "#F8F8F8"
+    },
+    "tabBar": {
+        "borderStyle": "black",
+        "selectedColor": "#EE0A24",
+        "color": "#646566",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "iconPath": "static/common/ico-order-default.png",
+                "selectedIconPath": "static/common/ico-order-checked.png",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/inquiry/index",
+                "iconPath": "static/common/ico-search-default.png",
+                "selectedIconPath": "static/common/ico-search-checked.png",
+                "text": "询价"
+            },
+            {
+                "pagePath": "pages/account/index",
+                "iconPath": "static/common/ico-setting-default.png",
+                "selectedIconPath": "static/common/ico-setting-checked.png",
+                "text": "我的"
+            }
+        ]
+    }
 }
