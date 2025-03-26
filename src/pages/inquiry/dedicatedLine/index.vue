@@ -6,31 +6,44 @@
       <view class="city-info">
         <!-- 起运地下拉 -->
         <view>
-          {{ searchParams.srcTitle }}
+          <dropdown-menu class="dispatch-city" @click="showShipperAddressList = true">
+            <dropdown-item ref="dispatchCityRef" title=" ">
+              <view class="popupTxet">
+                <addressList v-if="showShipperAddressList" :isDialog="true" flow="1" type="1" @checkCityCallback="checkCityCallback"></addressList>
+              </view>
+            </dropdown-item>
+            <view>
+              <view>{{ searchParams.srcTitle }}</view>
+              <view class="desc">{{ searchParams.srcTitleEn }}</view>
+            </view>
+          </dropdown-menu>
         </view>
         <view class="city-info-center">
           <image src="@/static/inquiry/icon-right.png" />
         </view>
         <!-- 目的地下拉 -->
         <view>
-          {{ searchParams.descTitle }}
+          <dropdown-menu class="destination-city" @click="showConsigneeAddressList = true">
+            <view>
+              {{ searchParams.descTitle }}
+              <view class="desc">{{ searchParams.descTitleEn }}</view>
+            </view>
+            <dropdown-item ref="destinationCityRef" title=" ">
+              <view class="popupTxet">
+                <addressList v-if="showConsigneeAddressList" :isDialog="true" flow="1" type="2" @checkCityCallback="checkCityCallback"></addressList>
+              </view>
+            </dropdown-item>
+          </dropdown-menu>
         </view>
       </view>
-      <view class="size-num"
-        >{{ searchParams.weight }}kg | {{ searchParams.squares }}CBM |
-        {{ searchParams.transCount }}{{ searchParams.transUnit }}</view
-      >
+      <view class="size-num">{{ searchParams.weight }}kg | {{ searchParams.squares }}CBM |
+        {{ searchParams.transCount }}{{ searchParams.transUnit }}</view>
       <dropdown-menu class="cargoInfo-content">
         <dropdown-item ref="cargoInfo" title=" ">
           <view class="popupTxet">
-            <CargoInfoByDetail
-              :searchData="searchParams"
-              @closeFloor="closeFloor"
-              @cargoInfoCallback="cargoInfoCallback"
-              :Kind="searchParams.transKind"
-              :receiverCityData="receiverCity"
-              ref="cargoInfoByDetailRef"
-            ></CargoInfoByDetail>
+            <CargoInfoByDetail :searchData="searchParams" @closeFloor="closeFloor"
+              @cargoInfoCallback="cargoInfoCallback" :Kind="searchParams.transKind" :receiverCityData="receiverCity"
+              ref="cargoInfoByDetailRef"></CargoInfoByDetail>
           </view>
         </dropdown-item>
       </dropdown-menu>
@@ -38,20 +51,12 @@
     <view class="container">
       <!-- 价格筛选 -->
       <view class="choice">
-        <dropdown-menu activeColor="#ee0a24" sticky>
-          <dropdown-item
-           :title="$t('inquiry.zxtransKind')"
-            :options="sort"
-            v-model="searchParams.sort"
-            @change="getInquiryZx"
-          >
+        <dropdown-menu activeColor="#ee0a24" sticky class="sort-dropdown">
+          <dropdown-item :title="$t('inquiry.zxtransKind')" :options="sort" v-model="searchParams.sort"
+            @change="getInquiryZx">
           </dropdown-item>
-          <dropdown-item
-            :title="$t('inquiry.zxtransKind')"
-            :options="transKind"
-            v-model="searchParams.transKind"
-            @change="getInquiryZx"
-          >
+          <dropdown-item :title="$t('inquiry.zxtransKind')" :options="transKind" v-model="searchParams.transKind"
+            @change="getInquiryZx">
           </dropdown-item>
         </dropdown-menu>
       </view>
@@ -60,69 +65,47 @@
         <view class="center" v-for="(item, index) in inquiryList" :key="index">
           <view class="title">
             <template v-if="lang === 'zh_CN'">
-              <img
-                class="imgage"
-                src="/static/inquiry/ico-nothan.png"
-                fit="contain"
-                v-if="item.taxIncluded == true"
-              />
-              <img
-                class="imgage"
-                src="/static/inquiry/ico-nohan.png"
-                fit="contain"
-                v-if="item.taxIncluded == false"
-              />
+              <img class="imgage" src="/static/inquiry/ico-nothan.png" fit="contain" v-if="item.taxIncluded == true" />
+              <img class="imgage" src="/static/inquiry/ico-nohan.png" fit="contain" v-if="item.taxIncluded == false" />
             </template>
             <template v-if="lang === 'en_US'">
-              <img
-                class="dutyImgage-En"
-                src="/static/inquiry/ico-en-nothan.png"
-                fit="contain"
-                v-if="item.taxIncluded == true"
-              />
-              <img
-                class="imgage-En"
-                src="/static/inquiry/ico-en-nohan.png"
-                fit="contain"
-                v-if="item.taxIncluded == false"
-              />
+              <img class="dutyImgage-En" src="/static/inquiry/ico-en-nothan.png" fit="contain"
+                v-if="item.taxIncluded == true" />
+              <img class="imgage-En" src="/static/inquiry/ico-en-nohan.png" fit="contain"
+                v-if="item.taxIncluded == false" />
             </template>
-            <view
-              class="tit"
-              @click="
-                placeOrder(
-                  item.id,
-                  item.price,
-                  item.channelCode,
-                  item.transKind,
-                  item.channelId,
-                  item.deliveryFeeDisplay,
-                  item.destCity
-                )
-              "
-              >{{ item.title }}</view
-            >
+            <view class="tit" @click="
+              placeOrder(
+                item.id,
+                item.price,
+                item.channelCode,
+                item.transKind,
+                item.channelId,
+                item.deliveryFeeDisplay,
+                item.destCity
+              )
+              ">{{ item.title }}</view>
           </view>
           <view class="parameter">
             <view class="leftBox">
               <view>
-                {{$t('inquiry.zxtransKind')}}:
+                {{ $t('inquiry.zxtransKind') }}:
                 <text>{{ item.transKind }}</text>
               </view>
               <view>
-                {{$t('orderDetail.channelCode')}}:
+                {{ $t('orderDetail.channelCode') }}:
                 <text>{{ item.channelCode }}</text>
               </view>
               <view>
-                {{$t('queryChannel.destCountry')}}:
+                {{ $t('queryChannel.destCountry') }}:
                 <text>{{ item.destCountry }}</text>
               </view>
               <view>
-                {{$t('inquiry.priceTitle')}}:
+                {{ $t('inquiry.priceTitle') }}:
                 <text>{{ item.priceTitle }}</text>
               </view>
               <view>
-                {{$t('channelDetail.shipTimeTitle')}}
+                {{ $t('channelDetail.shipTimeTitle') }}
                 <text>{{ item.needTimesDesc }}</text>
               </view>
               <view>
@@ -141,18 +124,16 @@
                 <text>{{ item.statSpec }}</text>
               </view>
               <view>
-                {{$t('inquiry.destCity')}}:
+                {{ $t('inquiry.destCity') }}:
                 <text>{{ item.destCity }}</text>
               </view>
               <view>
-                {{$t('inquiry.deliveryFee')}}:
-                <template
-                  v-if="
-                    item.deliveryFeeDisplay == '面谈' ||
-                    item.deliveryFeeDisplay == 'interview'
-                  "
-                >
-                  <text>{{$t('inquiry.inquiryInterview')}}</text>
+                {{ $t('inquiry.deliveryFee') }}:
+                <template v-if="
+                  item.deliveryFeeDisplay == '面谈' ||
+                  item.deliveryFeeDisplay == 'interview'
+                ">
+                  <text>{{ $t('inquiry.inquiryInterview') }}</text>
                 </template>
                 <template v-else>
                   <text>{{ item.deliveryFeeDisplay }}</text>
@@ -161,63 +142,47 @@
             </view>
             <view class="right">
               <template v-if="item.price > 0">
-                <view class="top" v-if="item.pricingType == '按重量'"
-                  >{{ item.currencySymbol }}{{ item.price }}/KG</view
-                >
-                <view class="top" v-if="item.pricingType == '按体积'"
-                  >{{ item.currencySymbol }}{{ item.price }}/CBM</view
-                >
-                <view class="top" v-if="item.pricingType == '按数量'"
-                  >{{ item.currencySymbol }}{{ item.price }}/PCS</view
-                >
-                <view
-                  class="continue-price"
-                  v-if="item.pricingType == '按首续重'"
-                >
+                <view class="top" v-if="item.pricingType == '按重量'">{{ item.currencySymbol }}{{ item.price }}/KG</view>
+                <view class="top" v-if="item.pricingType == '按体积'">{{ item.currencySymbol }}{{ item.price }}/CBM</view>
+                <view class="top" v-if="item.pricingType == '按数量'">{{ item.currencySymbol }}{{ item.price }}/PCS</view>
+                <view class="continue-price" v-if="item.pricingType == '按首续重'">
                   <view>{{ $t("inquiry.continuePrice") }}</view>
                   {{ item.currencySymbol }}{{ item.continuePrice }}/0.5KG
                   {{ item.currencySymbol }}{{ item.price }}/0.5KG
                 </view>
-                <view
-                  class="jumpDetail"
-                  @tap="
-                    placeOrder(
-                      item.id,
-                      item.price,
-                      item.channelCode,
-                      item.transKind,
-                      item.channelId,
-                      item.deliveryFeeDisplay,
-                      item.destCity
-                    )
-                  "
-                >
-                {{$t('inquiry.clickPrice')}}
-              </view>
+                <view class="jumpDetail" @tap="
+                  placeOrder(
+                    item.id,
+                    item.price,
+                    item.channelCode,
+                    item.transKind,
+                    item.channelId,
+                    item.deliveryFeeDisplay,
+                    item.destCity
+                  )
+                  ">
+                  {{ $t('inquiry.clickPrice') }}
+                </view>
               </template>
               <template v-if="item.price < 1">
                 <view class="jumpDetail" @click.stop="service()">
-                  {{$t('inquiry.inquiryInterview')}}
+                  {{ $t('inquiry.inquiryInterview') }}
                 </view>
               </template>
             </view>
           </view>
           <view class="divider"></view>
-          <view
-            class="matter"
-            ref="sidebarBox"
-            @tap="
-              placeOrder(
-                item.id,
-                item.price,
-                item.channelCode,
-                item.transKind,
-                item.channelId,
-                item.deliveryFeeDisplay,
-                item.destCity
-              )
-            "
-          >
+          <view class="matter" ref="sidebarBox" @tap="
+            placeOrder(
+              item.id,
+              item.price,
+              item.channelCode,
+              item.transKind,
+              item.channelId,
+              item.deliveryFeeDisplay,
+              item.destCity
+            )
+            ">
             <view ref="p1">
               <view v-html="item.note"></view>
             </view>
@@ -235,10 +200,10 @@ import { getInquiryZxData, listReceiverCity } from "@/api/inquiry";
 import { getDictTypes } from "@/api/common";
 import { onLoad } from "@dcloudio/uni-app";
 import EmptyComponent from "../../../components/EmptyComponent/index.vue";
-// import addressList from "@/views/components/addressList/index.vue"; // 起运地目的地列表
 import CargoInfoByDetail from "../components/cargoInfoByDetail/index.vue";
 import dropdownMenu from "../../../components/dropdownMenu/index.vue";
 import dropdownItem from "../../../components/dropdownMenu/item.vue";
+import addressList from "../../inquiry/components/addressList/index"
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 // 定义 props
@@ -292,6 +257,11 @@ const sort = ref([
 ]);
 const cargoInfoByDetailRef = ref(null);
 const cargoInfo = ref(null);
+const cityRef = ref(null);
+const showShipperAddressList = ref(false);
+const showConsigneeAddressList = ref(false);
+const dispatchCityRef = ref(null);
+const destinationCityRef = ref(null);
 
 // 生命周期钩子
 onMounted(() => {
@@ -345,6 +315,10 @@ const getInquiryZx = () => {
   });
 };
 
+const clickDestinationCity = () =>{
+  cityRef.value
+}
+
 const cargoInfoCallback = (data) => {
   Object.assign(searchParams, data);
   getInquiryZx();
@@ -376,12 +350,14 @@ const checkCityCallback = (data) => {
     searchParams.srcTitle = data.title;
     searchParams.srcScode = data.scode;
     searchParams.srcTitleEn = data.titleEn;
+    dispatchCityRef.value.onClose();
   } else if (data.type == "2") {
     // 目的地
     searchParams.descTitle = data.title;
     searchParams.descScode = data.scode;
     searchParams.descTitleEn = data.titleEn;
     searchParams.destCity = "";
+    destinationCityRef.value.onClose();
     // listReceiverCityData();
   }
   getInquiryZx();
@@ -425,9 +401,11 @@ const service = () => {
 
 .content {
   background: #f9f9fa;
+
   .search {
     padding: 30rpx 20rpx 40rpx;
     background: #df3030;
+
     .popupTxet {
       .cargo-info-by-detail {
         max-height: 800rpx;
@@ -435,6 +413,7 @@ const service = () => {
         overflow-y: auto;
       }
     }
+
     .city-info {
       display: flex;
       flex-wrap: wrap;
@@ -443,60 +422,21 @@ const service = () => {
       color: #ffffff;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
-      // /deep/.van-dropdown-menu {
-      //   .dest-country, .src-country {
-      //     position: relative;
-      //     margin-left: 50rpx;
-      //     font-size: 40rpx;
-      //     font-weight: 600;
-      //     color: #FFFFFF;
-      //     > div {
-      //       width: 210rpx;
-      //       overflow: hidden;
-      //       white-space: nowrap;
-      //       text-overflow: ellipsis;
-      //     }
-      //     .ico-select {
-      //       position: absolute;
-      //       top: 2rpx;
-      //       display: inline-block;
-      //       width: 32rpx;
-      //       height: 32rpx;
-      //       background: url("../../../static/inquiry/ico-select.png")
-      //         no-repeat;
-      //       background-size: contain;
-      //     }
-      //     .desc {
-      //       font-size: 26rpx;
-      //       font-weight: 400;
-      //       opacity: 0.6;
-      //       color: #FFFFFF;
-      //     }
-      //   }
-      //   .src-country {
-      //     .ico-select {
-      //       left: -50rpx;
-      //     }
-      //   }
-      //   .dest-country {
-      //     margin-left: 0;
-      //     margin-right: 50rpx;
-      //     text-align: right;
-      //     .ico-select {
-      //       right: -50rpx;
-      //     }
-      //   }
-      //   .popupTxet {
-      //     font-size: 28rpx;
-      //     .van-index-anchor {
-      //       position: static;
-      //     }
-      //   }
-      //   .van-popup--top {
-      //     border-radius: 0px 0px 30rpx 30rpx;
-      //     max-height: 90%;
-      //   }
-      // }
+      >view {
+        flex: 1;
+
+        .desc {
+          font-size: 26rpx;
+          font-weight: 400;
+          opacity: 0.6;
+          color: #FFFFFF;
+          text-align: center;
+          width: 120rpx;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
 
       .city-info-center {
         display: flex;
@@ -508,17 +448,82 @@ const service = () => {
         height: 0px;
         margin: 30rpx 0;
         border: 1px dashed #ffa0a0;
-        > uni-image {
+
+        >uni-image {
           display: block;
           width: 34rpx;
           height: 34rpx;
           pointer-events: none;
         }
       }
+      :deep(.group-title){
+        font-size: 30rpx;
+        color: #333333;
+      }
+      :deep(.group-item){
+        font-size: 28rpx;
+        color: #666666;
+      }
+      :deep(.dropdown-popup){
+        margin-top: 50rpx;
+        .content{
+          height: 85%;
+          overflow-y: auto;
+          .index-bar{
+            margin-top: 150rpx;
+          }
+          .uni-scroll-view{
+            height: 100%;
+            z-index: 200;
+          }
+        }
+        .my-index-bar{
+          height: 85%;
+        }
+      }
     }
+
+    .dispatch-city {
+      background: #df3030;
+      :deep(.dropdown-item) {
+        display: inline-block;
+        width: 32rpx;
+        height: 32rpx;
+        background: url(../../../static/inquiry/ico-select.png) no-repeat;
+        background-size: contain;
+        margin: 10rpx;
+      }
+    }
+
+    .destination-city {
+      background: #df3030;
+      display: flex;
+      justify-content: right;
+
+      :deep(.dropdown-item) {
+        display: inline-block;
+        width: 32rpx;
+        height: 32rpx;
+        background: url(../../../static/inquiry/ico-select.png) no-repeat;
+        background-size: contain;
+        margin: 10rpx;
+      }
+    }
+
     .cargoInfo-content {
       background: #df3030;
+      display: flex;
+      justify-content: center;
+
+      :deep(.dropdown-item) {
+        display: inline-block;
+        width: 35rpx;
+        height: 19rpx;
+        background: url(../../../static/inquiry/ico-arrow-up.png) no-repeat;
+        background-size: contain;
+      }
     }
+
     // /deep/.van-dropdown-menu {
     //   flex: 1;
     //   padding: 0;
@@ -565,6 +570,7 @@ const service = () => {
     //   text-align: center;
     // }
   }
+
   .size-num {
     min-height: 40rpx;
     color: #ffffff;
@@ -572,6 +578,7 @@ const service = () => {
     margin: 16rpx auto;
     text-align: center;
   }
+
   .container {
     margin-top: -40rpx;
     left: 0;
@@ -592,7 +599,7 @@ const service = () => {
       box-shadow: 0px 12rpx 20rpx #e8e1e157;
       border-radius: 30rpx;
       margin: 30rpx 30rpx 40rpx 30rpx;
-      
+
       .title {
         .imgage {
           width: 114rpx;
@@ -600,6 +607,7 @@ const service = () => {
           float: right;
           pointer-events: none;
         }
+
         //英文版含税图片
         .dutyImgage-En {
           float: right;
@@ -607,6 +615,7 @@ const service = () => {
           height: 58rpx;
           pointer-events: none;
         }
+
         //英文版不含税图片
         .imgage-En {
           float: right;
@@ -614,6 +623,7 @@ const service = () => {
           height: 54rpx;
           pointer-events: none;
         }
+
         .tit {
           font-size: 34rpx;
           color: #f86e21;
@@ -622,6 +632,7 @@ const service = () => {
           font-weight: 600;
         }
       }
+
       .bg {
         width: 630rpx;
         height: 2rpx;
@@ -634,9 +645,11 @@ const service = () => {
         font-size: 28rpx;
         height: auto;
         display: flex;
-        justify-content: center; /* 垂直居中 */
-        align-items: flex-end; /* 底部居中 */
-        
+        justify-content: center;
+        /* 垂直居中 */
+        align-items: flex-end;
+        /* 底部居中 */
+
         .leftBox {
           margin: 2rpx 40rpx;
           width: 400rpx;
@@ -644,7 +657,7 @@ const service = () => {
           font-size: 28rpx;
           color: #999999;
 
-          > view > uni-text {
+          >view>uni-text {
             font-size: 26rpx;
             margin-left: 10rpx;
             width: 200rpx;
@@ -671,6 +684,7 @@ const service = () => {
             font-size: 28rpx;
             color: #dd312f;
           }
+
           .continue-price {
             margin-left: 16rpx;
             margin-bottom: 10rpx;
@@ -679,6 +693,7 @@ const service = () => {
             word-break: break-all;
             word-wrap: break-word;
           }
+
           .bottom {
             width: 240rpx;
             height: 20rpx;

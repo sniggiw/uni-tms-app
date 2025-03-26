@@ -1,54 +1,28 @@
 <template>
   <!-- 标题栏 -->
-  <view
-    class="dropdown-item"
-    :class="{ open: isOpen }"
-    :style="{ color: curretnColor }"
-    @tap="handleClick"
-    @touchmove.prevent
-  >
+  <view class="dropdown-item" :class="{ open: isOpen }" :style="{ color: curretnColor }" @tap="handleClick"
+    @touchmove.prevent>
     <text class="title">{{ currentTitle }}</text>
   </view>
   <!-- 下拉弹窗 -->
-  <view
-    class="dropdown-popup"
-    :style="{ top: `${dropPopupTop}px`, zIndex, height: dropHeight }"
-    @touchmove.prevent
-  >
+  <view class="dropdown-popup" :style="{ top: `${dropPopupTop}px`, zIndex, height: dropHeight }" @touchmove.prevent>
     <view class="content" :class="customClass">
       <!-- 插槽 -->
       <slot v-if="hasSlot"></slot>
       <!-- 选项 -->
       <view class="list" v-else>
-        <view
-          :class="['item', { active: currentIndex === index }]"
-          v-for="(item, index) in options"
-          :key="item.name || index"
-          @tap="onSelect(item, index)"
-        >
+        <view :class="['item', { active: currentIndex === index }]" v-for="(item, index) in options"
+          :key="item.name || index" @tap="onSelect(item, index)">
           <view class="label">{{ item.name }}</view>
           <!-- 勾选图标 -->
-          <i
-            v-show="currentIndex === index"
-            class="iconfont icon-gouxuan icon"
-          ></i>
+          <i v-show="currentIndex === index" class="iconfont icon-gouxuan icon"></i>
         </view>
       </view>
     </view>
     <!-- 顶部遮罩层 -->
-    <view
-      class="overly-header"
-      v-show="isOpen"
-      :style="{ height: `${overlyHeight}px` }"
-      @touchmove.prevent
-    ></view>
+    <view class="overly-header" v-show="isOpen" :style="{ height: `${overlyHeight}px` }" @touchmove.prevent></view>
     <!-- 底部遮罩层 -->
-    <view
-      class="overly-footer"
-      v-show="isOpen"
-      @tap="onClose"
-      @touchmove.prevent
-    ></view>
+    <view class="overly-footer" v-show="isOpen" @tap="onClose" @touchmove.prevent></view>
   </view>
 </template>
 
@@ -80,6 +54,7 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue", "change"]);
 const slots = useSlots();
+
 //是否有插槽
 const hasSlot = computed(() => {
   return Object.keys(slots).length > 0;
@@ -108,8 +83,8 @@ const customClass = computed(() => {
   return isOpen.value === true
     ? "visible"
     : isOpen.value === false
-    ? "hidden"
-    : null;
+      ? "hidden"
+      : null;
 });
 
 let timeout = null;
@@ -119,7 +94,7 @@ const handleClick = () => {
   if (timeout) return;
   isOpen.value = !isOpen.value;
   if (isOpen.value) {
-		currentDropItem.value = props.title;
+    currentDropItem.value = props.title;
     getDropPopupTop();
   }
 
@@ -177,12 +152,22 @@ watch(isOpen, (v) => {
   if (v) {
     zIndex.value = 999;
     dropHeight.value = "auto";
+    // 禁止父组件滚动
+    const app = document.getElementById("app");
+    if (app) {
+      app.style.overflow = "hidden";
+    }
   } else {
     //关闭状态隐藏父容器
     //延迟改变使得关闭动画能完整呈现
     setTimeout(() => {
       zIndex.value = -1;
       dropHeight.value = 0;
+      // 恢复父组件滚动
+      const app = document.getElementById("app");
+      if (app) {
+        app.style.overflow = "auto";
+      }
     }, 200);
   }
 });
@@ -213,7 +198,7 @@ const onSelect = (item, index) => {
 
 // 暴露方法给父组件
 defineExpose({
-	onClose,
+  onClose,
 });
 </script>
 
@@ -231,16 +216,16 @@ defineExpose({
   position: relative;
   z-index: 10;
 
-  &::after {
-    display: block;
-    content: "";
-    border: 6rpx solid;
-    border-color: v-bind(curretnColor) transparent transparent transparent;
-    margin-bottom: -10rpx;
-    margin-left: 8rpx;
-    transition: all 0.2s;
-    transform-origin: center 3rpx;
-  }
+  // &::after {
+  //   display: block;
+  //   content: "";
+  //   border: 6rpx solid;
+  //   border-color: v-bind(curretnColor) transparent transparent transparent;
+  //   margin-bottom: -10rpx;
+  //   margin-left: 8rpx;
+  //   transition: all 0.2s;
+  //   transform-origin: center 3rpx;
+  // }
 
   &.open {
     &::after {
