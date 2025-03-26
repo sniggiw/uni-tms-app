@@ -55,6 +55,8 @@ const props = defineProps({
 const emits = defineEmits(["update:modelValue", "change"]);
 const slots = useSlots();
 
+const activeDropdown = inject('activeDropdown')
+
 //是否有插槽
 const hasSlot = computed(() => {
   return Object.keys(slots).length > 0;
@@ -88,21 +90,42 @@ const customClass = computed(() => {
 });
 
 let timeout = null;
-//打开或关闭
+
+// 修改点击处理逻辑
 const handleClick = () => {
-  //节流处理，防止点击过快动画未结束又切换导致显示bug
-  if (timeout) return;
-  isOpen.value = !isOpen.value;
+  if (timeout) return
+
+  // 点击时立即关闭其他弹窗(点击A弹窗，则关闭B弹窗)
+  if (activeDropdown.value !== props.title) {
+    activeDropdown.value = null // 触发其他弹窗关闭
+  }
+
+  isOpen.value = !isOpen.value
+
+  // 更新全局状态
   if (isOpen.value) {
-    currentDropItem.value = props.title;
-    getDropPopupTop();
+    activeDropdown.value = props.title
+    getDropPopupTop()
   }
 
   timeout = setTimeout(() => {
-    timeout = null;
-  }, 200);
-};
+    timeout = null
+  }, 200)
+}
+// 修改状态监听逻辑
+watch(activeDropdown, (newVal) => {
+  // 当全局状态与当前组件不匹配时关闭
+  if (newVal !== props.title) {
+    isOpen.value = false
+  }
+})
 
+// 增加自身状态同步
+watch(isOpen, (newVal) => {
+  if (!newVal && activeDropdown.value === props.title) {
+    activeDropdown.value = null
+  }
+})
 onMounted(() => {
   getDropPopupTop();
 });
@@ -300,6 +323,15 @@ defineExpose({
         }
       }
     }
+  }
+
+  /* 调整动画时间匹配 JavaScript 逻辑 */
+  .content.visible {
+    animation: visibleAnimaFrames 0.3s forwards;
+  }
+
+  .content.hidden {
+    animation: hiddenAnimaFrames 0.3s forwards;
   }
 }
 

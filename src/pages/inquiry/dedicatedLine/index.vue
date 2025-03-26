@@ -7,7 +7,7 @@
         <!-- 起运地下拉 -->
         <view>
           <dropdown-menu class="dispatch-city" @click="showShipperAddressList = true">
-            <dropdown-item ref="dispatchCityRef" title=" ">
+            <dropdown-item ref="dispatchCityRef" title="1">
               <view class="popupTxet">
                 <addressList v-if="showShipperAddressList" :isDialog="true" flow="1" type="1" @checkCityCallback="checkCityCallback"></addressList>
               </view>
@@ -28,7 +28,7 @@
               {{ searchParams.descTitle }}
               <view class="desc">{{ searchParams.descTitleEn }}</view>
             </view>
-            <dropdown-item ref="destinationCityRef" title=" ">
+            <dropdown-item ref="destinationCityRef" title="2">
               <view class="popupTxet">
                 <addressList v-if="showConsigneeAddressList" :isDialog="true" flow="1" type="2" @checkCityCallback="checkCityCallback"></addressList>
               </view>
@@ -52,7 +52,7 @@
       <!-- 价格筛选 -->
       <view class="choice">
         <dropdown-menu activeColor="#ee0a24" sticky class="sort-dropdown">
-          <dropdown-item :title="$t('inquiry.zxtransKind')" :options="sort" v-model="searchParams.sort"
+          <dropdown-item title="" :options="sort" v-model="searchParams.sort"
             @change="getInquiryZx">
           </dropdown-item>
           <dropdown-item :title="$t('inquiry.zxtransKind')" :options="transKind" v-model="searchParams.transKind"
@@ -195,7 +195,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
+import { ref, reactive, onMounted, onBeforeUnmount,provide } from "vue";
 import { getInquiryZxData, listReceiverCity } from "@/api/inquiry";
 import { getDictTypes } from "@/api/common";
 import { onLoad } from "@dcloudio/uni-app";
@@ -262,7 +262,9 @@ const showShipperAddressList = ref(false);
 const showConsigneeAddressList = ref(false);
 const dispatchCityRef = ref(null);
 const destinationCityRef = ref(null);
-
+// 创建响应式状态 (建议使用更具语义化的名称)
+const activeDropdown = ref(null)
+provide('activeDropdown', activeDropdown)
 // 生命周期钩子
 onMounted(() => {
   lang.value = uni.getStorageSync("lang");
@@ -492,6 +494,9 @@ const service = () => {
         background: url(../../../static/inquiry/ico-select.png) no-repeat;
         background-size: contain;
         margin: 10rpx;
+        .title{
+          display: none;
+        }
       }
     }
 
@@ -507,6 +512,9 @@ const service = () => {
         background: url(../../../static/inquiry/ico-select.png) no-repeat;
         background-size: contain;
         margin: 10rpx;
+        .title{
+          display: none;
+        }
       }
     }
 
@@ -523,52 +531,6 @@ const service = () => {
         background-size: contain;
       }
     }
-
-    // /deep/.van-dropdown-menu {
-    //   flex: 1;
-    //   padding: 0;
-    //   .van-dropdown-menu__bar {
-    //     background: #df3030;
-    //     box-shadow:none;
-    //     height: auto;
-    //   }
-    //   .van-dropdown-menu__title {
-    //     padding: 0;
-    //     &::after {
-    //       content: none;
-    //     }
-    //   }
-    //   .van-dropdown-item__content {
-    //     // height: 65%;
-    //     background: #F9F9FA;
-    //   }
-    //   .ico-arrow-up {
-    //     display: inline-block;
-    //     width: 35rpx;
-    //     height: 19rpx;
-    //     background: url("../../../static/inquiry/ico-arrow-up.png")
-    //       no-repeat;
-    //     background-size: contain;
-    //   }
-    // }
-    // .dropdown-cargoInfoBy{ //货物属性弹窗高度自适应
-    //   /deep/.van-dropdown-item__content {
-    //     // height: auto;
-    //     // /* 设置高度为自动，以适应内容 */
-    //     // max-height: none;
-    //     // /* 取消最大高度限制 */
-    //     // overflow: visible;
-    //     // /* 设置溢出时内容可见 */
-    //     max-height: 85%;
-    //   }
-    // }
-    // .size-num {
-    //   min-height: 40rpx;
-    //   color: #ffffff;
-    //   font-size: 30rpx;
-    //   margin: 16rpx auto;
-    //   text-align: center;
-    // }
   }
 
   .size-num {
