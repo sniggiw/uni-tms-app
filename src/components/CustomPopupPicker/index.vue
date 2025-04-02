@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useDebounce } from "@/hooks/debounce";
 import { useAreaList } from "@/hooks/area";
 
@@ -127,8 +127,8 @@ const handleHeaderBtnStart = () => {
 
 // 顶部右边按钮点击事件
 const handleHeaderBtnEnd = () => {
-    emit("headerBtnEnd");
     emit("update:modelValue", { ...selectAreaText, ...selectAreaCode.value });
+    emit("headerBtnEnd");
     handleHide();
 };
 

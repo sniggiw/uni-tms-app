@@ -8,16 +8,16 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { getAllAreaList } from "@/api/other";
-import { useAuthStore } from "@/stores";
+import { onMounted } from "vue";
+import { getAllAreaList, getCustomerInfo } from "@/api/other";
+import { useAuthStore } from "@/stores/auth";
 import { useAreaStore } from "@/stores/area";
 const authStore = useAuthStore();
 const areaStore = useAreaStore();
 
 const clearAuthInfoData = () => {
     authStore.clearAuthInfo();
-    getCustomerInfoData();
+    getCustomerInfo();
 };
 
 const judgeToLoginPage = () => {
@@ -28,7 +28,8 @@ const judgeToLoginPage = () => {
 
 const handleGetAllAreaListData = async () => {
     const res = await getAllAreaList();
-    areaStore.setArea({ cnAreaList: res[0].data, enCountryAreaList: res[1].data });
+    areaStore.clearArea();
+    areaStore.setArea({ areaList: res[0].data, enCountryAreaList: res[1].data });
 };
 
 const judgeToTestCustomPopPickerComponentPage = () => {

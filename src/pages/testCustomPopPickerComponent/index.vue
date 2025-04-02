@@ -46,7 +46,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted, nextTick } from "vue";
 import { useAreaStore } from "@/stores/area";
-import { useAreaList } from "@/hooks/area";
 import CustomPopupPicker from "@/components/CustomPopupPicker/index.vue";
 
 const areaStore = useAreaStore();
@@ -113,7 +112,7 @@ const handleDestroyCustomPopupPicker = (status) => {
 const handleShowCustomPopupPicker = async (val) => {
     currentRegionType.value = val;
 
-    currentAreaList.value = val == "consigneeRegion" ? areaStore.area.enCountryAreaList : areaStore.area.cnAreaList;
+    currentAreaList.value = val == "consigneeRegion" ? areaStore.area.enCountryAreaList : areaStore.area.areaList;
 
     isShowCustomPopupPicker.value = true;
     nextTick(() => {
