@@ -246,6 +246,20 @@ const getOrderTracks = (params) => {
     });
 };
 
+// 更新客户资料
+const updateCustomer = (params) => {
+    return new Promise((resolve, reject) => {
+        const url = `/tms-app/customer/setting/update`;
+        http.post(url, params) // 直接将 params 作为请求体传递
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+};
+
 export {
     getDictTypes,
     login,
@@ -262,5 +276,6 @@ export {
     orderPendingIndex,
     orderPendingList,
     orderProcessing,
-    getOrderTracks
+    getOrderTracks,
+    updateCustomer
 };

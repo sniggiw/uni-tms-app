@@ -178,6 +178,7 @@ const locale = {
     "unit":"single",
     "copyText":"copy",
     "onSubmitError":"Please fill in the required fields",
+    "require":"Please fill in the required fields",
 	},
   "confirmTips": {
     "confirmShipment": 'Do you confirm delivery?',

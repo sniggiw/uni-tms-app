@@ -4,10 +4,7 @@
       <view class="header-content">
         <view class="content-top">
           <view class="content-left">
-            <image
-              class="img"
-              src="../../static/account/ico-default-Avatar.png"
-            ></image>
+            <image class="img" src="../../static/account/ico-default-Avatar.png"></image>
             <!-- <uni-file-picker
               :before-upload="beforeUpload"
               :after-upload="afterUpload"
@@ -31,68 +28,70 @@
       <view class="last-bottom">
         <view>
           <view class="num">0.00</view>
-          <view class="title">{{$t('myInfo.balance')}}</view>
+          <view class="title">{{ $t('myInfo.balance') }}</view>
         </view>
         <view>
           <view class="num">0</view>
-          <view class="title">{{$t('myInfo.integral')}}</view>
+          <view class="title">{{ $t('myInfo.integral') }}</view>
         </view>
         <view>
           <view class="num">0</view>
-          <view class="title">{{$t('myInfo.coupon')}}</view>
+          <view class="title">{{ $t('myInfo.coupon') }}</view>
         </view>
         <image src="../../static/account/ico-myInfo.png"></image>
       </view>
     </view>
     <view class="manage-box">
       <view @tap="jumpPending">
-        <view
-          ><image src="../../static/account/ico-orderlist.png"></image
-        ></view>
-        <view class="title">{{$t('orderList.pending')}}</view>
+        <view>
+          <image src="../../static/account/ico-orderlist.png"></image>
+        </view>
+        <view class="title">{{ $t('orderList.pending') }}</view>
       </view>
       <view @tap="jumpProcess">
-        <view
-          ><image src="../../static/account/ico-processing.png"></image
-        ></view>
-        <view class="title">{{$t('orderList.process')}}</view>
+        <view>
+          <image src="../../static/account/ico-processing.png"></image>
+        </view>
+        <view class="title">{{ $t('orderList.process') }}</view>
       </view>
       <view @tap="jumpComplete">
-        <view><image src="../../static/account/ico-complete.png"></image></view>
-        <view class="title">{{$t('orderList.completed')}}</view>
+        <view>
+          <image src="../../static/account/ico-complete.png"></image>
+        </view>
+        <view class="title">{{ $t('orderList.completed') }}</view>
       </view>
       <view @tap="jumpOrderTrack">
-        <view
-          ><image src="../../static/account/ico-queryTrack.png"></image
-        ></view>
-        <view class="title">{{$t('orderDetail.orderTrack')}}</view>
+        <view>
+          <image src="../../static/account/ico-queryTrack.png"></image>
+        </view>
+        <view class="title">{{ $t('orderDetail.orderTrack') }}</view>
       </view>
     </view>
 
     <view class="bottom">
       <view @tap="jumpState">
         <i class="ico-statistical"></i>
-        <view class="title">{{$t('router.statistical')}}</view>
+        <view class="title">{{ $t('router.statistical') }}</view>
       </view>
       <view @tap="jumpChangePassword">
         <view class="ico-updatePassword"></view>
-        <view class="title">{{$t('myInfo.updatePassword')}}</view>
+        <view class="title">{{ $t('myInfo.updatePassword') }}</view>
       </view>
       <view @tap="jumpUpdateInfo">
         <view class="ico-updateData"></view>
-        <view class="title">{{$t('myInfo.updateData')}}</view>
+        <view class="title">{{ $t('myInfo.updateData') }}</view>
       </view>
       <view @tap="jumpShipper">
         <view class="ico-shipAddr"></view>
-        <view class="title">{{$t('myInfo.shipAddr')}}</view>
+        <view class="title">{{ $t('myInfo.shipAddr') }}</view>
       </view>
       <view @tap="jumpConsignee">
         <view class="ico-deliveryAddr"></view>
-        <view class="title">{{$t('myInfo.deliveryAddr')}}</view>
+        <view class="title">{{ $t('myInfo.deliveryAddr') }}</view>
       </view>
       <view @tap="logoutNow">
         <view class="ico-logout"></view>
-        <view class="title">{{$t('myInfo.logout')}}</view>
+        <view class="title">{{ $t('myInfo.logout') }}</view>
       </view>
       <!--<view @tap="toJumpReferrer">
         <view class="ico-myReferrer"></view>
@@ -160,6 +159,9 @@
 import { ref, reactive, onMounted } from "vue";
 import { getCustomerInfoData } from "@/api/common";
 import { useOtherStore, useAuthStore } from "@/stores";
+import { onShow } from '@dcloudio/uni-app';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 // import { useRouter, useStore } from "vue-router";
 // import Api from "@/api/index.js";
 // import Compressor from "compressorjs";
@@ -192,7 +194,7 @@ const member = ref("");
 const otherStore = useOtherStore();
 const authStore = useAuthStore();
 
-onMounted(() => {
+onShow(() => {
   getCustomerInfo();
   // store.commit("updateWarning", true);
   // if (!document.cookie.includes("passwordTips=")) {
@@ -230,8 +232,7 @@ const setcookie = () => {
 
 // 获取用户信息
 const getCustomerInfo = () => {
-  uni.showLoading({ title: "加载中..." });
-
+  uni.showLoading();
   getCustomerInfoData().then((res) => {
     uni.hideLoading();
     if (res.code === 200) {
@@ -367,8 +368,7 @@ const toJumpPlatform = () => {
 // 退出登录
 const logoutNow = () => {
   uni.showModal({
-    title: "提示",
-    content: "确定要退出登录吗？",
+    content: t('myInfo.logoutMessage'),
     success: (res) => {
       if (res.confirm) {
         uni.removeStorageSync("departure");
@@ -667,7 +667,7 @@ const commonUpload = (file) => {
         }
 
         .content-right {
-          > view {
+          >view {
             font-size: 36rpx;
             font-weight: 500;
             color: #ffffff;
@@ -723,7 +723,7 @@ const commonUpload = (file) => {
       height: 140rpx;
       position: relative;
 
-      > view {
+      >view {
         flex: 1;
         margin-left: 46rpx;
         margin-top: 42rpx;
@@ -748,7 +748,7 @@ const commonUpload = (file) => {
         }
       }
 
-      > uni-image {
+      >uni-image {
         width: 60rpx;
         height: 60rpx;
         position: absolute;
@@ -765,12 +765,12 @@ const commonUpload = (file) => {
     margin: 30rpx auto;
     display: flex;
 
-    > view {
+    >view {
       flex: 1;
       margin: 20rpx 0rpx 12rpx 44rpx;
 
-      > view {
-        > uni-image {
+      >view {
+        >uni-image {
           width: 80rpx;
           height: 80rpx;
           pointer-events: none;
@@ -792,7 +792,7 @@ const commonUpload = (file) => {
     width: 690rpx;
     margin: 0 auto;
 
-    > img {
+    >img {
       width: 690rpx;
       height: 270rpx;
       margin: 0 auto;
@@ -808,7 +808,7 @@ const commonUpload = (file) => {
     flex-flow: row wrap;
     align-content: flex-start;
 
-    > view {
+    >view {
       margin: 24rpx -10rpx 24rpx 26rpx;
       text-align: center;
 

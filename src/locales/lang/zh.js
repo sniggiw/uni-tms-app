@@ -178,6 +178,7 @@ const locale = {
     unit:"单",
     copyText:"复制",
     onSubmitError:"请填写必填项",
+    require:"请填写必填选项",
   },
   confirmTips: {
     confirmShipment: '是否确认发货？',
