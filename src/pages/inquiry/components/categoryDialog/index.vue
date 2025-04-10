@@ -235,10 +235,10 @@ const onSubmit = () => {
   showCategory.value.close(); //关闭弹窗
   const pathMap = {
     1: "/pages/inquiry/dedicatedLine/index",
-    2: "/pages/inquiry/intAirport",
-    3: "/pages/inquiry/intPort",
-    4: "/pages/inquiry/intExpress",
-    5: "/pages/inquiry/intRail",
+    2: "/pages/inquiry/airport/index",
+    3: "/pages/inquiry/port/index",
+    4: "/pages/inquiry/intExpressage/index",
+    5: "/pages/inquiry/intRailway/index",
   };
   const path = pathMap[searchData.flow] || "";
   uni.navigateTo({

@@ -168,7 +168,8 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import { getNewIndex, orderIndex, orderPendingIndex, orderProcessing, getCustomerInfoData } from "@/api/common"
+import { getNewIndex, orderIndex, orderPendingIndex, orderProcessing, getCustomerInfoData } from "@/api/common";
+import { onShow } from '@dcloudio/uni-app';
 
 // Props
 const props = defineProps({
@@ -265,7 +266,7 @@ const showNextNotice = () => {
 };
 
 // Lifecycle hooks
-onMounted(() => {
+onShow(() => {
   document.body.setAttribute("style", "background:#EAECF1");
   getNewIndexData();
   orderIndexData();
@@ -472,7 +473,7 @@ const getNewIndexData = async () => {
     const res = await getNewIndex();
     uni.hideLoading();
     if (res.code === 200) {
-      companyLogo.value = [...companyLogo.value, ...res.data.companyLogo];
+      companyLogo.value = res.data.companyLogo;
       notice.value = [...notice.value, ...res.data.notice];
       totalOrderNumber.value = res.data.totalOrderNumber;
       unfinishedOrderNumber.value = res.data.unfinishedOrderNumber;

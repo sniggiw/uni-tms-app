@@ -263,16 +263,16 @@ const toJumpDetail = (item) => {
       path = "/pages/inquiry/dedicatedLine/index"; // 专线
       break;
     case "2":
-      path = "/pages/inquiry/intAirport"; // 国际机场
+      path = "/pages/inquiry/airport/index"; // 国际机场
       break;
     case "3":
-      path = "/pages/inquiry/intPort"; // 国际港口
+      path = "/pages/inquiry/port/index"; // 国际港口
       break;
     case "4":
-      path = "/pages/inquiry/intExpress"; // 国际快递
+      path = "/pages/inquiry/intExpressage/index"; // 国际快递
       break;
     case "5":
-      path = "/pages/inquiry/intRail"; // 国际铁路
+      path = "/pages/inquiry/intRailway/index"; // 国际铁路
       break;
     default:
       console.error("无效的 flow");

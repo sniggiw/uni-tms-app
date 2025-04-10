@@ -123,6 +123,78 @@
                 "navigationStyle": "custom",
                 "navigationBarTitleText": "测试自定义的地区查找组件"
             }
+        },
+        {
+            "path": "pages/inquiry/airport/index",
+            "style": {
+                "navigationBarTitleText": "机场在线询价"
+            }
+        },
+        {
+            "path": "pages/inquiry/airport/airportDetail",
+            "style": {
+                "navigationBarTitleText": "机场查价结果详情"
+            }
+        },
+        {
+            "path": "pages/inquiry/airport/orders",
+            "style": {
+                "navigationBarTitleText": "机场在线下单"
+            }
+        },
+        {
+            "path": "pages/inquiry/port/index",
+            "style": {
+                "navigationBarTitleText": "港口在线询价"
+            }
+        },
+        {
+            "path": "pages/inquiry/port/portDetail",
+            "style": {
+                "navigationBarTitleText": "港口查价结果详情"
+            }
+        },
+        {
+            "path": "pages/inquiry/port/orders",
+            "style": {
+                "navigationBarTitleText": "港口在线下单"
+            }
+        },
+        {
+            "path": "pages/inquiry/intExpressage/index",
+            "style": {
+                "navigationBarTitleText": "快递在线询价"
+            }
+        },
+        {
+            "path": "pages/inquiry/intExpressage/expressDetail",
+            "style": {
+                "navigationBarTitleText": "快递查价结果详情"
+            }
+        },
+        {
+            "path": "pages/inquiry/intExpressage/orders",
+            "style": {
+                "navigationBarTitleText": "快递在线下单"
+            }
+        },
+        {
+            "path": "pages/inquiry/intRailway/index",
+            "style": {
+                "navigationBarTitleText": "铁路在线询价"
+            }
+        },
+        {
+            "path": "pages/inquiry/intRailway/railwayDetail",
+            "style": {
+                "navigationBarTitleText": "铁路查价结果详情"
+            }
+        },
+        {
+            "path": "pages/inquiry/intRailway/orders",
+            "style": {
+                "navigationBarTitleText": "铁路在线下单"
+            }
         }
     ],
     "globalStyle": {
