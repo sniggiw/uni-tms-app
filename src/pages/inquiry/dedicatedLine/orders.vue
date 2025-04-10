@@ -262,7 +262,7 @@ import {
   commonUpload,
 } from "@/api/common";
 import { getCity } from "@/api/other";
-import { getStore,removeStore } from "@/utils/index";
+import { getStore, removeStore } from "@/utils/index";
 import Agreement from "../../../components/agreement/index.vue";
 // import Compressor from 'compressorjs';
 // import CustomSelect from "../../../components/selectComponent/index.vue";
@@ -618,7 +618,7 @@ const getWarehouseListData = () => {
   });
 };
 
-const jumpPhonePreFix = (pageKind) =>{
+const jumpPhonePreFix = (pageKind) => {
   uni.navigateTo({
     url: `/pages/inquiry/components/phonePreFix/index?pageKind=${pageKind}&lang=${phonePrefixLang.value}`,
   });
@@ -752,7 +752,13 @@ const onSubmit = () => {
               Api.orderResubmit(params).then((res) => {
                 uni.hideLoading();
                 if (res.code === 200) {
-                  uni.navigateTo({ url: "/pages/order/list?active=2" });
+                  // 传递参数 - 首页tabs自动跳转到后台处理中
+                  uni.setStorageSync('active', {
+                    activeNum: 2,
+                  });
+                  uni.switchTab({
+                    url: '/pages/index/index'
+                  });
                   showToast("placeOrder.placeOrderSuccess");
                 } else {
                   showToast(res.msg);
@@ -762,7 +768,13 @@ const onSubmit = () => {
               Api.zxOrderSubmit(params).then((res) => {
                 uni.hideLoading();
                 if (res.code === 200) {
-                  uni.navigateTo({ url: "/pages/order/list?active=2" });
+                  // 传递参数 - 首页tabs自动跳转到后台处理中
+                  uni.setStorageSync('active', {
+                    activeNum: 2,
+                  });
+                  uni.switchTab({
+                    url: '/pages/index/index'
+                  });
                   showToast("placeOrder.placeOrderSuccess");
                 } else {
                   showToast(res.msg);
