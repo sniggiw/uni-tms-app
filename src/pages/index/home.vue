@@ -265,26 +265,6 @@ const showNextNotice = () => {
   setTimeout(showNextNotice, 5000); // 5秒切换一次
 };
 
-// Lifecycle hooks
-onShow(() => {
-  document.body.setAttribute("style", "background:#EAECF1");
-  getNewIndexData();
-  orderIndexData();
-  getCustomerInfo();
-  // confirmButtonText.value = $t("common.determine");
-  lang.value = uni.getStorageSync("lang");
-  orderPendingIndexData();
-  orderProcess();
-  showNextNotice();
-  setTimeout(() => {
-    startScroll();
-  }, 500); // 延迟 100ms 确保 DOM 渲染完成
-});
-
-onBeforeUnmount(() => {
-  document.body.removeAttribute("style");
-});
-
 // toast提示
 const showToast = (message, duration = 2000) => {
   uni.showToast({ title: message, icon: "none", duration });
@@ -474,14 +454,14 @@ const getNewIndexData = async () => {
     uni.hideLoading();
     if (res.code === 200) {
       companyLogo.value = res.data.companyLogo;
-      notice.value = [...notice.value, ...res.data.notice];
+      notice.value = res.data.notice;
       totalOrderNumber.value = res.data.totalOrderNumber;
       unfinishedOrderNumber.value = res.data.unfinishedOrderNumber;
-      banner.value = [...banner.value, ...res.data.baseBanner];
-      tools.value = [...tools.value, ...res.data.tools];
-      transport.value = [...transport.value, ...res.data.transport];
-      services.value = [...services.value, ...res.data.services];
-      partner.value = [...partner.value, ...res.data.partner];
+      banner.value = res.data.baseBanner;
+      tools.value = res.data.tools;
+      transport.value = res.data.transport;
+      services.value = res.data.services;
+      partner.value = res.data.partner;
       const size = 4;
       const result = [];
       for (let i = 0; i < transport.value.length; i += size) {
@@ -628,6 +608,25 @@ const service = () => {
 const getToast = () => {
   $toast({ message: $t("middle.toast"), duration: 2000 });
 };
+
+onShow(() => {
+  document.body.setAttribute("style", "background:#EAECF1");
+  getNewIndexData();
+  orderIndexData();
+  getCustomerInfo();
+  // confirmButtonText.value = $t("common.determine");
+  lang.value = uni.getStorageSync("lang");
+  orderPendingIndexData();
+  orderProcess();
+  showNextNotice();
+  setTimeout(() => {
+    startScroll();
+  }, 500); // 延迟 100ms 确保 DOM 渲染完成
+});
+
+onBeforeUnmount(() => {
+  document.body.removeAttribute("style");
+});
 </script>
 
 <style lang="scss" scoped>

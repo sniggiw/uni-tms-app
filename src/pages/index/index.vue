@@ -58,9 +58,33 @@
         <EmptyComponent v-else />
       </view>
       <!-- 已完成 -->
-      <view v-show="current === 3"> 选项卡1的内容 </view>
+      <view v-show="current === 3">
+        <view class="search-btn">
+          <uni-search-bar v-model="orderCode" @confirm="completedOrderProcess" :radius="100" cancelButton="none"
+            placeholder="请输入订单编码"></uni-search-bar>
+          <view @tap="completedOrderProcess">查询</view>
+        </view>
+        <template v-if="completedOrderList.length > 0">
+          <uni-list>
+            <listItem :orderList="completedOrderList" />
+          </uni-list>
+        </template>
+        <EmptyComponent v-else />
+      </view>
       <!-- 问题件 -->
-      <view v-show="current === 4"> 选项卡2的内容 </view>
+      <view v-show="current === 4">
+        <view class="search-btn">
+          <uni-search-bar v-model="orderCode" @confirm="problemOrderProcess" :radius="100" cancelButton="none"
+            placeholder="请输入订单编码"></uni-search-bar>
+          <view @tap="problemOrderProcess">查询</view>
+        </view>
+        <template v-if="problemOrderList.length > 0">
+          <uni-list>
+            <listItem :orderList="problemOrderList" />
+          </uni-list>
+        </template>
+        <EmptyComponent v-else />
+      </view>
     </view>
   </view>
 </template>
@@ -74,11 +98,13 @@ import EmptyComponent from "../../components/EmptyComponent/index.vue";
 import { onLaunch, onShow, onLoad } from '@dcloudio/uni-app';
 const current = ref(0);
 const items = ref(["首页", "待我处理", "后台处理中", "已完成", "问题件"]);
-const completOrderList = ref([]); //列表数据
-const orderCode = ref('');
 const orderPending = ref([]); // 待我处理汇总
-const orderNum = ref('');
 const pendingList = ref([]); //待我处理列表
+const completOrderList = ref([]); // 后台处理中列表数据
+const completedOrderList = ref([]); // 已完成列表数据
+const problemOrderList = ref([]); //问题件列表数据
+const orderCode = ref('');
+const orderNum = ref('');
 const pendingState = ref('');
 const flowCode = ref(''); //查询条件
 const showFirstListPage = ref(false); //待我处理tabs默认隐藏
@@ -95,20 +121,12 @@ const onClickItem = (e) => {
   } else if (e.currentIndex === 2) {
     //后台处理中
     completionOrderProcess();
+  } else if (e.currentIndex === 3) {
+    completedOrderProcess();
+  } else if (e.currentIndex === 4) {
+    problemOrderProcess();
   }
 };
-
-onShow(() => {
-  current.value = 0
-  const params = uni.getStorageSync('active');
-  if (params) {
-    current.value = params.activeNum
-    // 重新请求后台处理中的tabs数据
-    completionOrderProcess();
-    // 使用完后可以清除
-    uni.removeStorageSync('active');
-  }
-})
 
 // 待我处理汇总
 const orderPendingIndexData = () => {
@@ -156,6 +174,7 @@ const orderPendingListData = (pendingState, orderIds) => {
   })
 }
 
+// 后台处理中tabs
 const completionOrderProcess = () => {
   uni.showLoading();
   orderProcessing({
@@ -175,10 +194,61 @@ const completionOrderProcess = () => {
   })
 };
 
+// 已完成tabs
+const completedOrderProcess = () => {
+  uni.showLoading();
+  orderProcessing({
+    flowCode: 'COMPLETED',
+    orderCode: orderCode.value
+  }).then((res) => {
+    uni.hideLoading();
+    if (res.code === 200) {
+      completedOrderList.value = res.rows
+    } else {
+      uni.showToast({
+        title: res.msg,
+        icon: "none",
+        duration: 2000,
+      });
+    }
+  })
+};
+
+// 问题件tabs
+const problemOrderProcess = () => {
+  uni.showLoading();
+  orderProcessing({
+    flowCode: 'PROBLEM',
+    orderCode: orderCode.value
+  }).then((res) => {
+    uni.hideLoading();
+    if (res.code === 200) {
+      problemOrderList.value = res.rows
+    } else {
+      uni.showToast({
+        title: res.msg,
+        icon: "none",
+        duration: 2000,
+      });
+    }
+  })
+};
+
 const searchCompletOrderList = () => {
 
 }
 
+onShow(() => {
+  current.value = 0
+  const params = uni.getStorageSync('active');
+  if (params) {
+    current.value = params.activeNum
+    // 重新请求后台处理中的tabs数据
+    completionOrderProcess();
+    // 使用完后可以清除
+    uni.removeStorageSync('active');
+  }
+})
 </script>
 
 <style lang="scss" scoped>
