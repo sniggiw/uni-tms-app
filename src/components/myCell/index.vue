@@ -1,5 +1,5 @@
 <template>
-  <view class="my-cell">
+  <view class="my-cell" @tap="onClick">
     <!-- 左侧标题 -->
     <view class="my-cell__title">
       <slot name="title">{{ title }}</slot>

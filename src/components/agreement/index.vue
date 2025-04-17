@@ -76,7 +76,6 @@ const checked = ref(false);
 const showAgreement = ref(false);
 const popup = ref(null);
 const current = ref(0);
-const items = ref(["运输条款"]);
 
 onMounted(() => {
   commonListArgeementData();
@@ -139,7 +138,7 @@ defineExpose({
 /* 底部全屏弹窗样式 */
 .fullscreen-popup {
   width: 100%;
-  height: 100vh; /* 占满全屏 */
+  height: 90vh; /* 占满全屏 */
   background-color: #fff;
   display: flex;
   flex-direction: column;

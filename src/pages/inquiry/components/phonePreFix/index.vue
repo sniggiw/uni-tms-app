@@ -86,7 +86,13 @@ const handleItemClick = (item) => {
     });
     return
   }
-
+  if (page.value === 'register') { // 注册页
+    uni.setStorageSync('registerPhonePrefix', JSON.stringify(item.phonePrefix));
+    uni.navigateBack({
+      delta: 1 // 返回上一页
+    });
+    return
+  } 
 };
 </script>
 

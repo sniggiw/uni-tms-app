@@ -1,7 +1,7 @@
 <template>
   <view class="index-page">
     <view class="bg"></view>
-    <uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" styleType="text"
+    <uni-segmented-control class="fixed-segment" :current="current" :values="items" @clickItem="onClickItem" styleType="text"
       activeColor="#ffff"></uni-segmented-control>
     <view class="content">
       <!-- 首页 -->
@@ -253,6 +253,21 @@ onShow(() => {
 
 <style lang="scss" scoped>
 .index-page {
+  position: relative; /* 添加相对定位 */
+  
+  .fixed-segment {
+    position: fixed; /* 固定定位 */
+    top: 80rpx; /* 与.bg高度相同 */
+    left: 0;
+    right: 0;
+    z-index: 999; /* 确保它在其他内容之上 */
+    background: #df3030; /* 添加背景色 */
+    padding-bottom: 20rpx; /* 保持原有样式 */
+  }
+  
+  .content-with-padding {
+    padding-top: 80rpx; /* 为固定元素留出空间 (20rpx bg + 60rpx segment) */
+  }
   .bg {
     background: #df3030;
     text-align: center;
@@ -268,12 +283,14 @@ onShow(() => {
   :deep(.uni-list--border-bottom) {
     display: none;
   }
-
+  .home-page{
+    margin-top: 20rpx;
+  }
   .segmented-control {
     background: #df3030;
     font-size: 36rpx;
     padding-bottom: 20rpx;
-    top: -40rpx;
+    // top: -40rpx;
 
     :deep(.segmented-control__text) {
       color: #fea6a0 !important;
@@ -289,7 +306,7 @@ onShow(() => {
     align-items: center;
     font-size: 28rpx;
     width: 98%;
-    margin: 0 auto;
+    margin: 50rpx auto;
 
     :deep(.uni-searchbar) {
       width: 89%;

@@ -6,19 +6,22 @@
       <view class="hot-city">
         <view class="title"><i class="line"></i>{{ $t('common.inCommonUse') }}</view>
         <view class="city-list">
-          <myCell :title="item.areaName + '  ' + '  ' + item.phonePrefix" v-for="(item, index) in commonMobilePhonesZh"
-            :key="index" @click="handleItemClick(item)" class="my-cell" />
-
-          <!-- <view class="custom-card" v-if="search.lang === 'en'">
-          <van-cell :title="item.areaName + '  ' + '  ' + item.phonePrefix"
-            v-for="(item, index) in commonMobilePhonesEn" :key="index" @click="checkCity(item)" />
-        </view> -->
+          <template v-if="lang === 'zh_CN'">
+            <myCell :title="item.areaName + '  ' + '  ' + item.phonePrefix"
+              v-for="(item, index) in commonMobilePhonesZh" :key="index" @tap="handleItemClick(item)"
+              class="my-cell" />
+          </template>
+          <template v-else>
+            <myCell :title="item.areaName + '  ' + '  ' + item.phonePrefix"
+              v-for="(item, index) in commonMobilePhonesEn" :key="index" @tap="handleItemClick(item)"
+              class="my-cell" />
+          </template>
         </view>
       </view>
       <view v-for="(group, index) in data" :key="index" :id="`group-${index}`" class="group">
         <view class="group-title">{{ group.group }}</view>
         <view class="group-items">
-          <view v-for="(item, i) in group.phonePrefixList" :key="i" class="group-item" @click="handleItemClick(item)">
+          <view v-for="(item, i) in group.phonePrefixList" :key="i" class="group-item" @tap="handleItemClick(item)">
             {{ item.areaName }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.phonePrefix }}
           </view>
         </view>
@@ -28,7 +31,7 @@
     <!-- 右侧索引导航 -->
     <view class="index-bar">
       <view v-for="(group, index) in data" :key="index" class="index-item" :class="{ active: index === activeIndex }"
-        @click="scrollToGroup(index)">
+        @tap="scrollToGroup(index)">
         {{ group.group }}
       </view>
     </view>
@@ -65,7 +68,7 @@ const commonMobilePhonesEn = ref([
 ]);
 // 定义 emits
 const emit = defineEmits(['item-click']);
-
+const lang = ref(uni.getStorageSync('lang') || 'zh')
 const activeId = ref(''); // 当前激活的 ID
 const activeIndex = ref(0); // 当前激活的索引项
 
@@ -112,6 +115,7 @@ onMounted(() => {
   box-shadow: 0px 6rpx 10rpx 2rpx rgba(232, 225, 225, 0.34);
   border-radius: 30rpx;
   margin: 20rpx 30rpx;
+
   .title {
     display: flex;
     align-items: center;
@@ -159,7 +163,7 @@ onMounted(() => {
 .content {
   height: 100%;
   overflow-y: auto;
-  
+
 }
 
 .group {
