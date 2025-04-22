@@ -154,17 +154,17 @@
           @clickItem="tabsClick" styleType="text" activeColor="#df3030" :mask-tap="false"></uni-segmented-control>
         <view class="content">
           <view class="agreement" v-if="activeTabIndex === 0">
-            <view v-for="(item,index) in privacyAgreement" :key="index">
+            <view v-for="(item, index) in privacyAgreement" :key="index">
               <view v-html="item.content"></view>
             </view>
           </view>
           <view class="agreement" v-if="activeTabIndex === 1">
-            <view v-for="(item,index) in registrationAgreement" :key="index">
+            <view v-for="(item, index) in registrationAgreement" :key="index">
               <view v-html="item.content"></view>
             </view>
           </view>
           <view class="agreement" v-if="activeTabIndex === 2">
-            <view v-for="(item,index) in logisticsAgreement" :key="index">
+            <view v-for="(item, index) in logisticsAgreement" :key="index">
               <view v-html="item.content"></view>
             </view>
           </view>
@@ -246,6 +246,15 @@ const formData = reactive({
   },
   recommendPhone: route.query.recommendPhone
 })
+
+const regInfo = ref({
+  areaPhonePrefix: '+86',
+  code: '',
+  newPwd: '',
+  confirmPwd: '',
+  regPhone: '',
+})
+
 const cityData = ref([])
 const cityAreaCode = ref('')
 const privacyAgreement = ref([])
@@ -284,7 +293,7 @@ watch(formData, (val) => {
 // 生命周期
 onMounted(() => {
   initData()
- 
+
 })
 
 onBeforeUnmount(() => {
@@ -304,11 +313,11 @@ const jumpPhonePreFix = (pageKind) => {
 
 const openBottomPopup = (item) => {
   popupRef.value.open()
-  if(item.contentKind === '隐私协议' || item.contentKind === 'Privacy Agreement'){
+  if (item.contentKind === '隐私协议' || item.contentKind === 'Privacy Agreement') {
     activeTabIndex.value = 0
-  }else if(item.contentKind === '注册协议' || item.contentKind === 'User Registration Agreement'){
+  } else if (item.contentKind === '注册协议' || item.contentKind === 'User Registration Agreement') {
     activeTabIndex.value = 1
-  }else if(item.contentKind === '物流协议' || item.contentKind === 'Logistics Agreement'){
+  } else if (item.contentKind === '物流协议' || item.contentKind === 'Logistics Agreement') {
     activeTabIndex.value = 2
   }
 }
@@ -406,7 +415,7 @@ const commonCaptchaImageData = async () => {
     if (res.code === 200) {
       captchaImage.uuid = res.data.uuid
       captchaImage.img = 'data:image/gif;base64,' + res.data.img
-    }else{
+    } else {
       showToast(res.msg)
     }
   } catch (error) {
@@ -529,7 +538,7 @@ const argeementListData = async () => {
     uni.hideLoading();
     if (res.code === 200) {
       argeementList.value = res.data
-    }else{
+    } else {
       showToast(res.msg)
     }
   } catch (error) {
@@ -544,7 +553,7 @@ const commonListArgeementData = async () => {
     uni.hideLoading();
     if (res.code === 200) {
       privacyAgreement.value = res.data
-    }else{
+    } else {
       showToast(res.msg)
     }
   } catch (error) {
@@ -568,7 +577,7 @@ const registrationAgreementData = async () => {
       //     privacyAgreement.value = item.content
       //   }
       // })
-    }else{
+    } else {
       showToast(res.msg)
     }
   } catch (error) {
@@ -583,7 +592,7 @@ const logisticsAgreementData = async () => {
     uni.hideLoading();
     if (res.code === 200) {
       logisticsAgreement.value = res.data
-    }else{
+    } else {
       showToast(res.msg)
     }
   } catch (error) {

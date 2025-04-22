@@ -5,8 +5,8 @@
                 <view class="switchLanaguageBtn" @click="handleToggleLanguage('bottom')">
                     <!-- <text>{{ languageList.find((item) => item.value === language).text }}</text>
                     <text :class="['triangle', { active: isShowPopupContainer }]"></text> -->
-                    <text v-if="language === 'zh_CN'">中文</text>
-                    <text v-if="language === 'en_US'">English</text>
+                    <text v-if="language === 'zh_CN'">{{ $t('login.zhCN') }}</text>
+                    <text v-if="language === 'en_US'">{{ $t('login.enUS') }}</text>
                     <text :class="['triangle', { active: isShowPopupContainer }]"></text>
                 </view>
                 <view class="onlineServiceBtn"></view>
@@ -25,13 +25,13 @@
             <uni-card title="" extra="">
                 <view class="form">
                     <view class="inputContainer">
-                        <view class="beforeExtra">
-                            <text class="text plusSymbol">+</text>
-                            <text class="text areaCode">86</text>
+                        <view class="beforeExtra" @tap="jumpPhonePreFix('login')">
+                            <!-- <text class="text plusSymbol">+</text> -->
+                            <text class="text areaCode">{{ form.areaPhonePrefix }}</text>
                             <text class="text iconArrowDown"></text>
                         </view>
                         <!-- uniapp 中的 input，如果需要对 placeHolder 进行样式设置，需要使用 placeholder-class 添加类名 -->
-                        <input type="text" placeholder="请输入手机号" class="input" placeholder-class="placeholderClass"
+                        <input type="text" :placeholder="$t('register.regPhonePlaceholder')" class="input" placeholder-class="placeholderClass"
                             v-model="form.regPhone" />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUser.png" alt="" />
@@ -39,7 +39,7 @@
                     </view>
 
                     <view class="inputContainer">
-                        <input type="text" placeholder="请输入登录密码" class="input" placeholder-class="placeholderClass"
+                        <input :placeholder="$t('register.regPwdPlaceholder')" class="input" type="password" placeholder-class="placeholderClass"
                             v-model="form.regPwd" />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUnShowPassword.png" alt="" />
@@ -51,39 +51,43 @@
                             <view
                                 :class="['rememberPasswordBox', form.isRememberPassword ? 'iconIsRememberPassword' : 'unRememberPassword']">
                             </view>
-                            <view class="defaultText">记住账号密码</view>
+                            <view class="defaultText">{{ $t('login.rememberRegPwd') }}</view>
                         </view>
                         <view class="forgetPassword">
-                            <text class="defaultText">忘记密码?</text>
+                            <text class="defaultText" @tap="openForgetPasswordDialog">{{ $t('login.forgetRegPwd') }}</text>
                         </view>
                     </view>
                     <view class="registerNow">
-                        您还没有账号吗?<text @tap="jumpRegister">立即注册</text>
+                        {{ $t('login.registerText') }}<text @tap="jumpRegister">{{ $t('login.registerText2') }}</text>
                     </view>
                     <view class="trackAndLoginBtns">
-                        <view class="btn track" @tap="jumpQueryTrack">轨迹查询</view>
-                        <view class="btn login" @tap="handleLogin">登录</view>
+                        <view class="btn track" @tap="jumpQueryTrack">{{ $t('router.queryTrack') }}</view>
+                        <view class="btn login" @tap="handleLogin">{{ $t('login.logNow') }}</view>
                     </view>
 
-                    <view class="orLine">
+                    <!-- <view class="orLine">
                         <view class="line leftLine"></view>
                         <view class="text">OR</view>
                         <view class="line rightLine"></view>
                     </view>
 
-                    <view class="wechatLoginBtn">微信登录</view>
+                    <view class="wechatLoginBtn">微信登录</view> -->
                 </view>
             </uni-card>
 
-            <view class="protocol">
+            <!-- <view class="protocol">
                 <view :class="['agreeBtn', form.isAgree ? 'iconAgree' : 'unAgree']" @tap="handleToggleAgree"></view>
                 <text class="defaultText">我同意该协议</text>
                 <text>《隐私协议》</text>
                 <text>《注册协议》</text>
                 <text>《物流协议》</text>
-            </view>
+            </view> -->
 
         </view>
+        <view class="keep-on-record" :class="{ 'position-rel': isScroll }">
+            <text class="keep-on-record-text">{{ $t('login.copyRight') }}</text>
+        </view>
+
 
         <view class="popupLanguageContainer">
             <!-- change 事件是当 popup 组件显隐状态发生变化时触发的，而不是选择了内容时触发的 -->
@@ -118,8 +122,60 @@
                     </view>
                 </view>
                 <view class="btn-language">
-                    <button class="language-primary" @tap="changeLanguage">确认</button>
+                    <button class="language-primary" @tap="changeLanguage">{{ $t('common.confirm') }}</button>
                 </view>
+            </uni-popup>
+        </view>
+
+        <view class="popupForgetPasswordContainer">
+            <uni-popup ref="forgetPasswordDialog" type="dialog">
+                <view class="icon-del" @tap="closeForgetPopup"></view>
+                <uni-forms>
+                    <section class="basic-info">
+                        <uni-forms-item :label="$t('register.regPhone')">
+                            <view class="area-phone">
+                                <view class="phone-prefix" @tap="jumpForgetPreFix">
+                                    <view>{{ regInfo.areaPhonePrefix }}</view>
+                                    <view class="ico-phone"></view>
+                                </view>
+                                <uni-easyinput v-model.number="regInfo.regPhone" type="number"
+                                    :placeholder="$t('register.regPhonePlaceholder')">
+                                </uni-easyinput>
+                            </view>
+                        </uni-forms-item>
+                        <uni-forms-item :label="$t('register.captchaImage')">
+                            <uni-easyinput v-model="captchaImage.code"
+                                :placeholder="$t('register.captchaImagePlaceholder')">
+                                <template #right>
+                                    <img class="captcha-image-btn" :src="captchaImage.img"
+                                        @tap="commonCaptchaImageData" />
+                                </template>
+                            </uni-easyinput>
+                        </uni-forms-item>
+                        <uni-forms-item :label="$t('register.phoneCode')" :name="['regInfo', 'code']"
+                            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+                            <uni-easyinput v-model="regInfo.code" :placeholder="$t('register.phoneCodePlaceholder')">
+                                <template #right>
+                                    <button size="mini" class="phone-code-button"
+                                        :disabled="captchaImage.phoneCodeButton" @tap="commonCaptchaPhoneData">{{
+                                            captchaImage.phoneCodeButtonText }}</button>
+                                </template>
+                            </uni-easyinput>
+                        </uni-forms-item>
+                        <uni-forms-item :label="$t('register.regPwd')" :name="['regInfo', 'regPwd']"
+                            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+                            <uni-easyinput v-model="regInfo.regPwd" type="password"
+                                :placeholder="$t('register.regPwdPlaceholder')" @blur="checkPassword" />
+                        </uni-forms-item>
+
+                        <uni-forms-item :label="$t('changePassword.confirmPwd')" :name="['regInfo', 'confirmPwd']"
+                            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+                            <uni-easyinput v-model="regInfo.confirmPwd" type="password"
+                                :placeholder="$t('changePassword.confirmPwdPlaceholder')" @blur="checkPassword" />
+                        </uni-forms-item>
+                    </section>
+                </uni-forms>
+                <button class="forget-submit">{{ $t('register.agreementBtn') }}</button>
             </uni-popup>
         </view>
     </view>
@@ -127,11 +183,16 @@
 
 <script setup>
 import moment from "moment";
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
 import { loginByPhone } from "@/api/auth";
+import { useRoute } from 'vue-router';
+import { getStore, removeStore } from "@/utils/index";
 import { useAuthStore } from "@/stores";
 import { useI18n } from 'vue-i18n';
 const i18n = useI18n();
+const route = useRoute();
+import { commonCaptchaImage, commonCaptchaPhone } from "@/api/register";
+const { t } = useI18n()
 // const changeLanguage = (lang) => {
 //     uni.setLocale(lang);
 //     i18n.locale.value = lang; // 更新 i18n 的 locale
@@ -149,6 +210,25 @@ const selectLanguage = ref("zh_CN");
 const isShowPopupContainer = ref(false);
 const language = ref('zh_CN');
 const storedLanguage = uni.getStorageSync('lang');
+const isScroll = ref(false);
+const forgetPasswordDialog = ref(null);
+
+const captchaImage = ref({
+    uuid: '',
+    img: '',
+    code: '',
+    phoneCodeButton: false,
+    phoneCodeButtonText: t('register.sendOut'),
+    time: 60
+}) // 图形验证码
+
+const regInfo = ref({
+    areaPhonePrefix: '+86',
+    code: '',
+    newPwd: '',
+    confirmPwd: '',
+    regPhone: '',
+})
 
 onMounted(() => {
     if (storedLanguage === 'zh_CN') {
@@ -158,6 +238,8 @@ onMounted(() => {
     } else {
         language.value = 'zh_CN'; // 如果存储的值不是 'zh_CN' 或 'en_US'，默认赋值 'en_US'
     }
+    hasScrollbar();
+    commonCaptchaImageData();
 })
 
 //切换语言
@@ -195,16 +277,123 @@ const form = reactive({
     regPhone: "18520664371",
     regPwd: "123456",
     isRememberPassword: false,
-    isAgree: true,
 });
 
 const handleToggleIsRememberPassword = () => {
     form.isRememberPassword = !form.isRememberPassword;
 };
 
+const jumpPhonePreFix = (pageKind) => {
+    uni.navigateTo({
+        url: `/pages/inquiry/components/phonePreFix/index?pageKind=${pageKind}&lang=${storedLanguage.value}`,
+    });
+};
+
+const jumpForgetPreFix = () => {
+    uni.showToast({
+        title: t('login.forgetTips'),
+        duration: 1500,
+        icon: "none",
+    });
+}
+
 const handleToggleAgree = () => {
     form.isAgree = !form.isAgree;
 };
+
+const commonCaptchaImageData = async () => {
+    try {
+        const res = await commonCaptchaImage()
+        if (res.code === 200) {
+            captchaImage.uuid = res.data.uuid
+            captchaImage.img = 'data:image/gif;base64,' + res.data.img
+        } else {
+            uni.showToast({
+                title: res.msg,
+                duration: 1500,
+                icon: "none",
+            });
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const commonCaptchaPhoneData = async () => {
+    if (!regInfo.regPhone) {
+        uni.showToast({
+            title: t('register.regPhonePlaceholder'),
+            duration: 1500,
+            icon: "none",
+        });
+        return
+    }
+    if (!captchaImage.code) {
+        uni.showToast({
+            title: t('register.captchaImagePlaceholder'),
+            duration: 1500,
+            icon: "none",
+        });
+        return
+    }
+
+    const captcha = formData.regInfo.areaPhonePrefix
+    const params = {
+        areaPhonePrefix: captcha,
+        code: captchaImage.code,
+        regPhone: formData.regInfo.regPhone,
+        uuid: captchaImage.uuid,
+        captchaKind: '1'
+    }
+
+    uni.showLoading();
+    try {
+        const res = await commonCaptchaPhone(params)
+        uni.hideLoading();
+        if (res.code === 200) {
+            captchaImage.phoneCodeButtonText = captchaImage.time + 's'
+            captchaImage.phoneCodeButton = true
+            const setInt = setInterval(() => {
+                captchaImage.time = captchaImage.time - 1
+                captchaImage.phoneCodeButtonText = captchaImage.time + 's'
+                if (captchaImage.time <= 0) {
+                    captchaImage.phoneCodeButton = false
+                    captchaImage.phoneCodeButtonText = t('register.resend')
+                    captchaImage.time = 60
+                    clearInterval(setInt)
+                }
+            }, 1000)
+        } else {
+            commonCaptchaImageData()
+        }
+        showToast(res.msg)
+    } catch (error) {
+        uni.hideLoading();
+        console.error(error)
+    }
+};
+
+const checkPassword = () => {
+    if (regInfo.regPwd && regInfo.confirmPwd && regInfo.regPwd !== regInfo.confirmPwd) {
+        uni.showToast({
+            title: t('register.confirmPwdTip'),
+            duration: 1500,
+            icon: "none",
+        });
+    }
+}
+
+const hasScrollbar = () => {
+    isScroll.value = document.getElementsByClassName('loginPage')[0].clientHeight > (window.innerHeight || document.documentElement.clientHeight);
+};
+
+const openForgetPasswordDialog = () => {
+    forgetPasswordDialog.value.open()
+}
+
+const closeForgetPopup = () => {
+    forgetPasswordDialog.value.close()
+}
 
 // 校验表单
 const validateForm = () => {
@@ -279,6 +468,22 @@ const handleLogin = async () => {
         });
     }
 };
+
+// 手机号码区号
+watch(
+    () => route.path,
+    (to, from) => {
+        if (to !== from) {
+            const phonePrefix = getStore("loginPhonePrefix");
+            if (phonePrefix) {
+                form.areaPhonePrefix = phonePrefix;
+                setTimeout(() => {
+                    removeStore("loginPhonePrefix");
+                }, 150);
+            }
+        }
+    }
+);
 </script>
 
 <style lang="scss" scoped>
@@ -409,7 +614,7 @@ const handleLogin = async () => {
                     }
 
                     .areaCode {
-                        margin: 0 10rpx;
+                        margin: 0rpx 5rpx 0rpx -6rpx;
                     }
 
                     .iconArrowDown {
@@ -595,6 +800,33 @@ const handleLogin = async () => {
         }
     }
 
+    .keep-on-record {
+        position: absolute;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+        width: 750rpx;
+        height: 180rpx;
+        background: url("../../static/account/bottom-bg.png") no-repeat;
+        background-position: bottom;
+        background-size: cover;
+
+        .keep-on-record-text {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 30rpx;
+            text-align: center;
+            font-size: 26rpx;
+            color: #D73336;
+        }
+    }
+
+    .position-rel {
+        position: relative;
+    }
+
     .popupLanguageContainer {
         .popup-content {
             display: flex;
@@ -748,6 +980,122 @@ const handleLogin = async () => {
                 font-size: 28rpx;
                 color: #ffffff;
             }
+        }
+    }
+
+    .popupForgetPasswordContainer {
+        :deep(.uni-popup__wrapper) {
+            width: 80%;
+            background: #ffffff !important;
+            padding-bottom: 50rpx;
+            border-radius: 20rpx;
+            position: relative;
+
+            .icon-del {
+                position: absolute;
+                right: 30rpx;
+                top: 25rpx;
+                display: inline-block;
+                width: 24rpx;
+                height: 24rpx;
+                background: url("../../static/common/icon-delete.png") no-repeat;
+                background-size: contain;
+
+            }
+
+            .basic-info {
+                overflow: hidden;
+                margin: 70rpx 2rpx 40rpx;
+                background: #ffffff;
+                box-shadow: 0px 6rpx 10rpx 2rpx rgba(232, 225, 225, 0.34);
+                border-radius: 30rpx;
+
+                .uni-forms-item {
+                    margin-bottom: 0rpx;
+                }
+
+                .area-phone {
+                    display: flex;
+                    align-items: center;
+
+                    .phone-prefix {
+                        color: #333333;
+                        font-size: 30rpx;
+                        display: flex;
+                        align-items: center;
+                        margin-left: 34rpx;
+
+                        .ico-phone {
+                            width: 20rpx;
+                            height: 10rpx;
+                            background: url("../../../static/common/icon-phonePreFix.png") no-repeat;
+                            background-size: contain;
+                            margin-left: 16rpx;
+                        }
+                    }
+                }
+
+                .uni-forms-item__content {
+                    display: flex;
+                    text-align: right;
+
+                    .uni-easyinput {
+                        .uni-easyinput__content {
+                            text-align: right;
+                            border: 0;
+                            margin-right: 10rpx;
+                        }
+
+                        .is-disabled {
+                            color: #c8c9cc;
+                            background-color: #ffffff !important;
+                        }
+                    }
+
+
+                    .uni-select {
+                        border: none !important;
+                    }
+
+                    .uni-forms-item__error {
+                        right: 25rpx;
+                        top: 50rpx;
+                    }
+
+
+
+                    .captcha-image-btn {
+                        width: 160rpx;
+                        height: 60rpx;
+                        overflow: hidden;
+                        border-radius: 10rpx;
+                    }
+
+                    .phone-code-button {
+                        color: #ffffff;
+                        background: #DF3030;
+                        border: 2rpx solid #DF3030;
+                        border-radius: 60rpx;
+                        min-width: 80rpx;
+                        height: 52rpx;
+                        line-height: 52rpx;
+                    }
+
+
+                }
+            }
+        }
+
+        .forget-submit {
+            background: #DF3030;
+            border: 2rpx solid #DF3030;
+            color: #ffffff;
+            border-radius: 40rpx;
+            width: 350rpx;
+            height: 70rpx;
+            line-height: 68rpx;
+            margin-top: 24rpx;
+            text-align: center;
         }
     }
 }
