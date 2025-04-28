@@ -3,10 +3,8 @@
         <view class="header">
             <view class="top">
                 <view class="switchLanaguageBtn" @click="handleToggleLanguage('bottom')">
-                    <!-- <text>{{ languageList.find((item) => item.value === language).text }}</text>
-                    <text :class="['triangle', { active: isShowPopupContainer }]"></text> -->
-                    <text v-if="language === 'zh_CN'">{{ $t('login.zhCN') }}</text>
-                    <text v-if="language === 'en_US'">{{ $t('login.enUS') }}</text>
+                    <text v-if="language === 'zh-Hans'">{{ t("login.zhCN") }}</text>
+                    <text v-if="language === 'en'">{{ t("login.enUS") }}</text>
                     <text :class="['triangle', { active: isShowPopupContainer }]"></text>
                 </view>
                 <view class="onlineServiceBtn"></view>
@@ -15,8 +13,8 @@
             <view class="mid">
                 <view class="logo"></view>
                 <view class="desc">
-                    <view class="title">{{ $t('login.login') }}</view>
-                    <view class="subTitle">{{ $t('login.h2') }}</view>
+                    <view class="title">{{ t("login.login") }}</view>
+                    <view class="subTitle">{{ t("login.h2") }}</view>
                 </view>
             </view>
         </view>
@@ -31,16 +29,26 @@
                             <text class="text iconArrowDown"></text>
                         </view>
                         <!-- uniapp 中的 input，如果需要对 placeHolder 进行样式设置，需要使用 placeholder-class 添加类名 -->
-                        <input type="text" :placeholder="$t('register.regPhonePlaceholder')" class="input" placeholder-class="placeholderClass"
-                            v-model="form.regPhone" />
+                        <input
+                            type="text"
+                            :placeholder="t('register.regPhonePlaceholder')"
+                            class="input"
+                            placeholder-class="placeholderClass"
+                            v-model="form.regPhone"
+                        />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUser.png" alt="" />
                         </view>
                     </view>
 
                     <view class="inputContainer">
-                        <input :placeholder="$t('register.regPwdPlaceholder')" class="input" type="password" placeholder-class="placeholderClass"
-                            v-model="form.regPwd" />
+                        <input
+                            :placeholder="t('register.regPwdPlaceholder')"
+                            class="input"
+                            type="password"
+                            placeholder-class="placeholderClass"
+                            v-model="form.regPwd"
+                        />
                         <view class="afterExtra">
                             <image src="@/static/imgs/login/iconUnShowPassword.png" alt="" />
                         </view>
@@ -48,21 +56,19 @@
 
                     <view class="rememberAndForgetPassword">
                         <view class="rememberPassword" @tap="handleToggleIsRememberPassword">
-                            <view
-                                :class="['rememberPasswordBox', form.isRememberPassword ? 'iconIsRememberPassword' : 'unRememberPassword']">
-                            </view>
-                            <view class="defaultText">{{ $t('login.rememberRegPwd') }}</view>
+                            <view :class="['rememberPasswordBox', form.isRememberPassword ? 'iconIsRememberPassword' : 'unRememberPassword']"> </view>
+                            <view class="defaultText">{{ t("login.rememberRegPwd") }}</view>
                         </view>
                         <view class="forgetPassword">
-                            <text class="defaultText" @tap="openForgetPasswordDialog">{{ $t('login.forgetRegPwd') }}</text>
+                            <text class="defaultText" @tap="openForgetPasswordDialog">{{ t("login.forgetRegPwd") }}</text>
                         </view>
                     </view>
                     <view class="registerNow">
-                        {{ $t('login.registerText') }}<text @tap="jumpRegister">{{ $t('login.registerText2') }}</text>
+                        {{ t("login.registerText") }}<text @tap="jumpRegister">{{ t("login.registerText2") }}</text>
                     </view>
                     <view class="trackAndLoginBtns">
-                        <view class="btn track" @tap="jumpQueryTrack">{{ $t('router.queryTrack') }}</view>
-                        <view class="btn login" @tap="handleLogin">{{ $t('login.logNow') }}</view>
+                        <view class="btn track" @tap="jumpQueryTrack">{{ t("router.queryTrack") }}</view>
+                        <view class="btn login" @tap="handleLogin">{{ t("login.logNow") }}</view>
                     </view>
 
                     <!-- <view class="orLine">
@@ -82,12 +88,10 @@
                 <text>《注册协议》</text>
                 <text>《物流协议》</text>
             </view> -->
-
         </view>
         <view class="keep-on-record" :class="{ 'position-rel': isScroll }">
-            <text class="keep-on-record-text">{{ $t('login.copyRight') }}</text>
+            <text class="keep-on-record-text">{{ t("login.copyRight") }}</text>
         </view>
-
 
         <view class="popupLanguageContainer">
             <!-- change 事件是当 popup 组件显隐状态发生变化时触发的，而不是选择了内容时触发的 -->
@@ -100,10 +104,10 @@
                                 <i class="ico-language ico-chinese"></i>
                             </view>
                             <view>
-                                {{ $t('login.zhCN') }}
+                                {{ t("login.zhCN") }}
                             </view>
                             <view class="icoTick-content">
-                                <i class="ico-tick" v-if="language === 'zh_CN'"></i>
+                                <i class="ico-tick" v-if="language === 'zh-Hans'"></i>
                                 <view v-else></view>
                             </view>
                         </view>
@@ -112,17 +116,17 @@
                                 <i class="ico-language ico-english"></i>
                             </view>
                             <view>
-                                {{ $t('login.enUS') }}
+                                {{ t("login.enUS") }}
                             </view>
                             <view class="icoTick-content">
-                                <i class="ico-tick" @tap="onClick($event, 2)" v-if="language === 'en_US'"></i>
+                                <i class="ico-tick" @tap="onClick($event, 2)" v-if="language === 'en'"></i>
                                 <view @tap="onClick($event, 2)" v-else></view>
                             </view>
                         </view>
                     </view>
                 </view>
                 <view class="btn-language">
-                    <button class="language-primary" @tap="changeLanguage">{{ $t('common.confirm') }}</button>
+                    <button class="language-primary" @tap="changeLanguage">{{ t("common.confirm") }}</button>
                 </view>
             </uni-popup>
         </view>
@@ -132,71 +136,89 @@
                 <view class="icon-del" @tap="closeForgetPopup"></view>
                 <uni-forms>
                     <section class="basic-info">
-                        <uni-forms-item :label="$t('register.regPhone')">
+                        <uni-forms-item :label="t('register.regPhone')">
                             <view class="area-phone">
                                 <view class="phone-prefix" @tap="jumpForgetPreFix">
                                     <view>{{ regInfo.areaPhonePrefix }}</view>
                                     <view class="ico-phone"></view>
                                 </view>
-                                <uni-easyinput v-model.number="regInfo.regPhone" type="number"
-                                    :placeholder="$t('register.regPhonePlaceholder')">
+                                <uni-easyinput v-model.number="regInfo.regPhone" type="number" :placeholder="t('register.regPhonePlaceholder')">
                                 </uni-easyinput>
                             </view>
                         </uni-forms-item>
-                        <uni-forms-item :label="$t('register.captchaImage')">
-                            <uni-easyinput v-model="captchaImage.code"
-                                :placeholder="$t('register.captchaImagePlaceholder')">
+                        <uni-forms-item :label="t('register.captchaImage')">
+                            <uni-easyinput v-model="captchaImage.code" :placeholder="t('register.captchaImagePlaceholder')">
                                 <template #right>
-                                    <img class="captcha-image-btn" :src="captchaImage.img"
-                                        @tap="commonCaptchaImageData" />
+                                    <img class="captcha-image-btn" :src="captchaImage.img" @tap="commonCaptchaImageData" />
                                 </template>
                             </uni-easyinput>
                         </uni-forms-item>
-                        <uni-forms-item :label="$t('register.phoneCode')" :name="['regInfo', 'code']"
-                            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
-                            <uni-easyinput v-model="regInfo.code" :placeholder="$t('register.phoneCodePlaceholder')">
+                        <uni-forms-item
+                            :label="t('register.phoneCode')"
+                            :name="['regInfo', 'code']"
+                            :rules="[{ required: true, errorMessage: t('common.require') }]"
+                            required
+                        >
+                            <uni-easyinput v-model="regInfo.code" :placeholder="t('register.phoneCodePlaceholder')">
                                 <template #right>
-                                    <button size="mini" class="phone-code-button"
-                                        :disabled="captchaImage.phoneCodeButton" @tap="commonCaptchaPhoneData">{{
-                                            captchaImage.phoneCodeButtonText }}</button>
+                                    <button
+                                        size="mini"
+                                        class="phone-code-button"
+                                        :disabled="captchaImage.phoneCodeButton"
+                                        @tap="commonCaptchaPhoneData"
+                                    >
+                                        {{ captchaImage.phoneCodeButtonText }}
+                                    </button>
                                 </template>
                             </uni-easyinput>
                         </uni-forms-item>
-                        <uni-forms-item :label="$t('register.regPwd')" :name="['regInfo', 'regPwd']"
-                            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
-                            <uni-easyinput v-model="regInfo.regPwd" type="password"
-                                :placeholder="$t('register.regPwdPlaceholder')" @blur="checkPassword" />
+                        <uni-forms-item
+                            :label="t('register.regPwd')"
+                            :name="['regInfo', 'regPwd']"
+                            :rules="[{ required: true, errorMessage: t('common.require') }]"
+                            required
+                        >
+                            <uni-easyinput
+                                v-model="regInfo.regPwd"
+                                type="password"
+                                :placeholder="t('register.regPwdPlaceholder')"
+                                @blur="checkPassword"
+                            />
                         </uni-forms-item>
 
-                        <uni-forms-item :label="$t('changePassword.confirmPwd')" :name="['regInfo', 'confirmPwd']"
-                            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
-                            <uni-easyinput v-model="regInfo.confirmPwd" type="password"
-                                :placeholder="$t('changePassword.confirmPwdPlaceholder')" @blur="checkPassword" />
+                        <uni-forms-item
+                            :label="t('changePassword.confirmPwd')"
+                            :name="['regInfo', 'confirmPwd']"
+                            :rules="[{ required: true, errorMessage: t('common.require') }]"
+                            required
+                        >
+                            <uni-easyinput
+                                v-model="regInfo.confirmPwd"
+                                type="password"
+                                :placeholder="t('changePassword.confirmPwdPlaceholder')"
+                                @blur="checkPassword"
+                            />
                         </uni-forms-item>
                     </section>
                 </uni-forms>
-                <button class="forget-submit">{{ $t('register.agreementBtn') }}</button>
+                <button class="forget-submit">{{ t("register.agreementBtn") }}</button>
             </uni-popup>
         </view>
     </view>
 </template>
 
 <script setup>
-import moment from "moment";
-import { reactive, ref, onMounted, watch } from "vue";
 import { loginByPhone } from "@/api/auth";
-import { useRoute } from 'vue-router';
-import { getStore, removeStore } from "@/utils/index";
-import { useAuthStore } from "@/stores";
-import { useI18n } from 'vue-i18n';
-const i18n = useI18n();
-const route = useRoute();
 import { commonCaptchaImage, commonCaptchaPhone } from "@/api/register";
-const { t } = useI18n()
-// const changeLanguage = (lang) => {
-//     uni.setLocale(lang);
-//     i18n.locale.value = lang; // 更新 i18n 的 locale
-// }
+import { useAuthStore } from "@/stores";
+import { getStore, removeStore } from "@/utils/index";
+import moment from "moment";
+import { onMounted, reactive, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const { t, locale } = useI18n();
 const authStore = useAuthStore();
 
 const ERROR_TOSAT_TEXT = {
@@ -206,58 +228,58 @@ const ERROR_TOSAT_TEXT = {
 };
 
 const popupLanguage = ref(null);
-const selectLanguage = ref("zh_CN");
+const selectLanguage = ref("zh-Hans");
 const isShowPopupContainer = ref(false);
-const language = ref('zh_CN');
-const storedLanguage = uni.getStorageSync('lang');
+const language = ref("zh-Hans");
+const storedLanguage = uni.getStorageSync("lang");
 const isScroll = ref(false);
 const forgetPasswordDialog = ref(null);
 
 const captchaImage = ref({
-    uuid: '',
-    img: '',
-    code: '',
+    uuid: "",
+    img: "",
+    code: "",
     phoneCodeButton: false,
-    phoneCodeButtonText: t('register.sendOut'),
-    time: 60
-}) // 图形验证码
+    phoneCodeButtonText: t("register.sendOut"),
+    time: 60,
+}); // 图形验证码
 
 const regInfo = ref({
-    areaPhonePrefix: '+86',
-    code: '',
-    newPwd: '',
-    confirmPwd: '',
-    regPhone: '',
-})
+    areaPhonePrefix: "+86",
+    code: "",
+    newPwd: "",
+    confirmPwd: "",
+    regPhone: "",
+});
 
 onMounted(() => {
-    if (storedLanguage === 'zh_CN') {
-        language.value = 'zh_CN'; // 如果是 'zh_CN'，直接赋值 'zh_CN'
-    } else if (storedLanguage === 'en_US') {
-        language.value = 'en_US'; // 如果是 'en_US'，赋值 'en_US'
+    if (storedLanguage === "zh-Hans") {
+        language.value = "zh-Hans";
+    } else if (storedLanguage === "en") {
+        language.value = "en";
     } else {
-        language.value = 'zh_CN'; // 如果存储的值不是 'zh_CN' 或 'en_US'，默认赋值 'en_US'
+        language.value = "zh-Hans";
     }
     hasScrollbar();
     commonCaptchaImageData();
-})
+});
 
 //切换语言
 const changeLanguage = () => {
     popupLanguage.value.close();
+
     uni.setLocale(language.value);
-    i18n.locale.value = language.value; // 更新 i18n 的 locale
-    uni.setStorageSync('lang', language.value); //存储lang
+    locale.value = language.value; // 更新 i18n 的 locale
+    uni.setStorageSync("lang", language.value); //存储lang
 };
 
 const onClick = (event, index) => {
     if (index === 1) {
-        language.value = 'zh_CN';
-
+        language.value = "zh-Hans";
     } else if (index === 2) {
-        language.value = 'en_US';
+        language.value = "en";
     }
-}
+};
 
 const handleToggleLanguage = (type) => {
     popupLanguage.value.open(type);
@@ -291,11 +313,11 @@ const jumpPhonePreFix = (pageKind) => {
 
 const jumpForgetPreFix = () => {
     uni.showToast({
-        title: t('login.forgetTips'),
+        title: t("login.forgetTips"),
         duration: 1500,
         icon: "none",
     });
-}
+};
 
 const handleToggleAgree = () => {
     form.isAgree = !form.isAgree;
@@ -303,10 +325,10 @@ const handleToggleAgree = () => {
 
 const commonCaptchaImageData = async () => {
     try {
-        const res = await commonCaptchaImage()
+        const res = await commonCaptchaImage();
         if (res.code === 200) {
-            captchaImage.uuid = res.data.uuid
-            captchaImage.img = 'data:image/gif;base64,' + res.data.img
+            captchaImage.uuid = res.data.uuid;
+            captchaImage.img = "data:image/gif;base64," + res.data.img;
         } else {
             uni.showToast({
                 title: res.msg,
@@ -315,85 +337,85 @@ const commonCaptchaImageData = async () => {
             });
         }
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
-}
+};
 
 const commonCaptchaPhoneData = async () => {
     if (!regInfo.regPhone) {
         uni.showToast({
-            title: t('register.regPhonePlaceholder'),
+            title: t("register.regPhonePlaceholder"),
             duration: 1500,
             icon: "none",
         });
-        return
+        return;
     }
     if (!captchaImage.code) {
         uni.showToast({
-            title: t('register.captchaImagePlaceholder'),
+            title: t("register.captchaImagePlaceholder"),
             duration: 1500,
             icon: "none",
         });
-        return
+        return;
     }
 
-    const captcha = formData.regInfo.areaPhonePrefix
+    const captcha = formData.regInfo.areaPhonePrefix;
     const params = {
         areaPhonePrefix: captcha,
         code: captchaImage.code,
         regPhone: formData.regInfo.regPhone,
         uuid: captchaImage.uuid,
-        captchaKind: '1'
-    }
+        captchaKind: "1",
+    };
 
     uni.showLoading();
     try {
-        const res = await commonCaptchaPhone(params)
+        const res = await commonCaptchaPhone(params);
         uni.hideLoading();
         if (res.code === 200) {
-            captchaImage.phoneCodeButtonText = captchaImage.time + 's'
-            captchaImage.phoneCodeButton = true
+            captchaImage.phoneCodeButtonText = captchaImage.time + "s";
+            captchaImage.phoneCodeButton = true;
             const setInt = setInterval(() => {
-                captchaImage.time = captchaImage.time - 1
-                captchaImage.phoneCodeButtonText = captchaImage.time + 's'
+                captchaImage.time = captchaImage.time - 1;
+                captchaImage.phoneCodeButtonText = captchaImage.time + "s";
                 if (captchaImage.time <= 0) {
-                    captchaImage.phoneCodeButton = false
-                    captchaImage.phoneCodeButtonText = t('register.resend')
-                    captchaImage.time = 60
-                    clearInterval(setInt)
+                    captchaImage.phoneCodeButton = false;
+                    captchaImage.phoneCodeButtonText = t("register.resend");
+                    captchaImage.time = 60;
+                    clearInterval(setInt);
                 }
-            }, 1000)
+            }, 1000);
         } else {
-            commonCaptchaImageData()
+            commonCaptchaImageData();
         }
-        showToast(res.msg)
+        showToast(res.msg);
     } catch (error) {
         uni.hideLoading();
-        console.error(error)
+        console.error(error);
     }
 };
 
 const checkPassword = () => {
     if (regInfo.regPwd && regInfo.confirmPwd && regInfo.regPwd !== regInfo.confirmPwd) {
         uni.showToast({
-            title: t('register.confirmPwdTip'),
+            title: t("register.confirmPwdTip"),
             duration: 1500,
             icon: "none",
         });
     }
-}
+};
 
 const hasScrollbar = () => {
-    isScroll.value = document.getElementsByClassName('loginPage')[0].clientHeight > (window.innerHeight || document.documentElement.clientHeight);
+    isScroll.value = document.getElementsByClassName("loginPage")[0].clientHeight > (window.innerHeight || document.documentElement.clientHeight);
 };
 
 const openForgetPasswordDialog = () => {
-    forgetPasswordDialog.value.open()
-}
+    forgetPasswordDialog.value.open();
+};
 
 const closeForgetPopup = () => {
-    forgetPasswordDialog.value.close()
-}
+    forgetPasswordDialog.value.close();
+};
 
 // 校验表单
 const validateForm = () => {
@@ -424,11 +446,11 @@ const validateForm = () => {
 };
 
 const jumpQueryTrack = () => {
-    uni.navigateTo({ url: '/pages/order/queryTrack/index/index' })
+    uni.navigateTo({ url: "/pages/order/queryTrack/index/index" });
 };
 
 const jumpRegister = () => {
-    uni.navigateTo({ url: '/pages/register/index/index' })
+    uni.navigateTo({ url: "/pages/register/index/index" });
 };
 
 const handleLogin = async () => {
@@ -694,8 +716,8 @@ watch(
                 margin-top: 20rpx;
                 margin-left: 8rpx;
 
-                >text {
-                    color: #1266FB
+                > text {
+                    color: #1266fb;
                 }
             }
 
@@ -819,7 +841,7 @@ watch(
             bottom: 30rpx;
             text-align: center;
             font-size: 26rpx;
-            color: #D73336;
+            color: #d73336;
         }
     }
 
@@ -910,7 +932,6 @@ watch(
                         background: url("../../static/account/ico-english.png") no-repeat;
                         background-size: contain;
                     }
-
                 }
             }
 
@@ -1000,7 +1021,6 @@ watch(
                 height: 24rpx;
                 background: url("../../static/common/icon-delete.png") no-repeat;
                 background-size: contain;
-
             }
 
             .basic-info {
@@ -1052,7 +1072,6 @@ watch(
                         }
                     }
 
-
                     .uni-select {
                         border: none !important;
                     }
@@ -1061,8 +1080,6 @@ watch(
                         right: 25rpx;
                         top: 50rpx;
                     }
-
-
 
                     .captcha-image-btn {
                         width: 160rpx;
@@ -1073,22 +1090,20 @@ watch(
 
                     .phone-code-button {
                         color: #ffffff;
-                        background: #DF3030;
-                        border: 2rpx solid #DF3030;
+                        background: #df3030;
+                        border: 2rpx solid #df3030;
                         border-radius: 60rpx;
                         min-width: 80rpx;
                         height: 52rpx;
                         line-height: 52rpx;
                     }
-
-
                 }
             }
         }
 
         .forget-submit {
-            background: #DF3030;
-            border: 2rpx solid #DF3030;
+            background: #df3030;
+            border: 2rpx solid #df3030;
             color: #ffffff;
             border-radius: 40rpx;
             width: 350rpx;
