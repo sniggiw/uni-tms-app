@@ -3,32 +3,32 @@
     <uni-forms @submit="onSubmit" :model="form" ref="formRef">
       <view class="top">
         <uni-forms-item
-          :label="$t('inquiry.weight')"
+          :label="t('inquiry.weight')"
           required
           :name="['weight']"
-          :rules="[{ required: true, errorMessage: $t('inquiry.tips') }]"
+          :rules="[{ required: true, errorMessage: t('inquiry.tips') }]"
         >
           <uni-easyinput
             type="number"
             v-model="form.weight"
             :inputBorder="false"
-            :placeholder="$t('inquiry.weightPlaceholder')"
+            :placeholder="t('inquiry.weightPlaceholder')"
           />
         </uni-forms-item>
-        <uni-forms-item :label="$t('inquiry.squares')" required>
+        <uni-forms-item :label="t('inquiry.squares')" required>
           <uni-easyinput
             type="number"
-            :placeholder="$t('goods.squaresPlaceholder')"
+            :placeholder="t('goods.squaresPlaceholder')"
             v-model="form.squares"
             :inputBorder="false"
           />
         </uni-forms-item>
-        <uni-forms-item :label="$t('inquiry.amount')" required>
+        <uni-forms-item :label="t('inquiry.amount')" required>
           <uni-easyinput
             type="number"
             v-model="form.transCount"
             :inputBorder="false"
-            :placeholder="$t('inquiry.amountPlaceholder')"
+            :placeholder="t('inquiry.amountPlaceholder')"
           />
           <uni-data-select
             v-model="form.transUnit"
@@ -38,22 +38,22 @@
         </uni-forms-item>
       </view>
       <view class="top" v-if="flow == 1">
-        <uni-forms-item :label="$t('inquiry.destCity')" >
+        <uni-forms-item :label="t('inquiry.destCity')" >
           <uni-data-select
             v-model="form.destCity"
             class="destCity-select"
             :localdata="receiverCityData"
-            :placeholder="$t('inquiry.destCityPlaceholder')"
+            :placeholder="t('inquiry.destCityPlaceholder')"
           />
         </uni-forms-item>
-        <uni-forms-item :label="$t('inquiry.maxLong')">
-          <uni-easyinput type="number" v-model="form.maxLong" :border="false"  :placeholder="$t('inquiry.maxLongPlaceholder')"/>
+        <uni-forms-item :label="t('inquiry.maxLong')">
+          <uni-easyinput type="number" v-model="form.maxLong" :border="false"  :placeholder="t('inquiry.maxLongPlaceholder')"/>
         </uni-forms-item>
-        <uni-forms-item :label="$t('inquiry.maxWidth')">
-          <uni-easyinput type="number" v-model="form.maxWidth" :placeholder="$t('inquiry.maxWidthPlaceholder')"/>
+        <uni-forms-item :label="t('inquiry.maxWidth')">
+          <uni-easyinput type="number" v-model="form.maxWidth" :placeholder="t('inquiry.maxWidthPlaceholder')"/>
         </uni-forms-item>
-        <uni-forms-item  :label="$t('inquiry.maxHeight')">
-          <uni-easyinput type="number" v-model="form.maxHeight"  :placeholder="$t('inquiry.maxHeightPlaceholder')"/>
+        <uni-forms-item  :label="t('inquiry.maxHeight')">
+          <uni-easyinput type="number" v-model="form.maxHeight"  :placeholder="t('inquiry.maxHeightPlaceholder')"/>
         </uni-forms-item>
       </view>
       <!-- 货物品名选择 -->
@@ -70,7 +70,7 @@
               {{ item.name }}
             </view>
 
-            <!-- <template v-if="lang === 'en_US'">
+            <!-- <template v-if="lang === 'en'">
               <view
                 class="value-en"
                 :class="{ active: getProductsActive(item.value) }"
@@ -84,8 +84,8 @@
           </view>
         </view>
         <view class="footer-detail-btn">
-          <button class="close" @click="close">{{$t('inquiry.shutdownButton')}}</button>
-          <button class="confirm" @click="onSubmit">{{$t('inquiry.priceButton')}}</button>
+          <button class="close" @click="close">{{t('inquiry.shutdownButton')}}</button>
+          <button class="confirm" @click="onSubmit">{{t('inquiry.priceButton')}}</button>
         </view>
       </view>
     </uni-forms>

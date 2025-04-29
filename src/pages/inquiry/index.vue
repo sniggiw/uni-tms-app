@@ -13,7 +13,7 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico-logistics-default"></view>
-                <view :class="activeName === '1' ? 'active' : ''">{{ $t('inquiry.speical') }}</view>
+                <view :class="activeName === '1' ? 'active' : ''">{{ t('inquiry.speical') }}</view>
                 <i class="ico-put-away" v-if="activeName === '1'"></i>
                 <i class="ico-open" v-else></i>
               </view>
@@ -28,7 +28,7 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-air"></view>
-                <view :class="activeName === '2' ? 'active' : ''">{{ $t('inquiry.airportTo') }}</view>
+                <view :class="activeName === '2' ? 'active' : ''">{{ t('inquiry.airportTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '2'"></i>
                 <i class="ico-open" v-else></i>
               </view>
@@ -43,7 +43,7 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-sea"></view>
-                <view :class="activeName === '3' ? 'active' : ''">{{ $t('inquiry.portTo') }}</view>
+                <view :class="activeName === '3' ? 'active' : ''">{{ t('inquiry.portTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '3'"></i>
                 <i class="ico-open" v-else></i>
               </view>
@@ -58,7 +58,7 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-car"></view>
-                <view :class="activeName === '4' ? 'active' : ''">{{ $t('inquiry.expressTo') }}</view>
+                <view :class="activeName === '4' ? 'active' : ''">{{ t('inquiry.expressTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '4'"></i>
                 <i class="ico-open" v-else></i>
               </view>
@@ -73,7 +73,7 @@
             <view class="collapseItem">
               <view class="collapseItem-title">
                 <view class="ico ico-railway"></view>
-                <view :class="activeName === '5' ? 'active' : ''">{{ $t('inquiry.railTo') }}</view>
+                <view :class="activeName === '5' ? 'active' : ''">{{ t('inquiry.railTo') }}</view>
                 <i class="ico-put-away" v-if="activeName === '5'"></i>
                 <i class="ico-open" v-else></i>
               </view>
@@ -87,7 +87,7 @@
     <!-- 底部热门城市 -->
     <view class="hot" v-if="hotToday.length > 0">
       <view class="hot-title">
-        <view>{{ $t('inquiry.hot') }}</view>
+        <view>{{ t('inquiry.hot') }}</view>
         <view class="line"></view>
       </view>
       <view class="hot-list" v-for="(item, index) in hotToday" :key="index">
@@ -141,7 +141,7 @@
                 item.flowTemplateId == 2 ||
                 item.flowTemplateId == 4 ||
                 item.flowTemplateId == 5) &&
-              lang == 'en_US'
+              lang == 'en'
             ">
               <view class="item-last"> ${{ channel.price }} </view>
             </template>
@@ -164,6 +164,8 @@ import { getBannerData, inquiryHotToday } from "@/api/inquiry";
 import HomeCollapseItem from "../inquiry/components/homeComponent/index.vue";
 import CargoInfoDialog from "../inquiry/components/cargoInfoDialog/index.vue";
 import { onShow } from '@dcloudio/uni-app';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const collapseItemRef = ref(null);
 const activeName = ref("1");
 const searchData = ref({});

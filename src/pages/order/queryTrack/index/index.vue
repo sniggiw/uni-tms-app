@@ -2,8 +2,8 @@
   <view class="query-track">
     <view class="top-search">
       <uni-search-bar v-model="orderCode" cancelButton="none" radius="50"
-        :placeholder="$t('orderList.orderCodePlaceholder')"></uni-search-bar>
-      <view type="text" @tap="getOrderTracksData" class="search-btn">{{ $t('common.search') }}</view>
+        :placeholder="t('orderList.orderCodePlaceholder')"></uni-search-bar>
+      <view type="text" @tap="getOrderTracksData" class="search-btn">{{ t('common.search') }}</view>
     </view>
     <view class="container" v-if="orderTracks.length > 0">
       <uni-steps :options="orderTracks" active-icon="/static/order/ico-track-checked.png" :active="active" direction="column"/>
@@ -35,7 +35,7 @@ onMounted(() => {
       i18n.locale.value = languag;
     }
   } else {
-    i18n.locale.value === 'zh' ? 'zh_CN' : 'en_US'
+    i18n.locale.value === 'zh-Hans' ? 'zh-Hans' : 'en'
   }
 });
 

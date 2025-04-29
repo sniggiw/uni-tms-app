@@ -2,8 +2,8 @@
   <view class="addressList-page">
     <view class="top-search">
       <uni-search-bar v-model="search.addr" @confirm="phonePrefixData" cancelButton="none" radius="50"
-        :placeholder="$t('inquiry.enterCity')"></uni-search-bar>
-      <view type="text" @tap="phonePrefixData" class="search-btn">{{ $t('common.search') }}</view>
+        :placeholder="t('inquiry.enterCity')"></uni-search-bar>
+      <view type="text" @tap="phonePrefixData" class="search-btn">{{ t('common.search') }}</view>
     </view>
     <MyIndexBar :data="addrList" @item-click="handleItemClick" class="my-indexBar"></MyIndexBar>
   </view>

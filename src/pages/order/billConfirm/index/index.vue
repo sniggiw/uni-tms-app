@@ -3,9 +3,9 @@
     <view class="custom-card container1">
       <view class="price-list">
         <view class="price-title">
-          <view>{{ $t("billConfirm.serialNumber") }}</view>
-          <view>{{ $t("billConfirm.costItem") }}</view>
-          <view>{{ $t("billConfirm.amount") }}</view>
+          <view>{{ t("billConfirm.serialNumber") }}</view>
+          <view>{{ t("billConfirm.costItem") }}</view>
+          <view>{{ t("billConfirm.amount") }}</view>
         </view>
         <view class="price-item" v-for="(item, index) in billInfo.bills" :key="index">
           <view>{{ index + 1 }}</view>
@@ -15,7 +15,7 @@
           </view>
         </view>
         <view class="summation">
-          <view>{{ $t("common.summation") }}</view>
+          <view>{{ t("common.summation") }}</view>
           <view class="total-all">
             <template v-if="billInfo.total">
               <span class="total-amount" v-for="(item, index) in billInfo.total" :key="index">({{ item.currency }}){{
@@ -31,9 +31,9 @@
     </view>
     <!-- 入库数据查看-专线独有 -->
     <view class="custom-card container2" v-if="flowTemplateId == 1">
-      <view class="receipt-title">{{ $t("receiptConfirm.note") }}</view>
+      <view class="receipt-title">{{ t("receiptConfirm.note") }}</view>
       <view class="custom-card img-container" v-if="images && images.length">
-        <view class="title">{{ $t("receiptConfirm.warehouseImg") }}</view>
+        <view class="title">{{ t("receiptConfirm.warehouseImg") }}</view>
         <view class="img-list">
           <image :src="item" v-for="(item, index) in images" :key="index" @tap="
             receiptShowImage = true;
@@ -42,35 +42,35 @@
         </view>
       </view>
       <view class="custom-card sum-container">
-        <myCell :title="$t('receiptConfirm.finalPrice')" :value="finalPrice + ' ' + finalPriceUnt" />
-        <myCell :title="$t('receiptConfirm.finalPriceDesc')" :value="finalPriceDesc" />
+        <myCell :title="t('receiptConfirm.finalPrice')" :value="finalPrice + ' ' + finalPriceUnt" />
+        <myCell :title="t('receiptConfirm.finalPriceDesc')" :value="finalPriceDesc" />
       </view>
       <view class="custom-card sum-container">
-        <myCell :title="$t('goods.totalWeightSum')" :value="totalWeightSum.toFixed(2)" />
-        <myCell :title="$t('goods.zxTotalMateWeightSum')" :value="totalMateWeightSum.toFixed(2)" />
+        <myCell :title="t('goods.totalWeightSum')" :value="totalWeightSum.toFixed(2)" />
+        <myCell :title="t('goods.zxTotalMateWeightSum')" :value="totalMateWeightSum.toFixed(2)" />
       </view>
     </view>
     <view class="custom-card pay-method" v-if="pendingState === 'CONFIRM_BILL'">
       <uni-data-picker :localdata="payKind" :map="{ text: 'name', value: 'value' }" v-model="billInfo.payKind"
-        :placeholder="$t('billConfirm.payKindPlaceholder')" />
-      <uni-data-picker :label="$t('billConfirm.outMemo')" :localdata="outMemo" :map="{ text: 'name', value: 'value' }"
-        v-model="billInfo.outMemo" :placeholder="$t('billConfirm.outMemoPlaceholder')" />
-      <uni-data-picker :label="$t('billConfirm.isNeedPaper')" :localdata="sysYesNo" ref="isNeedPaper"
+        :placeholder="t('billConfirm.payKindPlaceholder')" />
+      <uni-data-picker :label="t('billConfirm.outMemo')" :localdata="outMemo" :map="{ text: 'name', value: 'value' }"
+        v-model="billInfo.outMemo" :placeholder="t('billConfirm.outMemoPlaceholder')" />
+      <uni-data-picker :label="t('billConfirm.isNeedPaper')" :localdata="sysYesNo" ref="isNeedPaper"
         :map="{ text: 'name', value: 'value' }" v-model="billInfo.isNeedPaper"
-        :placeholder="$t('billConfirm.isNeedPaperPlaceholder')" />
+        :placeholder="t('billConfirm.isNeedPaperPlaceholder')" />
     </view>
     <view class="custom-card container4" v-if="pendingState === 'CONFIRM_BILL'">
-      <my-cell :title="$t('billConfirm.downloadExecl')">
+      <my-cell :title="t('billConfirm.downloadExecl')">
         <template #right>
           <button class="down-btn" @tap="downloadBillsExcel">{{
-            $t("common.download")
+            t("common.download")
             }}</button>
         </template>
       </my-cell>
-      <my-cell :title="$t('billConfirm.downloadPdf')">
+      <my-cell :title="t('billConfirm.downloadPdf')">
         <template #right>
           <button class="down-btn" @tap="downloadBillsPdf">{{
-            $t("common.download")
+            t("common.download")
             }}</button>
         </template>
       </my-cell>
@@ -78,12 +78,12 @@
     <view class="footer-btn">
       <template v-if="pendingState === 'CONFIRM_BILL'">
         <uni-button type="default confirm-btn" @tap="billConfirm()">{{
-          $t("billConfirm.approvalBill")
+          t("billConfirm.approvalBill")
           }}</uni-button>
       </template>
       <template v-if="pendingState === 'PAID'">
         <uni-button type="default confirm-btn" @tap="paymentCompleted()">{{
-          $t("billConfirm.paymentCompleted")
+          t("billConfirm.paymentCompleted")
           }}</uni-button>
       </template>
     </view>
@@ -184,11 +184,11 @@ const getZxIncomeInfoData = async () => {
 
 const paymentCompleted = () => {
   if (fileList.value.length <= 0) {
-    uni.showToast({ title: $t('billConfirm.fileListPlaceholder'), duration: 2000 });
+    uni.showToast({ title: t('billConfirm.fileListPlaceholder'), duration: 2000 });
     return;
   }
   showConfirm.value = true;
-  confirmMessage.value = $t('confirmTips.confirmCompletePayment');
+  confirmMessage.value = t('confirmTips.confirmCompletePayment');
   confirmBtnType.value = 2;
 };
 
@@ -245,7 +245,7 @@ const onConfirm = () => {
 const paymentCompletedSubmit = async () => {
   const res = await billsPay({ orderId: orderId.value });
   if (res.code === 200) {
-    uni.showToast({ title: $t('billConfirm.completed'), duration: 2000, icon: 'none' });
+    uni.showToast({ title: t('billConfirm.completed'), duration: 2000, icon: 'none' });
     uni.navigateBack();
   } else {
     uni.showToast({ title: res.msg, duration: 2000, icon: 'none' });
@@ -263,7 +263,7 @@ const getBillsVoucherData = async () => {
 
 const beforeRead = (file) => {
   if (file.size > 10 * 1024 * 1024) {
-    uni.showToast({ title: $t('common.imgUploadTip'), duration: 2000, icon: 'none' });
+    uni.showToast({ title: t('common.imgUploadTip'), duration: 2000, icon: 'none' });
     return false;
   }
   return true;
@@ -288,7 +288,7 @@ const afterRead = (file) => {
 
 const commonUpload = async (file) => {
   file.status = 'uploading';
-  file.message = $t('common.uploading');
+  file.message = t('common.uploading');
   const formData = new FormData();
   formData.append('file', file.file);
   const res = await Api.commonUpload(formData);
@@ -299,15 +299,15 @@ const commonUpload = async (file) => {
     const saveRes = await Api.saveBillsVoucher(fileData);
     if (saveRes.code === 200) {
       getBillsVoucher();
-      uni.showToast({ title: $t('common.uploadSuccess'), duration: 2000 });
+      uni.showToast({ title: t('common.uploadSuccess'), duration: 2000 });
     } else {
       file.status = 'failed';
-      file.message = $t('common.uploadFailed');
+      file.message = t('common.uploadFailed');
       uni.showToast({ title: saveRes.msg, duration: 2000 });
     }
   } else {
     file.status = 'failed';
-    file.message = $t('common.uploadFailed');
+    file.message = t('common.uploadFailed');
     uni.showToast({ title: res.msg, duration: 2000 });
   }
 };
@@ -316,7 +316,7 @@ const beforeDelete = async (data, data2) => {
   const res = await Api.commonDelAttachfiles({ ids: data.id });
   if (res.code === 200) {
     fileList.value.splice(data2.index, 1);
-    uni.showToast({ title: $t('common.deleteSuccess'), duration: 2000 });
+    uni.showToast({ title: t('common.deleteSuccess'), duration: 2000 });
   } else {
     uni.showToast({ title: res.msg, duration: 2000 });
   }

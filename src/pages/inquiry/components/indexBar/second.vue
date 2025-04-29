@@ -4,9 +4,9 @@
     <!-- 内容区域 -->
     <scroll-view scroll-y class="content" :scroll-into-view="activeId" @scroll="onScroll">
       <view class="hot-city">
-        <view class="title"><i class="line"></i>{{ $t('common.inCommonUse') }}</view>
+        <view class="title"><i class="line"></i>{{ t('common.inCommonUse') }}</view>
         <view class="city-list">
-          <template v-if="lang === 'zh_CN'">
+          <template v-if="lang === 'zh-Hans'">
             <myCell :title="item.areaName + '  ' + '  ' + item.phonePrefix"
               v-for="(item, index) in commonMobilePhonesZh" :key="index" @tap="handleItemClick(item)"
               class="my-cell" />

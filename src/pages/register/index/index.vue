@@ -4,21 +4,21 @@
       <template v-if="formData.regInfo.areaPhonePrefix === '+86'">
         <!-- 手机号码 -->
         <section class="basic-info">
-          <uni-forms-item :label="$t('register.regPhone')" :name="['regInfo', 'regPhone']"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+          <uni-forms-item :label="t('register.regPhone')" :name="['regInfo', 'regPhone']"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" required>
             <view class="area-phone">
               <view class="phone-prefix" @tap="jumpPhonePreFix('register')">
                 <view>{{ formData.regInfo.areaPhonePrefix }}</view>
                 <view class="ico-phone"></view>
               </view>
               <uni-easyinput v-model.number="formData.regInfo.regPhone" type="number"
-                :placeholder="$t('register.regPhonePlaceholder')">
+                :placeholder="t('register.regPhonePlaceholder')">
               </uni-easyinput>
             </view>
           </uni-forms-item>
 
-          <uni-forms-item :label="$t('register.captchaImage')" v-if="formData.baseInfo.facebook != '2331'" required>
-            <uni-easyinput v-model="captchaImage.code" :placeholder="$t('register.captchaImagePlaceholder')">
+          <uni-forms-item :label="t('register.captchaImage')" v-if="formData.baseInfo.facebook != '2331'" required>
+            <uni-easyinput v-model="captchaImage.code" :placeholder="t('register.captchaImagePlaceholder')">
               <template #right>
                 <img class="captcha-image-btn" :src="captchaImage.img" @tap="commonCaptchaImageData" />
               </template>
@@ -26,9 +26,9 @@
           </uni-forms-item>
 
           <template v-if="formData.baseInfo.facebook != '2331'">
-            <uni-forms-item :label="$t('register.phoneCode')" :name="['regInfo', 'code']"
-              :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
-              <uni-easyinput v-model="formData.regInfo.code" :placeholder="$t('register.phoneCodePlaceholder')">
+            <uni-forms-item :label="t('register.phoneCode')" :name="['regInfo', 'code']"
+              :rules="[{ required: true, errorMessage: t('common.require') }]" required>
+              <uni-easyinput v-model="formData.regInfo.code" :placeholder="t('register.phoneCodePlaceholder')">
                 <template #right>
                   <button size="mini" class="phone-code-button" :disabled="captchaImage.phoneCodeButton"
                     @tap="commonCaptchaPhoneData">{{ captchaImage.phoneCodeButtonText }}</button>
@@ -37,16 +37,16 @@
             </uni-forms-item>
           </template>
 
-          <uni-forms-item :label="$t('register.regPwd')" :name="['regInfo', 'regPwd']"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+          <uni-forms-item :label="t('register.regPwd')" :name="['regInfo', 'regPwd']"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" required>
             <uni-easyinput v-model="formData.regInfo.regPwd" type="password"
-              :placeholder="$t('register.regPwdPlaceholder')" @blur="checkPassword" />
+              :placeholder="t('register.regPwdPlaceholder')" @blur="checkPassword" />
           </uni-forms-item>
 
-          <uni-forms-item :label="$t('changePassword.confirmPwd')" :name="['regInfo', 'confirmPwd']"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+          <uni-forms-item :label="t('changePassword.confirmPwd')" :name="['regInfo', 'confirmPwd']"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" required>
             <uni-easyinput v-model="formData.regInfo.confirmPwd" type="password"
-              :placeholder="$t('changePassword.confirmPwdPlaceholder')" @blur="checkPassword" />
+              :placeholder="t('changePassword.confirmPwdPlaceholder')" @blur="checkPassword" />
           </uni-forms-item>
         </section>
       </template>
@@ -54,33 +54,33 @@
       <template v-else>
         <!-- 手机号码 -->
         <section class="basic-info">
-          <uni-forms-item :label="$t('register.regPhone')" :name="['regInfo', 'regPhone']"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+          <uni-forms-item :label="t('register.regPhone')" :name="['regInfo', 'regPhone']"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" required>
             <view class="area-phone">
               <view class="phone-prefix" @tap="jumpPhonePreFix('register')">
                 <view>{{ formData.regInfo.areaPhonePrefix }}</view>
                 <view class="ico-phone"></view>
               </view>
               <uni-easyinput v-model.number="formData.regInfo.regPhone" type="number"
-                :placeholder="$t('register.regPhonePlaceholder')">
+                :placeholder="t('register.regPhonePlaceholder')">
               </uni-easyinput>
             </view>
           </uni-forms-item>
-          <uni-forms-item :label="$t('register.regPwd')" :name="['regInfo', 'regPwd']"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+          <uni-forms-item :label="t('register.regPwd')" :name="['regInfo', 'regPwd']"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" required>
             <uni-easyinput v-model="formData.regInfo.regPwd" type="password"
-              :placeholder="$t('register.regPwdPlaceholder')" @blur="checkPassword" />
+              :placeholder="t('register.regPwdPlaceholder')" @blur="checkPassword" />
           </uni-forms-item>
-          <uni-forms-item :label="$t('changePassword.confirmPwd')" :name="['regInfo', 'confirmPwd']"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+          <uni-forms-item :label="t('changePassword.confirmPwd')" :name="['regInfo', 'confirmPwd']"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" required>
             <uni-easyinput v-model="formData.regInfo.confirmPwd" type="password"
-              :placeholder="$t('changePassword.confirmPwdPlaceholder')" @blur="checkPassword" />
+              :placeholder="t('changePassword.confirmPwdPlaceholder')" @blur="checkPassword" />
           </uni-forms-item>
         </section>
       </template>
       <!-- 用户信息 -->
       <section class="basic-info">
-        <uni-forms-item :label="$t('register.kind')">
+        <uni-forms-item :label="t('register.kind')">
           <view class="customer-type-value">
             <view class="value-item" :class="{ active: formData.baseInfo.kind == item.value }"
               v-for="(item, index) in kind" :key="index" @tap="formData.baseInfo.kind = item.value">
@@ -88,55 +88,55 @@
             </view>
           </view>
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.realname')" :name="['baseInfo', 'realname']"
-          :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
-          <uni-easyinput v-model="formData.baseInfo.realname" :placeholder="$t('register.realnamePlaceholder')" />
+        <uni-forms-item :label="t('register.realname')" :name="['baseInfo', 'realname']"
+          :rules="[{ required: true, errorMessage: t('common.require') }]" required>
+          <uni-easyinput v-model="formData.baseInfo.realname" :placeholder="t('register.realnamePlaceholder')" />
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.vx')">
-          <uni-easyinput v-model="formData.baseInfo.vx" :placeholder="$t('register.vxPlaceholder')" />
+        <uni-forms-item :label="t('register.vx')">
+          <uni-easyinput v-model="formData.baseInfo.vx" :placeholder="t('register.vxPlaceholder')" />
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.email')">
-          <uni-easyinput v-model="formData.baseInfo.email" :placeholder="$t('register.emailPlaceholder')" />
+        <uni-forms-item :label="t('register.email')">
+          <uni-easyinput v-model="formData.baseInfo.email" :placeholder="t('register.emailPlaceholder')" />
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.qq')">
-          <uni-easyinput v-model="formData.baseInfo.qq" :placeholder="$t('register.qqPlaceholder')" />
+        <uni-forms-item :label="t('register.qq')">
+          <uni-easyinput v-model="formData.baseInfo.qq" :placeholder="t('register.qqPlaceholder')" />
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.facebook')">
-          <uni-easyinput v-model="formData.baseInfo.facebook" :placeholder="$t('register.facebookPlaceholder')" />
+        <uni-forms-item :label="t('register.facebook')">
+          <uni-easyinput v-model="formData.baseInfo.facebook" :placeholder="t('register.facebookPlaceholder')" />
         </uni-forms-item>
-        <!-- <select-component :label="$t('register.cityCode')" v-model="formData.cityCode" ref="cityCode"
-          :needToSearch="true" :searchTip="$t('common.areaTip')" :placeholder="$t('register.cityPlaceholder')"
+        <!-- <select-component :label="t('register.cityCode')" v-model="formData.cityCode" ref="cityCode"
+          :needToSearch="true" :searchTip="t('common.areaTip')" :placeholder="t('register.cityPlaceholder')"
           rightIcon="arrow" :columns="cityData" nameKey="areaName"
           :requireContent="formData.regInfo.areaPhonePrefix === '+86/中国' || formData.regInfo.areaPhonePrefix === '+86/China'">
         </select-component> -->
       </section>
       <!-- 企业信息 -->
       <section class="basic-info" v-if="formData.baseInfo.kind == '企业'">
-        <uni-forms-item :label="$t('register.entKind')" :name="['entInfo', 'entKind']"
-          :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
+        <uni-forms-item :label="t('register.entKind')" :name="['entInfo', 'entKind']"
+          :rules="[{ required: true, errorMessage: t('common.require') }]" required>
           <uni-data-select v-model="formData.entInfo.entKind" :localdata="entKind"
-            :placeholder="$t('register.entKindPlaceholder')" :clear="false" />
+            :placeholder="t('register.entKindPlaceholder')" :clear="false" />
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.entName')" :name="['entInfo', 'entName']"
-          :rules="[{ required: true, errorMessage: $t('common.require') }]" required>
-          <uni-easyinput v-model="formData.entInfo.entName" :placeholder="$t('register.entNamePlaceholder')" />
+        <uni-forms-item :label="t('register.entName')" :name="['entInfo', 'entName']"
+          :rules="[{ required: true, errorMessage: t('common.require') }]" required>
+          <uni-easyinput v-model="formData.entInfo.entName" :placeholder="t('register.entNamePlaceholder')" />
         </uni-forms-item>
-        <uni-forms-item :label="$t('register.entNum')">
-          <uni-easyinput v-model="formData.entInfo.entNum" :placeholder="$t('register.entNumPlaceholder')" />
+        <uni-forms-item :label="t('register.entNum')">
+          <uni-easyinput v-model="formData.entInfo.entNum" :placeholder="t('register.entNumPlaceholder')" />
         </uni-forms-item>
       </section>
       <!-- 推荐人号码 -->
       <section class="basic-info">
-        <uni-forms-item :label="$t('register.recommendPhone')">
+        <uni-forms-item :label="t('register.recommendPhone')">
           <uni-easyinput v-model="formData.recommendPhone" :disabled="!!recommendPhone"
-            :placeholder="$t('register.recommendPhonePlaceholder')" />
+            :placeholder="t('register.recommendPhonePlaceholder')" />
         </uni-forms-item>
       </section>
       <!-- 阅读协议单选框 -->
       <view class="agress_con">
         <text class="checkbox" :class="{ checked: checked }" @tap="check"></text>
         <p>
-          <text @tap="check">{{ $t('register.protocolText') }}</text>
+          <text @tap="check">{{ t('register.protocolText') }}</text>
           <text class="agreement-name" v-for="(item, index) in argeementList" :key="index"
             @tap="openBottomPopup(item)">《{{
               item.contentKind }}》</text>
@@ -144,7 +144,7 @@
       </view>
       <!-- 立即注册 -->
       <view class="footer-btn" id="registerSubmit">
-        <button @tap="aplyInfo">{{ $t('register.submit') }}</button>
+        <button @tap="aplyInfo">{{ t('register.submit') }}</button>
       </view>
     </uni-forms>
     <!-- 阅读协议弹窗 -->
@@ -170,8 +170,8 @@
           </view>
         </view>
         <view class="footer-btn">
-          <button @tap="agreementClick" class="button1">{{ $t('common.confirmRegister') }}</button>
-          <button @tap="notAgreement" class="button2">{{ $t('common.notConfirmRegister') }}</button>
+          <button @tap="agreementClick" class="button1">{{ t('common.confirmRegister') }}</button>
+          <button @tap="notAgreement" class="button2">{{ t('common.notConfirmRegister') }}</button>
         </view>
       </view>
     </uni-popup>
@@ -189,7 +189,7 @@ import { getStore, removeStore } from "@/utils/index";
 // import Cookies from "js-cookie"
 const { t } = useI18n()
 const route = useRoute()
-const lang = ref(uni.getStorageSync('lang') || 'zh_CN')
+const lang = ref(uni.getStorageSync('lang') || 'zh-Hans')
 const confirmButton = ref(true)
 const privacyButton = ref(false)
 const registeredButton = ref(false)

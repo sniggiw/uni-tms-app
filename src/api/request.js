@@ -11,7 +11,12 @@ const request = axios.create({
 request.interceptors.request.use(
     // 在发送请求之前做些什么
     function (config) {
-        config.headers["Content-Language"] = uni.getStorageSync("lang") ? uni.getStorageSync("lang") : "zh_CN"; // 语言
+        if(uni.getStorageSync("lang") === 'zh-Hans'){
+            config.headers["Content-Language"] = 'zh_CN'
+        }else{
+            config.headers["Content-Language"] = 'en_US'
+        }
+        // config.headers["Content-Language"] = uni.getStorageSync("lang") ? uni.getStorageSync("lang") : "zh_CN"; // 语言
         config.headers["X-Request-Client"] = "web"; // 客户端来源:默认web
 
         if (authStore?.authInfo?.token) {

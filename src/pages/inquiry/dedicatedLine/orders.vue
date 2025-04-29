@@ -87,7 +87,7 @@
       </view>
       <!-- 收货人 -->
       <view class="custom-card container3">
-        <!-- <uni-cell :title="$t('orderDetail.lang')" :value="lang" /> -->
+        <!-- <uni-cell :title="t('orderDetail.lang')" :value="lang" /> -->
         <uni-forms-item label="收货人" required :name="['receiveInfo', 'receiverName']"
           :rules="[{ required: true, errorMessage: '请输入收货人' }]">
           <uni-easyinput v-model="form.receiveInfo.receiverName" placeholder="请输入收货人" />
@@ -114,9 +114,9 @@
       </view>
       <!-- 派送人城市 -->
       <view class="custom-card container3" v-if="receiverShow">
-        <uni-forms-item label="$t('orderDetail.receivCity')">
+        <uni-forms-item label="t('orderDetail.receivCity')">
           <uni-data-select v-model="spareReceiverCountryName" :localdata="receiverCityData"
-            placeholder="$t('orderDetail.receivCityPlaceholder')" />
+            placeholder="t('orderDetail.receivCityPlaceholder')" />
         </uni-forms-item>
       </view>
       <!-- 唛头 -->
@@ -130,8 +130,8 @@
       </view>
       <!-- 货物中文名 —— 图片上传 -->
       <view class="custom-card container5">
-        <!-- <uni-cell :title="$t('inquiry.productsAttr')" :value="form.attrInfo.productsAttr" /> -->
-        <template v-if="showLang === 'zh_CN' || areaPhonePreFix != '+968'">
+        <!-- <uni-cell :title="t('inquiry.productsAttr')" :value="form.attrInfo.productsAttr" /> -->
+        <template v-if="showLang === 'zh-Hans' || areaPhonePreFix != '+968'">
           <uni-forms-item label="中文品名" required :name="['productsInfo', 'productsCn']"
             :rules="[{ required: true, errorMessage: '请输入中文品名' }]">
             <uni-easyinput v-model="form.productsInfo.productsCn" placeholder="请输入中文品名" />
@@ -153,7 +153,7 @@
         </template>
         <uni-forms-item label="总箱数" required :name="['productsInfo', 'transCount']"
           :rules="[{ required: true, errorMessage: '请输入总箱数' }]">
-          <uni-easyinput v-model="form.productsInfo.transCount" placeholder="$t('goods.transCountPlaceholder')" />
+          <uni-easyinput v-model="form.productsInfo.transCount" placeholder="t('goods.transCountPlaceholder')" />
           <uni-data-select v-model="form.productsInfo.transUnit" :localdata="transUnit" :clear="false" />
         </uni-forms-item>
         <uni-forms-item label="重量(KG)" required :name="['productsInfo', 'weight']"
@@ -236,7 +236,7 @@
         <view class="custom-card container2" v-if="form.productsInfo.packingList.length > 0">
           <view v-for="(item, index) in form.productsInfo.packingList" :key="index" :title="item.title">
             <button @tap="deleteFile(item.title)">
-              {{ $t("common.delete") }}
+              {{ t("common.delete") }}
             </button>
           </view>
         </view>

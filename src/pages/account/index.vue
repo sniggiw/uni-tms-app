@@ -28,15 +28,15 @@
       <view class="last-bottom">
         <view>
           <view class="num">0.00</view>
-          <view class="title">{{ $t('myInfo.balance') }}</view>
+          <view class="title">{{ t('myInfo.balance') }}</view>
         </view>
         <view>
           <view class="num">0</view>
-          <view class="title">{{ $t('myInfo.integral') }}</view>
+          <view class="title">{{ t('myInfo.integral') }}</view>
         </view>
         <view>
           <view class="num">0</view>
-          <view class="title">{{ $t('myInfo.coupon') }}</view>
+          <view class="title">{{ t('myInfo.coupon') }}</view>
         </view>
         <image src="../../static/account/ico-myInfo.png"></image>
       </view>
@@ -46,68 +46,68 @@
         <view>
           <image src="../../static/account/ico-orderlist.png"></image>
         </view>
-        <view class="title">{{ $t('orderList.pending') }}</view>
+        <view class="title">{{ t('orderList.pending') }}</view>
       </view>
       <view @tap="jumpProcess">
         <view>
           <image src="../../static/account/ico-processing.png"></image>
         </view>
-        <view class="title">{{ $t('orderList.process') }}</view>
+        <view class="title">{{ t('orderList.process') }}</view>
       </view>
       <view @tap="jumpComplete">
         <view>
           <image src="../../static/account/ico-complete.png"></image>
         </view>
-        <view class="title">{{ $t('orderList.completed') }}</view>
+        <view class="title">{{ t('orderList.completed') }}</view>
       </view>
       <view @tap="jumpOrderTrack">
         <view>
           <image src="../../static/account/ico-queryTrack.png"></image>
         </view>
-        <view class="title">{{ $t('orderDetail.orderTrack') }}</view>
+        <view class="title">{{ t('orderDetail.orderTrack') }}</view>
       </view>
     </view>
 
     <view class="bottom">
       <view @tap="jumpState">
         <i class="ico-statistical"></i>
-        <view class="title">{{ $t('router.statistical') }}</view>
+        <view class="title">{{ t('router.statistical') }}</view>
       </view>
       <view @tap="jumpChangePassword">
         <view class="ico-updatePassword"></view>
-        <view class="title">{{ $t('myInfo.updatePassword') }}</view>
+        <view class="title">{{ t('myInfo.updatePassword') }}</view>
       </view>
       <view @tap="jumpUpdateInfo">
         <view class="ico-updateData"></view>
-        <view class="title">{{ $t('myInfo.updateData') }}</view>
+        <view class="title">{{ t('myInfo.updateData') }}</view>
       </view>
       <view @tap="jumpShipper">
         <view class="ico-shipAddr"></view>
-        <view class="title">{{ $t('myInfo.shipAddr') }}</view>
+        <view class="title">{{ t('myInfo.shipAddr') }}</view>
       </view>
       <view @tap="jumpConsignee">
         <view class="ico-deliveryAddr"></view>
-        <view class="title">{{ $t('myInfo.deliveryAddr') }}</view>
+        <view class="title">{{ t('myInfo.deliveryAddr') }}</view>
       </view>
       <view @tap="logoutNow">
         <view class="ico-logout"></view>
-        <view class="title">{{ $t('myInfo.logout') }}</view>
+        <view class="title">{{ t('myInfo.logout') }}</view>
       </view>
       <!--<view @tap="toJumpReferrer">
         <view class="ico-myReferrer"></view>
-        <view class="title">{{ $t("myInfo.myReferrer") }}</view>
+        <view class="title">{{ t("myInfo.myReferrer") }}</view>
       </view>
       <view @tap="toJumpPlatform">
         <view class="ico-platform"></view>
-        <view class="title">{{ $t("myInfo.platform") }}</view>
+        <view class="title">{{ t("myInfo.platform") }}</view>
       </view>
       <view @tap="jumpPrivacy">
         <view class="ico-privacy"></view>
-        <view class="title">{{ $t("router.privacy") }}</view>
+        <view class="title">{{ t("router.privacy") }}</view>
       </view>
       <view @tap="cancel">
         <view class="ico-cancel"></view>
-        <view class="title">{{ $t("myInfo.cancel") }}</view>
+        <view class="title">{{ t("myInfo.cancel") }}</view>
       </view>
      
       <view
@@ -115,11 +115,11 @@
         v-if="distributorId != null && distributorId != ''"
       >
         <view class="ico-officer"></view>
-        <view class="title">{{ $t("myInfo.officer") }}</view>
+        <view class="title">{{ t("myInfo.officer") }}</view>
       </view>
       <view @tap="getOfficerToast" v-else>
         <view class="ico-officer"></view>
-        <view class="title">{{ $t("myInfo.officer") }}</view>
+        <view class="title">{{ t("myInfo.officer") }}</view>
       </view>
       <view
         @tap="jumpReportCard"
@@ -128,27 +128,27 @@
         "
       >
         <view class="ico-reportCard"></view>
-        <view class="title">{{ $t("myInfo.reportCard") }}</view>
+        <view class="title">{{ t("myInfo.reportCard") }}</view>
       </view>
       <view @tap="jumpApi">
         <view class="ico-api"></view>
-        <view class="title">{{ $t("router.apiSetup") }}</view>
+        <view class="title">{{ t("router.apiSetup") }}</view>
       </view>
       <view @tap="jumpMarketHome">
         <view class="ico-market"></view>
-        <view class="title">{{ $t("myInfo.market") }}</view>
+        <view class="title">{{ t("myInfo.market") }}</view>
       </view>
       <view @tap="jumpAddress">
         <view class="ico-warehouse"></view>
-        <view class="title">{{ $t("myInfo.collectionAddress") }}</view>
+        <view class="title">{{ t("myInfo.collectionAddress") }}</view>
       </view> -->
     </view>
     <uni-popup ref="passwordPopup" type="dialog">
       <view class="confirm-popup-content">
-        <view class="tit">{{ $t(`changePassword.thirdTips`) }}</view>
+        <view class="tit">{{ t(`changePassword.thirdTips`) }}</view>
         <view class="last-btn">
           <button class="btn" @tap="jumpChangePassword">
-            {{ $t("common.setUp") }}
+            {{ t("common.setUp") }}
           </button>
         </view>
       </view>

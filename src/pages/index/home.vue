@@ -12,7 +12,7 @@
     <view class="order-data">
       <view class="notice">
         <view>
-          <image class="notice-img" :src="lang === 'zh_CN'
+          <image class="notice-img" :src="lang === 'zh-Hans'
             ? '../../static/common/home-zhNotice.png'
             : '../../static/common/home-EnNotice.png'
             " />
@@ -30,28 +30,28 @@
       <view class="data-box">
         <view class="box-top">
           <view class="left" @tap="jumpInquiry">
-            <view class="h1">{{$t('orderList.systemInquiry')}}</view>
-            <view class="text">{{$t('orderList.systemInquiryH2')}}</view>
+            <view class="h1">{{t('orderList.systemInquiry')}}</view>
+            <view class="text">{{t('orderList.systemInquiryH2')}}</view>
             <view class="left-icon"></view>
           </view>
           <view class="center" @tap="service">
-            <view class="h1">{{$t('orderList.artificialInquiry')}}</view>
-            <view class="text">{{$t('orderList.artificialInquiryH2')}}</view>
+            <view class="h1">{{t('orderList.artificialInquiry')}}</view>
+            <view class="text">{{t('orderList.artificialInquiryH2')}}</view>
             <view class="center-icon"></view>
           </view>
           <view class="right" @tap="jumpStatistical">
-            <view class="h1">{{$t('inquiry.collect')}}</view>
-            <view class="text">{{$t('orderList.collectH2')}}</view>
+            <view class="h1">{{t('inquiry.collect')}}</view>
+            <view class="text">{{t('orderList.collectH2')}}</view>
             <view class="right-icon"></view>
           </view>
         </view>
         <view class="box-bottom">
           <view class="left" @tap="jumpPending">
-            <view class="tit">{{$t('orderList.pending')}}:</view>
+            <view class="tit">{{t('orderList.pending')}}:</view>
             <view>{{ pendNum }}</view>
           </view>
           <view class="right" @tap="jumpProcess">
-            <view class="tit">{{$t('orderList.process')}}:</view>
+            <view class="tit">{{t('orderList.process')}}:</view>
             <view>{{ processNum }}</view>
           </view>
         </view>
@@ -69,7 +69,7 @@
 
     <!-- 营销宣传图入口 -->
     <view class="market-banner" @tap="jumpMarketHome">
-      <view class="zh-bg" v-if="lang === 'zh_CN'"></view>
+      <view class="zh-bg" v-if="lang === 'zh-Hans'"></view>
       <view class="en-bg" v-else></view>
     </view>
 
@@ -78,7 +78,7 @@
       <!-- 中东生活服务 -->
       <view class="tool-bottom">
         <view class="tool-title">
-          <view class="title-line"></view>{{$t('orderList.services')}}
+          <view class="title-line"></view>{{t('orderList.services')}}
         </view>
         <view class="item">
           <view v-for="(item, index) in services" :key="index" @tap="jumpServices(item.jumpUrl)">
@@ -92,7 +92,7 @@
       <!-- 中东运力 -->
       <view class="bottom">
         <view class="tool-title">
-          <view class="title-line"></view>{{$t('orderList.capacity')}}
+          <view class="title-line"></view>{{t('orderList.capacity')}}
         </view>
         
         <swiper class="bottom-swipe" indicator-color="#ebedf0" indicator-active-color="rgb(221, 49, 47)" :indicator-dots="true">
@@ -132,7 +132,7 @@
       <!-- 运力工具 -->
       <view class="top">
         <view class="tool-title">
-          <view class="title-line"></view>{{$t('orderList.tools')}}
+          <view class="title-line"></view>{{t('orderList.tools')}}
         </view>
         <view class="item">
           <view v-for="(item, index) in tools" :key="index" @tap="jumpTools(item.jumpUrl)">
@@ -145,7 +145,7 @@
     </view>
     <!-- 合作伙伴 -->
     <!-- <view class="last-bottom" @tap="jumpOfficer">
-      <image :src="lang === 'zh_CN'
+      <image :src="lang === 'zh-Hans'
         ? '../../static/common/home-lastZhOfficer.png'
         : '../../static/common/home-lastEnOfficer.png'
         " />
@@ -155,11 +155,11 @@
     <!-- <uni-popup ref="popup" type="center">
       <view class="announcement-popup">
         <image src="../../assets/images/home-popupBackground.png" class="popup-image" />
-        <view class="popup-title">{{ $t("inquiry.announcement") }}</view>
+        <view class="popup-title">{{ t("inquiry.announcement") }}</view>
         <view class="popup" v-html="content"></view>
         <view class="button" @tap="closePopup">
           <image src="../../assets/images/home-popupButton.png" />
-          <text>{{ $t("inquiry.popupText") }}</text>
+          <text>{{ t("inquiry.popupText") }}</text>
         </view>
       </view>
     </uni-popup> -->
@@ -170,7 +170,8 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { getNewIndex, orderIndex, orderPendingIndex, orderProcessing, getCustomerInfoData } from "@/api/common";
 import { onShow } from '@dcloudio/uni-app';
-
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 // Props
 const props = defineProps({
   number: {
@@ -334,7 +335,7 @@ const orderIndexData = async () => {
 //     if (res.code === 200) {
 //       morningArticle.value = res.data;
 //     } else {
-//       $toast({ message: $t("middle.toast"), duration: 2000 });
+//       $toast({ message: t("middle.toast"), duration: 2000 });
 //     }
 //   } catch (error) {
 //     console.error(error);
@@ -348,7 +349,7 @@ const orderIndexData = async () => {
 //     if (res.code === 200) {
 //       afternoonArticle.value = res.data;
 //     } else {
-//       $toast({ message: $t("middle.toast"), duration: 2000 });
+//       $toast({ message: t("middle.toast"), duration: 2000 });
 //     }
 //   } catch (error) {
 //     console.error(error);
@@ -362,7 +363,7 @@ const orderIndexData = async () => {
 //     if (res.code === 200) {
 //       nightArticle.value = res.data;
 //     } else {
-//       $toast({ message: $t("middle.toast"), duration: 2000 });
+//       $toast({ message: t("middle.toast"), duration: 2000 });
 //     }
 //   } catch (error) {
 //     console.error(error);
@@ -426,26 +427,26 @@ const jumpMarketHome = () => {
   } else if (member.value === 0) {
     $router.push({ path: "/market/marketPromotion" });
   } else if (member.value === 2) {
-    showToast($t("marketing.stop"));
+    showToast(t("marketing.stop"));
   }
 };
 
-const jumpOfficer = () => {
-  if (distributorApproved.value === -2) {
-    $toast({ message: $t("officer.failureToast"), duration: 2000 });
-  } else if (distributorApproved.value === -1) {
-    $router.push({ path: "/account/becomeIndex" });
-  } else if (distributorApproved.value === 0) {
-    $toast({ message: $t("officer.underReviewToast"), duration: 2000 });
-  } else if (distributorApproved.value === 1) {
-    $router.push({
-      path: "/account/officerIndex",
-      query: { lang: lang.value, distributorId: distributorId.value },
-    });
-  } else if (distributorApproved.value === 2) {
-    $toast({ message: $t("officer.notPassed"), duration: 2000 });
-  }
-};
+// const jumpOfficer = () => {
+//   if (distributorApproved.value === -2) {
+//     $toast({ message: t("officer.failureToast"), duration: 2000 });
+//   } else if (distributorApproved.value === -1) {
+//     $router.push({ path: "/account/becomeIndex" });
+//   } else if (distributorApproved.value === 0) {
+//     $toast({ message: t("officer.underReviewToast"), duration: 2000 });
+//   } else if (distributorApproved.value === 1) {
+//     $router.push({
+//       path: "/account/officerIndex",
+//       query: { lang: lang.value, distributorId: distributorId.value },
+//     });
+//   } else if (distributorApproved.value === 2) {
+//     $toast({ message: t("officer.notPassed"), duration: 2000 });
+//   }
+// };
 
 const getNewIndexData = async () => {
   uni.showLoading({ title: "加载中..." });
@@ -494,7 +495,7 @@ const jumpTools = (url) => {
   if (url) {
     window.location.href = url;
   } else {
-    showToast($t("middle.toast"));
+    showToast(t("middle.toast"));
   }
 };
 
@@ -519,7 +520,7 @@ const jumpServices = (url) => {
   } else if (url) {
     window.location.href = url;
   } else {
-    showToast($t("middle.toast"));
+    showToast(t("middle.toast"));
   }
 };
 
@@ -606,7 +607,7 @@ const service = () => {
 };
 
 const getToast = () => {
-  $toast({ message: $t("middle.toast"), duration: 2000 });
+  $toast({ message: t("middle.toast"), duration: 2000 });
 };
 
 onShow(() => {
@@ -614,7 +615,7 @@ onShow(() => {
   getNewIndexData();
   orderIndexData();
   getCustomerInfo();
-  // confirmButtonText.value = $t("common.determine");
+  // confirmButtonText.value = t("common.determine");
   lang.value = uni.getStorageSync("lang");
   orderPendingIndexData();
   orderProcess();

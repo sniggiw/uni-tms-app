@@ -4,8 +4,8 @@
       <view class="left" @tap="toJump(1)">
         <view class="left">{{
           inquirySearch[flow]
-            ? inquirySearch[flow].srcTitle || $t('inquiry.pleaseCheck')
-            : $t('inquiry.pleaseCheck')
+            ? inquirySearch[flow].srcTitle || t('inquiry.pleaseCheck')
+            : t('inquiry.pleaseCheck')
         }}</view>
         <view class="foreign">{{
           inquirySearch[flow]
@@ -23,8 +23,8 @@
       <view class="right" @tap="toJump(2)">
         <view>{{
           inquirySearch[flow]
-            ? inquirySearch[flow].descTitle || $t('inquiry.pleaseCheckTo')
-            : $t('inquiry.pleaseCheckTo')
+            ? inquirySearch[flow].descTitle || t('inquiry.pleaseCheckTo')
+            : t('inquiry.pleaseCheckTo')
         }}</view>
         <view class="foreign">{{
           inquirySearch[flow]
@@ -35,14 +35,14 @@
     </view>
     <view class="check-box">
       <button type="default" class="shortcut-price" @tap="toQuickOrder" v-if="flow == 1">
-        {{ $t('inquiry.quickBtn') }}
+        {{ t('inquiry.quickBtn') }}
       </button>
-      <button class="check-price" @tap="toSearchInquiry">{{ $t('inquiry.traditionalOrder') }}</button>
+      <button class="check-price" @tap="toSearchInquiry">{{ t('inquiry.traditionalOrder') }}</button>
     </view>
 
     <!-- 历史询价 -->
     <view v-if="historyList[flow] && historyList[flow].length > 0" class="inquiry-history">
-      <view class="title">{{ $t('inquiry.historicalRoute') }}</view>
+      <view class="title">{{ t('inquiry.historicalRoute') }}</view>
       <view class="history-list">
         <view v-for="(item, index) in historyList[flow]" :key="index" class="item" @tap="toJumpDetail(item)">
           <view class="left">
@@ -68,6 +68,8 @@ import { ref, reactive, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { inquiryHistory } from "@/api/inquiry";
 import { onLaunch, onShow, onUnload } from '@dcloudio/uni-app'
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 // 获取当前路由实例
 const route = useRoute();
 const props = defineProps({

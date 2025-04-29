@@ -55,7 +55,7 @@
           <dropdown-item title="" :options="sort" v-model="searchParams.sort"
             @change="getInquiryZx">
           </dropdown-item>
-          <dropdown-item :title="$t('inquiry.zxtransKind')" :options="transKind" v-model="searchParams.transKind"
+          <dropdown-item :title="t('inquiry.zxtransKind')" :options="transKind" v-model="searchParams.transKind"
             @change="getInquiryZx">
           </dropdown-item>
         </dropdown-menu>
@@ -64,11 +64,11 @@
       <template v-if="inquiryList.length > 0">
         <view class="center" v-for="(item, index) in inquiryList" :key="index">
           <view class="title">
-            <template v-if="lang === 'zh_CN'">
+            <template v-if="lang === 'zh-Hans'">
               <img class="imgage" src="/static/inquiry/ico-nothan.png" fit="contain" v-if="item.taxIncluded == true" />
               <img class="imgage" src="/static/inquiry/ico-nohan.png" fit="contain" v-if="item.taxIncluded == false" />
             </template>
-            <template v-if="lang === 'en_US'">
+            <template v-if="lang === 'en'">
               <img class="dutyImgage-En" src="/static/inquiry/ico-en-nothan.png" fit="contain"
                 v-if="item.taxIncluded == true" />
               <img class="imgage-En" src="/static/inquiry/ico-en-nohan.png" fit="contain"
@@ -89,51 +89,51 @@
           <view class="parameter">
             <view class="leftBox">
               <view>
-                {{ $t('inquiry.zxtransKind') }}:
+                {{ t('inquiry.zxtransKind') }}:
                 <text>{{ item.transKind }}</text>
               </view>
               <view>
-                {{ $t('orderDetail.channelCode') }}:
+                {{ t('orderDetail.channelCode') }}:
                 <text>{{ item.channelCode }}</text>
               </view>
               <view>
-                {{ $t('queryChannel.destCountry') }}:
+                {{ t('queryChannel.destCountry') }}:
                 <text>{{ item.destCountry }}</text>
               </view>
               <view>
-                {{ $t('inquiry.priceTitle') }}:
+                {{ t('inquiry.priceTitle') }}:
                 <text>{{ item.priceTitle }}</text>
               </view>
               <view>
-                {{ $t('channelDetail.shipTimeTitle') }}
+                {{ t('channelDetail.shipTimeTitle') }}
                 <text>{{ item.needTimesDesc }}</text>
               </view>
               <view>
                 <template v-if="item.pricingType == '按重量'">
-                  {{ $t('inquiry.specBegin') }}:
+                  {{ t('inquiry.specBegin') }}:
                 </template>
                 <template v-if="item.pricingType == '按体积'">
-                  {{ $t('inquiry.volume') }}:
+                  {{ t('inquiry.volume') }}:
                 </template>
                 <template v-if="item.pricingType == '按数量'">
-                  {{ $t('inquiry.chargeQuantity') }}:
+                  {{ t('inquiry.chargeQuantity') }}:
                 </template>
                 <template v-if="item.pricingType == '按首续重'">
-                  {{ $t('inquiry.specBegin') }}:
+                  {{ t('inquiry.specBegin') }}:
                 </template>
                 <text>{{ item.statSpec }}</text>
               </view>
               <view>
-                {{ $t('inquiry.destCity') }}:
+                {{ t('inquiry.destCity') }}:
                 <text>{{ item.destCity }}</text>
               </view>
               <view>
-                {{ $t('inquiry.deliveryFee') }}:
+                {{ t('inquiry.deliveryFee') }}:
                 <template v-if="
                   item.deliveryFeeDisplay == '面谈' ||
                   item.deliveryFeeDisplay == 'interview'
                 ">
-                  <text>{{ $t('inquiry.inquiryInterview') }}</text>
+                  <text>{{ t('inquiry.inquiryInterview') }}</text>
                 </template>
                 <template v-else>
                   <text>{{ item.deliveryFeeDisplay }}</text>
@@ -146,7 +146,7 @@
                 <view class="top" v-if="item.pricingType == '按体积'">{{ item.currencySymbol }}{{ item.price }}/CBM</view>
                 <view class="top" v-if="item.pricingType == '按数量'">{{ item.currencySymbol }}{{ item.price }}/PCS</view>
                 <view class="continue-price" v-if="item.pricingType == '按首续重'">
-                  <view>{{ $t("inquiry.continuePrice") }}</view>
+                  <view>{{ t("inquiry.continuePrice") }}</view>
                   {{ item.currencySymbol }}{{ item.continuePrice }}/0.5KG
                   {{ item.currencySymbol }}{{ item.price }}/0.5KG
                 </view>
@@ -161,12 +161,12 @@
                     item.destCity
                   )
                   ">
-                  {{ $t('inquiry.clickPrice') }}
+                  {{ t('inquiry.clickPrice') }}
                 </view>
               </template>
               <template v-if="item.price < 1">
                 <view class="jumpDetail" @click.stop="service()">
-                  {{ $t('inquiry.inquiryInterview') }}
+                  {{ t('inquiry.inquiryInterview') }}
                 </view>
               </template>
             </view>

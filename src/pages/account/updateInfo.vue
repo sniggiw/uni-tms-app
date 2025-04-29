@@ -15,56 +15,56 @@
     <view class="basic-info">
       <uni-forms ref="formRef" :model="formData">
         <!-- 账号类型 -->
-        <uni-forms-item :label="$t('register.kind')" name="kind">
+        <uni-forms-item :label="t('register.kind')" name="kind">
           <uni-easyinput v-model="formData.kind" disabled :clearable="false" />
         </uni-forms-item>
         <!-- 姓名 -->
-        <uni-forms-item :label="$t('register.realname')" name="realname"
-          :rules="[{ required: true, errorMessage: $t('common.require') }]" :required="true">
-          <uni-easyinput v-model="formData.realname" :placeholder="$t('register.realnamePlaceholder')"
+        <uni-forms-item :label="t('register.realname')" name="realname"
+          :rules="[{ required: true, errorMessage: t('common.require') }]" :required="true">
+          <uni-easyinput v-model="formData.realname" :placeholder="t('register.realnamePlaceholder')"
             :clearable="false" />
         </uni-forms-item>
         <!-- 微信 -->
-        <uni-forms-item :label="$t('register.vx')">
-          <uni-easyinput v-model="formData.vx" :placeholder="$t('register.vxPlaceholder')" />
+        <uni-forms-item :label="t('register.vx')">
+          <uni-easyinput v-model="formData.vx" :placeholder="t('register.vxPlaceholder')" />
         </uni-forms-item>
         <!-- qq -->
-        <uni-forms-item :label="$t('register.qq')">
-          <uni-easyinput v-model="formData.qq" :placeholder="$t('register.qqPlaceholder')" />
+        <uni-forms-item :label="t('register.qq')">
+          <uni-easyinput v-model="formData.qq" :placeholder="t('register.qqPlaceholder')" />
         </uni-forms-item>
         <!-- email -->
-        <uni-forms-item :label="$t('register.email')">
-          <uni-easyinput v-model="formData.email" :placeholder="$t('register.emailPlaceholder')" />
+        <uni-forms-item :label="t('register.email')">
+          <uni-easyinput v-model="formData.email" :placeholder="t('register.emailPlaceholder')" />
         </uni-forms-item>
         <!-- Facebook -->
-        <uni-forms-item :label="$t('register.facebook')">
-          <uni-easyinput v-model="formData.facebook" :placeholder="$t('register.facebookPlaceholder')" />
+        <uni-forms-item :label="t('register.facebook')">
+          <uni-easyinput v-model="formData.facebook" :placeholder="t('register.facebookPlaceholder')" />
         </uni-forms-item>
         <!-- 收货人国家 -->
-        <uni-forms-item :label="$t('register.country')">
+        <uni-forms-item :label="t('register.country')">
           <uni-easyinput v-model="formData.areaName" disabled />
         </uni-forms-item>
         <!-- 城市 -->
-        <uni-forms-item :label="$t('register.cityCode')">
+        <uni-forms-item :label="t('register.cityCode')">
           <uni-data-select v-model="formData.cityCode" :localdata="cityList"
-            :placeholder="$t('register.cityPlaceholder')" :clear="false"></uni-data-select>
+            :placeholder="t('register.cityPlaceholder')" :clear="false"></uni-data-select>
         </uni-forms-item>
         <template v-if="formData.kind == '企业'">
-          <uni-forms-item :label="$t('register.entKind')" :required="true">
+          <uni-forms-item :label="t('register.entKind')" :required="true">
             <uni-data-select v-model="formData.entKind" :localdata="entKind"
-              :placeholder="$t('register.entKindPlaceholder')" :clear="false"></uni-data-select>
+              :placeholder="t('register.entKindPlaceholder')" :clear="false"></uni-data-select>
           </uni-forms-item>
-          <uni-forms-item :label="$t('register.entName')" name="entName"
-            :rules="[{ required: true, errorMessage: $t('common.require') }]" :required="true">
-            <uni-easyinput v-model="formData.entName" :placeholder="$t('register.entNamePlaceholder')" />
+          <uni-forms-item :label="t('register.entName')" name="entName"
+            :rules="[{ required: true, errorMessage: t('common.require') }]" :required="true">
+            <uni-easyinput v-model="formData.entName" :placeholder="t('register.entNamePlaceholder')" />
           </uni-forms-item>
-          <uni-forms-item :label="$t('register.entNum')" name="entNum">
-            <uni-easyinput v-model="formData.entNum" :placeholder="$t('register.entNumPlaceholder')" />
+          <uni-forms-item :label="t('register.entNum')" name="entNum">
+            <uni-easyinput v-model="formData.entNum" :placeholder="t('register.entNumPlaceholder')" />
           </uni-forms-item>
         </template>
         <!-- 推荐人电话号码 -->
-        <uni-forms-item :label="$t('register.recommendPhone')" name="recommendPhone">
-          <uni-easyinput v-model="formData.recommendPhone" :placeholder="$t('register.recommendPhonePlaceholder')"
+        <uni-forms-item :label="t('register.recommendPhone')" name="recommendPhone">
+          <uni-easyinput v-model="formData.recommendPhone" :placeholder="t('register.recommendPhonePlaceholder')"
             :disabled="!recommendDisabled" />
         </uni-forms-item>
       </uni-forms>
@@ -72,12 +72,12 @@
 
     <!-- 底部修改按钮 -->
     <view class="footer-btn">
-      <button :disabled="disabledBtn" @click="submitForm">{{ $t('common.edit') }}</button>
+      <button :disabled="disabledBtn" @click="submitForm">{{ t('common.edit') }}</button>
     </view>
 
     <!-- 推荐人号码提示信息弹窗 -->
     <uni-popup ref="confirmPopup" type="dialog">
-      <uni-popup-dialog :title="$t('common.recommendPhoneTip')" :content="$t('inquiry.popupText')" @confirm="confirmBtn"
+      <uni-popup-dialog :title="t('common.recommendPhoneTip')" :content="t('inquiry.popupText')" @confirm="confirmBtn"
         mode="base"></uni-popup-dialog>
     </uni-popup>
   </view>
