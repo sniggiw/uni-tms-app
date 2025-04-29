@@ -1,4 +1,12 @@
 import { ref, computed, reactive } from "vue";
+import { useAreaStore } from "@/stores/area";
+
+const { area } = useAreaStore();
+const initSelectText = reactive({
+    countryText: area.areaList[0].areaName,
+    provinceText: area.areaList[0].children ? area.areaList[0].children[0].areaName : "",
+    cityText: area.areaList[0].children ? (area.areaList[0].children[0].children ? area.areaList[0].children[0].children[0].areaName : "") : "",
+});
 
 export const createAreaListMap = (areaList) => {
     const areaListMap = [];
@@ -77,11 +85,13 @@ export function useAreaList(params) {
     const selectAreaText = reactive(
         checkObjectEmpty(params.selectAreaText)
             ? { ...params.selectAreaText }
-            : {
-                  countryText: "中国",
-                  provinceText: "北京市",
+            : params.columnsLength == 1
+            ? {
+                  countryText: "China",
+                  provinceText: "",
                   cityText: "",
               }
+            : initSelectText
     );
 
     // 原始的地区信息（根据接口返回的数据）
@@ -94,12 +104,16 @@ export function useAreaList(params) {
      */
     const changeOriginAreaList = (isSearch = false, val = "") => {
         if (isSearch && val) {
-            const _originAreaList = transformAreaListMapToAreaList(createAreaListMap(params.areaList).filter((item) => item.areaName.toLowerCase().includes(val.toLowerCase())));
+            const _originAreaList = transformAreaListMapToAreaList(
+                createAreaListMap(params.areaList).filter((item) => item.areaName.toLowerCase().includes(val.toLowerCase()))
+            );
             originAreaList.value = _originAreaList;
             selectAreaText.countryText = _originAreaList[0] ? _originAreaList[0]?.areaName : "";
             selectAreaText.provinceText = _originAreaList[0] && _originAreaList[0]?.children ? _originAreaList[0]?.children[0]?.areaName : "";
             selectAreaText.cityText =
-                _originAreaList[0] && _originAreaList[0]?.children && _originAreaList[0]?.children[0]?.children ? _originAreaList[0]?.children[0]?.children[0]?.areaName : "";
+                _originAreaList[0] && _originAreaList[0]?.children && _originAreaList[0]?.children[0]?.children
+                    ? _originAreaList[0]?.children[0]?.children[0]?.areaName
+                    : "";
         } else {
             originAreaList.value = params.areaList;
             selectAreaText.countryText = "中国";
@@ -133,7 +147,9 @@ export function useAreaList(params) {
 
     // 初始默认传递进来的地区信息 获取对应的数组索引值（除了第一次的值有用，后续的值无用）
     const defaultSelectAreaIndexArr = computed(() => {
-        return handleGetDefaultValue(checkObjectEmpty(params.selectAreaText) ? { ...params.selectAreaText } : { countryText: "中国", provinceText: "北京市", cityText: "" });
+        return handleGetDefaultValue(
+            checkObjectEmpty(params.selectAreaText) ? { ...params.selectAreaText } : { countryText: "中国", provinceText: "北京市", cityText: "" }
+        );
     });
 
     const handleGetDefaultValue = (params) => {
@@ -154,8 +170,9 @@ export function useAreaList(params) {
         const provinceAreaCode =
             params.columnsLength != 3
                 ? ""
-                : originAreaList.value.find((item) => item.areaName === selectAreaText.countryText).children.find((pItem) => pItem.areaName === selectAreaText.provinceText)
-                      .areaCode;
+                : originAreaList.value
+                      .find((item) => item.areaName === selectAreaText.countryText)
+                      .children.find((pItem) => pItem.areaName === selectAreaText.provinceText).areaCode;
         const cityAreaCode =
             params.columnsLength != 3
                 ? ""

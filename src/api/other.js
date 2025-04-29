@@ -41,6 +41,8 @@ const getAreaList = (params = null) => {
 };
 
 const getAllAreaList = () => {
+    const currentLang = uni.getLocale();
+    console.log("currentLang", currentLang);
     return new Promise((resolve, reject) => {
         // 第一个 请求获取中国全部地区数据
         // 后续需要请求什么数据就根据业务需求添加 传递参数即可

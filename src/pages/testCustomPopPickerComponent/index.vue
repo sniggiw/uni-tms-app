@@ -12,7 +12,14 @@
                 </uni-forms-item>
 
                 <uni-forms-item label-width="90px" label="详细地址" name="shipperAddress">
-                    <uni-easyinput type="text" v-model="formData.shipperAddress" placeholder="请输入详细地址" :inputBorder="false" :clearable="false" style="text-align: right" />
+                    <uni-easyinput
+                        type="text"
+                        v-model="formData.shipperAddress"
+                        placeholder="请输入详细地址"
+                        :inputBorder="false"
+                        :clearable="false"
+                        style="text-align: right"
+                    />
                 </uni-forms-item>
 
                 <!-- 收货人地址 -->
@@ -44,10 +51,9 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, nextTick } from "vue";
-import { useAreaStore } from "@/stores/area";
-import { useAreaList } from "@/hooks/area";
 import CustomPopupPicker from "@/components/CustomPopupPicker/index.vue";
+import { useAreaStore } from "@/stores/area";
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 
 const areaStore = useAreaStore();
 
@@ -113,7 +119,7 @@ const handleDestroyCustomPopupPicker = (status) => {
 const handleShowCustomPopupPicker = async (val) => {
     currentRegionType.value = val;
 
-    currentAreaList.value = val == "consigneeRegion" ? areaStore.area.enCountryAreaList : areaStore.area.cnAreaList;
+    currentAreaList.value = val == "consigneeRegion" ? areaStore.area.enCountryAreaList : areaStore.area.areaList;
 
     isShowCustomPopupPicker.value = true;
     nextTick(() => {
@@ -135,13 +141,16 @@ const handleSubmit = () => {
 };
 
 onMounted(() => {
-    formData.shipperRegion.countryText = "中国";
-    formData.shipperRegion.provinceText = "江苏省";
-    formData.shipperRegion.cityText = "南京市";
+    // formData.shipperRegion.countryText = "中国";
+    // formData.shipperRegion.provinceText = "江苏省";
+    // formData.shipperRegion.cityText = "南京市";
+    // formData.shipperRegion.countryAreaCode = "001";
+    // formData.shipperRegion.provinceAreaCode = "001010";
+    // formData.shipperRegion.cityAreaCode = "00101001";
+});
 
-    formData.shipperRegion.countryAreaCode = "001";
-    formData.shipperRegion.provinceAreaCode = "001010";
-    formData.shipperRegion.cityAreaCode = "00101001";
+onBeforeUnmount(() => {
+    customPopupPickerRef.value.close();
 });
 </script>
 

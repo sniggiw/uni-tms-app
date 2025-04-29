@@ -19,7 +19,9 @@ export const useAreaStore = defineStore(
         };
 
         const clearArea = () => {
-            area.value = {};
+            for (const key in area) {
+                delete area[key];
+            }
         };
 
         return {

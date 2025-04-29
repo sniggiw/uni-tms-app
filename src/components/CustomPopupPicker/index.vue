@@ -18,8 +18,13 @@
 
             <!-- 列表，默认为一列，可多列 -->
             <picker-view class="popup-picker-view" :value="pickerValue" @change="onPickerChange">
-                <picker-view-column v-for="(column, index) in props.currentRegionType == 'consigneeRegion' ? columns.slice(0, 1) : columns" :key="index">
-                    <view class="item" v-for="(item, i) in columns[index]" :key="i">{{ item }}</view>
+                <picker-view-column
+                    v-for="(column, index) in props.currentRegionType == 'consigneeRegion' ? columns.slice(0, 1) : columns"
+                    :key="index"
+                >
+                    <view class="item" v-for="(item, i) in columns[index]" :key="i">
+                        <view class="item-text">{{ item }}</view>
+                    </view>
                 </picker-view-column>
             </picker-view>
         </view>
@@ -27,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { useDebounce } from "@/hooks/debounce";
 import { useAreaList } from "@/hooks/area";
 
@@ -47,7 +52,17 @@ const props = defineProps({
 
 const emit = defineEmits(["headerBtnStart", "headerBtnEnd", "destroyCustomPopupPicker", "update:modelValue"]);
 
-const { originAreaList, countryList, provinceList, cityList, selectAreaText, selectAreaCode, defaultSelectAreaIndexArr, changeSelectAreaText, changeOriginAreaList } = useAreaList({
+const {
+    originAreaList,
+    countryList,
+    provinceList,
+    cityList,
+    selectAreaText,
+    selectAreaCode,
+    defaultSelectAreaIndexArr,
+    changeSelectAreaText,
+    changeOriginAreaList,
+} = useAreaList({
     areaList: props.currentAreaList,
     columnsLength: props.currentRegionType == "consigneeRegion" ? 1 : 3,
     selectAreaText: { countryText: props.modelValue.countryText, provinceText: props.modelValue.provinceText, cityText: props.modelValue.cityText },
@@ -127,8 +142,8 @@ const handleHeaderBtnStart = () => {
 
 // 顶部右边按钮点击事件
 const handleHeaderBtnEnd = () => {
-    emit("headerBtnEnd");
     emit("update:modelValue", { ...selectAreaText, ...selectAreaCode.value });
+    emit("headerBtnEnd");
     handleHide();
 };
 
@@ -229,6 +244,15 @@ $gray-text-color: #969799;
             display: flex;
             justify-content: center;
             align-items: center;
+
+            .item-text {
+                width: 8em;
+                font-size: 30rpx;
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
     }
 }

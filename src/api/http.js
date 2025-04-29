@@ -1,8 +1,8 @@
 import request from "./request";
 
 const http = {
-    get(url) {
-        return request.get(url);
+    get(url, params) {
+        return request.get(url, { params });
     },
     post(url, data) {
         return request.post(url, data);
