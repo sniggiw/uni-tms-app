@@ -327,8 +327,8 @@ const commonCaptchaImageData = async () => {
     try {
         const res = await commonCaptchaImage();
         if (res.code === 200) {
-            captchaImage.uuid = res.data.uuid;
-            captchaImage.img = "data:image/gif;base64," + res.data.img;
+            captchaImage.value.uuid = res.data.uuid;
+            captchaImage.value.img = "data:image/gif;base64," + res.data.img;
         } else {
             uni.showToast({
                 title: res.msg,
